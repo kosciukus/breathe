@@ -5,10 +5,12 @@ import { Animated, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import DurationSliderRow from "./components/DurationSliderRow";
-import SoundToggleRow from "./components/SoundToggleRow";
+import PresetChips from "./components/PresetChips";
+import ToggleRow from "./components/ToggleRow";
 import { PHASE_LABEL, PHASE_TONE, SLIDER_ITEMS } from "./constants";
 import { useBreathingTimer } from "./hooks/useBreathingTimer";
 import { styles } from "./styles";
+import { isSameDurations } from "./utils";
 
 export default function BreathingScreen() {
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -20,6 +22,8 @@ export default function BreathingScreen() {
     progress,
     remainingSecDisplay,
     totalActiveSec,
+    presets,
+    applyPreset,
     toggleRun,
     reset,
     setDraftField,
@@ -47,7 +51,7 @@ export default function BreathingScreen() {
   const rowAnims = useRef<Animated.Value[]>([]);
   if (rowAnims.current.length === 0) {
     rowAnims.current = Array.from(
-      { length: SLIDER_ITEMS.length + 2 },
+      { length: SLIDER_ITEMS.length + 3 },
       () => new Animated.Value(0)
     );
   }
@@ -92,6 +96,11 @@ export default function BreathingScreen() {
     }),
     [setDraftField]
   );
+
+  const selectedPresetName = useMemo(() => {
+    const matched = presets.find((preset) => isSameDurations(preset.durations, draft));
+    return matched ? matched.name : null;
+  }, [draft, presets]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -175,7 +184,11 @@ export default function BreathingScreen() {
               ],
             }}
           >
-            <SoundToggleRow label="Phase sound" value={soundEnabled} onChange={setSoundEnabled} />
+            <PresetChips
+              presets={presets}
+              selectedName={selectedPresetName}
+              onSelect={applyPreset}
+            />
           </Animated.View>
 
           <Animated.View
@@ -191,37 +204,63 @@ export default function BreathingScreen() {
               ],
             }}
           >
-            <SoundToggleRow
-              label="Vibration"
-              value={vibrationEnabled}
-              onChange={setVibrationEnabled}
-            />
+            <View style={styles.presetSection}>
+              <Text style={styles.presetTitle}>Preferences</Text>
+              <View style={styles.controls}>
+                <ToggleRow label="Phase sound" value={soundEnabled} onChange={setSoundEnabled} />
+                <ToggleRow
+                  label="Vibration"
+                  value={vibrationEnabled}
+                  onChange={setVibrationEnabled}
+                />
+              </View>
+            </View>
           </Animated.View>
 
-          {SLIDER_ITEMS.map((item, index) => (
-            <Animated.View
-              key={item.key}
-              style={{
-                opacity: rowAnims.current[index + 2],
-                transform: [
-                  {
-                    translateY: rowAnims.current[index + 2].interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [12, 0],
-                    }),
-                  },
-                ],
-              }}
-            >
-              <DurationSliderRow
-                label={item.label}
-                value={draft[item.key]}
-                onChange={sliderHandlers[item.key]}
-                min={item.min}
-                max={item.max}
-              />
-            </Animated.View>
-          ))}
+          <Animated.View
+            style={{
+              opacity: rowAnims.current[2],
+              transform: [
+                {
+                  translateY: rowAnims.current[2].interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [12, 0],
+                  }),
+                },
+              ],
+            }}
+          >
+          </Animated.View>
+
+          <View style={styles.presetSection}>
+            <Text style={styles.presetTitle}>Settings</Text>
+            <View style={styles.controls}>
+              {SLIDER_ITEMS.map((item, index) => (
+                <Animated.View
+                  key={item.key}
+                  style={{
+                    opacity: rowAnims.current[index + 3],
+                    transform: [
+                      {
+                        translateY: rowAnims.current[index + 3].interpolate({
+                          inputRange: [0, 1],
+                          outputRange: [12, 0],
+                        }),
+                      },
+                    ],
+                  }}
+                >
+                  <DurationSliderRow
+                    label={item.label}
+                    value={draft[item.key]}
+                    onChange={sliderHandlers[item.key]}
+                    min={item.min}
+                    max={item.max}
+                  />
+                </Animated.View>
+              ))}
+            </View>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>

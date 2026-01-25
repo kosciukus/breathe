@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { PHASE_ORDER, TICK_MS } from "../constants";
+import { BREATHING_PRESETS } from "../presets";
 import { DurationsSec, PhaseKey } from "../types";
 import { clampSec, nextPhase } from "../utils";
 
@@ -12,6 +13,8 @@ type BreathingTimerState = {
   progress: number;
   remainingSecDisplay: number;
   totalActiveSec: number;
+  presets: typeof BREATHING_PRESETS;
+  applyPreset: (name: string) => void;
   toggleRun: () => void;
   reset: () => void;
   setDraftField: (key: keyof DurationsSec, v: number) => void;
@@ -159,6 +162,12 @@ export const useBreathingTimer = (): BreathingTimerState => {
     setDraft((prev) => ({ ...prev, [key]: clampSec(v) }));
   }, []);
 
+  const applyPreset = useCallback((name: string) => {
+    const preset = BREATHING_PRESETS.find((item) => item.name === name);
+    if (!preset) return;
+    setDraft(preset.durations);
+  }, []);
+
   const totalActiveSec = active.inhale + active.hold1 + active.exhale + active.hold2;
 
   return {
@@ -170,6 +179,8 @@ export const useBreathingTimer = (): BreathingTimerState => {
     progress,
     remainingSecDisplay,
     totalActiveSec,
+    presets: BREATHING_PRESETS,
+    applyPreset,
     toggleRun,
     reset,
     setDraftField,

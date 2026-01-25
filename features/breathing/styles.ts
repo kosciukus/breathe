@@ -155,6 +155,28 @@ export const styles = StyleSheet.create({
   note: { marginTop: 12, color: COLORS.muted },
   noteBold: { fontWeight: "700" },
   controls: { marginTop: 14, gap: 10 },
+  presetSection: { gap: 8 },
+  presetTitle: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: COLORS.muted,
+    letterSpacing: 1.2,
+  },
+  presetRow: { gap: 10 },
+  presetChip: {
+    backgroundColor: COLORS.card,
+    borderRadius: 999,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: "#E6E0D8",
+  },
+  presetChipSelected: {
+    backgroundColor: COLORS.accentSoft,
+    borderColor: COLORS.accent,
+  },
+  presetChipText: { color: COLORS.ink, fontWeight: "600" },
+  presetChipTextSelected: { color: COLORS.accent, fontWeight: "700" },
   row: {
     backgroundColor: COLORS.card,
     borderRadius: 16,

@@ -13,3 +13,8 @@ export type SliderItem = {
   min: number;
   max: number;
 };
+
+export type BreathingPreset = {
+  name: string;
+  durations: DurationsSec;
+};

@@ -2,13 +2,13 @@ import React from "react";
 import { Switch, Text, View } from "react-native";
 import { COLORS, styles } from "../styles";
 
-type SoundToggleRowProps = {
+type ToggleRowProps = {
   label: string;
   value: boolean;
   onChange: (next: boolean) => void;
 };
 
-const SoundToggleRow = ({ label, value, onChange }: SoundToggleRowProps) => {
+const ToggleRow = ({ label, value, onChange }: ToggleRowProps) => {
   return (
     <View style={styles.row}>
       <View style={styles.toggleRow}>
@@ -24,4 +24,4 @@ const SoundToggleRow = ({ label, value, onChange }: SoundToggleRowProps) => {
   );
 };
 
-export default React.memo(SoundToggleRow);
+export default React.memo(ToggleRow);
