@@ -17,4 +17,5 @@ export type SliderItem = {
 export type BreathingPreset = {
   name: string;
   durations: DurationsSec;
+  repeatMinutes: number;
 };

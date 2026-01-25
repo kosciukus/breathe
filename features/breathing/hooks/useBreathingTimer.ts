@@ -7,14 +7,17 @@ import { clampSec, nextPhase } from "../utils";
 type BreathingTimerState = {
   active: DurationsSec;
   draft: DurationsSec;
+  repeatMinutes: number;
   phase: PhaseKey;
   remainingMs: number;
+  sessionRemainingMs: number | null;
   isRunning: boolean;
   progress: number;
   remainingSecDisplay: number;
   totalActiveSec: number;
   presets: typeof BREATHING_PRESETS;
   applyPreset: (name: string) => void;
+  setRepeatMinutes: (next: number) => void;
   toggleRun: () => void;
   reset: () => void;
   setDraftField: (key: keyof DurationsSec, v: number) => void;
@@ -28,8 +31,12 @@ export const useBreathingTimer = (): BreathingTimerState => {
     hold2: 0,
   });
   const [active, setActive] = useState<DurationsSec>(draft);
+  const [repeatMinutes, setRepeatMinutes] = useState(5);
   const [phase, setPhase] = useState<PhaseKey>("inhale");
   const [remainingMs, setRemainingMs] = useState<number>(active.inhale * 1000);
+  const [sessionRemainingMs, setSessionRemainingMs] = useState<number | null>(
+    repeatMinutes > 0 ? repeatMinutes * 60 * 1000 : null
+  );
   const [isRunning, setIsRunning] = useState(false);
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -37,6 +44,8 @@ export const useBreathingTimer = (): BreathingTimerState => {
   const phaseRef = useRef<PhaseKey>(phase);
   const remainingRef = useRef<number>(remainingMs);
   const draftRef = useRef<DurationsSec>(draft);
+  const repeatMinutesRef = useRef(repeatMinutes);
+  const sessionRemainingRef = useRef<number | null>(repeatMinutes * 60 * 1000);
 
   useEffect(() => {
     isRunningRef.current = isRunning;
@@ -53,6 +62,15 @@ export const useBreathingTimer = (): BreathingTimerState => {
   useEffect(() => {
     draftRef.current = draft;
   }, [draft]);
+
+  useEffect(() => {
+    repeatMinutesRef.current = repeatMinutes;
+    if (!isRunningRef.current) {
+      const nextSession = repeatMinutes > 0 ? repeatMinutes * 60 * 1000 : null;
+      sessionRemainingRef.current = nextSession;
+      setSessionRemainingMs(nextSession);
+    }
+  }, [repeatMinutes]);
 
   const currentPhaseDurationMs = useMemo(() => {
     return Math.max(0, active[phase] * 1000);
@@ -86,6 +104,10 @@ export const useBreathingTimer = (): BreathingTimerState => {
     setIsRunning(false);
     setActive(draftRef.current);
     setPhaseAndRemaining("inhale", draftRef.current);
+    const nextSession =
+      repeatMinutesRef.current > 0 ? repeatMinutesRef.current * 60 * 1000 : null;
+    sessionRemainingRef.current = nextSession;
+    setSessionRemainingMs(nextSession);
   }, [clearTimer, setPhaseAndRemaining]);
 
   const start = useCallback(() => {
@@ -96,6 +118,10 @@ export const useBreathingTimer = (): BreathingTimerState => {
     const nextMs = Math.max(0, d[phaseRef.current] * 1000);
     setRemainingMs(nextMs);
     remainingRef.current = nextMs;
+    const nextSession =
+      repeatMinutesRef.current > 0 ? repeatMinutesRef.current * 60 * 1000 : null;
+    sessionRemainingRef.current = nextSession;
+    setSessionRemainingMs(nextSession);
 
     setIsRunning(true);
   }, []);
@@ -115,6 +141,18 @@ export const useBreathingTimer = (): BreathingTimerState => {
     if (!isRunning) return;
 
     intervalRef.current = setInterval(() => {
+      if (sessionRemainingRef.current !== null) {
+        const nextSession = sessionRemainingRef.current - TICK_MS;
+        sessionRemainingRef.current = nextSession;
+        setSessionRemainingMs(nextSession);
+        if (nextSession <= 0) {
+          setIsRunning(false);
+          setRemainingMs(0);
+          remainingRef.current = 0;
+          return;
+        }
+      }
+
       const rem = remainingRef.current;
 
       if (rem <= 0) {
@@ -169,6 +207,7 @@ export const useBreathingTimer = (): BreathingTimerState => {
     const preset = BREATHING_PRESETS.find((item) => item.name === name);
     if (!preset) return;
     setDraft(preset.durations);
+    setRepeatMinutes(preset.repeatMinutes);
   }, []);
 
   const totalActiveSec = active.inhale + active.hold1 + active.exhale + active.hold2;
@@ -176,14 +215,17 @@ export const useBreathingTimer = (): BreathingTimerState => {
   return {
     active,
     draft,
+    repeatMinutes,
     phase,
     remainingMs,
     isRunning,
     progress,
     remainingSecDisplay,
     totalActiveSec,
+    sessionRemainingMs,
     presets: BREATHING_PRESETS,
     applyPreset,
+    setRepeatMinutes,
     toggleRun,
     reset,
     setDraftField,

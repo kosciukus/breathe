@@ -6,7 +6,8 @@
       "hold1": 0,
       "exhale": 6,
       "hold2": 0
-    }
+    },
+    "repeatMinutes": 5
   },
   {
     "name": "Box 4-4-4-4",
@@ -15,7 +16,8 @@
       "hold1": 4,
       "exhale": 4,
       "hold2": 4
-    }
+    },
+    "repeatMinutes": 8
   },
   {
     "name": "Relax 4-7-8",
@@ -24,7 +26,8 @@
       "hold1": 7,
       "exhale": 8,
       "hold2": 0
-    }
+    },
+    "repeatMinutes": 6
   },
   {
     "name": "Focus 5-5",
@@ -33,6 +36,7 @@
       "hold1": 0,
       "exhale": 5,
       "hold2": 0
-    }
+    },
+    "repeatMinutes": 10
   }
 ]

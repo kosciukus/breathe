@@ -10,6 +10,7 @@ type DurationSliderRowProps = {
   min?: number;
   max?: number;
   onChange: (v: number) => void;
+  unitLabel?: string;
 };
 
 const DurationSliderRow = ({
@@ -18,12 +19,16 @@ const DurationSliderRow = ({
   onChange,
   min = 0,
   max = 20,
+  unitLabel = "s",
 }: DurationSliderRowProps) => {
   return (
     <View style={styles.row}>
       <View style={styles.rowHeader}>
         <Text style={styles.rowLabel}>{label}</Text>
-        <Text style={styles.rowValue}>{value}s</Text>
+        <Text style={styles.rowValue}>
+          {value}
+          {unitLabel}
+        </Text>
       </View>
       <Slider
         value={value}

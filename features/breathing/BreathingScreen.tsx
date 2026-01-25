@@ -10,7 +10,7 @@ import ToggleRow from "./components/ToggleRow";
 import { PHASE_LABEL, PHASE_TONE, SLIDER_ITEMS } from "./constants";
 import { useBreathingTimer } from "./hooks/useBreathingTimer";
 import { styles } from "./styles";
-import { isSameDurations } from "./utils";
+import { formatMinutesSeconds, isSameDurations } from "./utils";
 
 export default function BreathingScreen() {
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -20,10 +20,12 @@ export default function BreathingScreen() {
     phase,
     isRunning,
     progress,
-    remainingSecDisplay,
     totalActiveSec,
+    repeatMinutes,
+    sessionRemainingMs,
     presets,
     applyPreset,
+    setRepeatMinutes,
     toggleRun,
     reset,
     setDraftField,
@@ -99,8 +101,9 @@ export default function BreathingScreen() {
 
   const selectedPresetName = useMemo(() => {
     const matched = presets.find((preset) => isSameDurations(preset.durations, draft));
-    return matched ? matched.name : null;
-  }, [draft, presets]);
+    if (!matched) return null;
+    return matched.repeatMinutes === repeatMinutes ? matched.name : null;
+  }, [draft, presets, repeatMinutes]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -136,7 +139,7 @@ export default function BreathingScreen() {
             <Text style={styles.phaseLabel}>{PHASE_LABEL[phase]}</Text>
           </View>
           <Text style={styles.countdown}>
-            {totalActiveSec <= 0 ? "—" : `${remainingSecDisplay}s`}
+            {sessionRemainingMs === null ? "—" : formatMinutesSeconds(sessionRemainingMs)}
           </Text>
 
           <View style={styles.progressTrack}>
@@ -164,10 +167,7 @@ export default function BreathingScreen() {
               <Text style={[styles.buttonText, styles.secondaryText]}>Reset</Text>
             </Pressable>
           </View>
-
-          <Text style={styles.note}>
-            Slider changes apply at the <Text style={styles.noteBold}>next phase</Text>.
-          </Text>
+          
         </Animated.View>
 
         <View style={styles.controls}>
@@ -217,24 +217,31 @@ export default function BreathingScreen() {
             </View>
           </Animated.View>
 
-          <Animated.View
-            style={{
-              opacity: rowAnims.current[2],
-              transform: [
-                {
-                  translateY: rowAnims.current[2].interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [12, 0],
-                  }),
-                },
-              ],
-            }}
-          >
-          </Animated.View>
-
           <View style={styles.presetSection}>
             <Text style={styles.presetTitle}>Settings</Text>
             <View style={styles.controls}>
+              <Animated.View
+                style={{
+                  opacity: rowAnims.current[2],
+                  transform: [
+                    {
+                      translateY: rowAnims.current[2].interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [12, 0],
+                      }),
+                    },
+                  ],
+                }}
+              >
+                <DurationSliderRow
+                  label="Repeat for"
+                  value={repeatMinutes}
+                  onChange={setRepeatMinutes}
+                  min={0}
+                  max={30}
+                  unitLabel=" min"
+                />
+              </Animated.View>
               {SLIDER_ITEMS.map((item, index) => (
                 <Animated.View
                   key={item.key}
