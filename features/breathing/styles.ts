@@ -90,6 +90,14 @@ export const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 999,
   },
+  phaseRow: { flexDirection: "row", alignItems: "center", gap: 8 },
+  phaseCaption: {
+    fontSize: 12,
+    fontWeight: "700",
+    letterSpacing: 1.2,
+    color: COLORS.muted,
+    textTransform: "uppercase",
+  },
   phaseLabel: {
     fontSize: 12,
     fontWeight: "700",

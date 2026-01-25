@@ -27,6 +27,7 @@ const resources = {
       },
       label: {
         remaining: "Remaining",
+        state: "State:",
         phaseSound: "Phase sound",
         vibration: "Vibration",
         repeatFor: "Repeat for",
@@ -71,6 +72,7 @@ const resources = {
       },
       label: {
         remaining: "Restante",
+        state: "Estado:",
         phaseSound: "Sonido de fase",
         vibration: "Vibracion",
         repeatFor: "Repetir durante",
@@ -115,6 +117,7 @@ const resources = {
       },
       label: {
         remaining: "Restant",
+        state: "Etat:",
         phaseSound: "Son de phase",
         vibration: "Vibration",
         repeatFor: "Repeter pendant",
@@ -159,6 +162,7 @@ const resources = {
       },
       label: {
         remaining: "Pozostalo",
+        state: "Czynność:",
         phaseSound: "Dzwiek fazy",
         vibration: "Wibracje",
         repeatFor: "Powtarzaj przez",

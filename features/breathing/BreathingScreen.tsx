@@ -141,8 +141,11 @@ export default function BreathingScreen() {
           <Text style={styles.countdown}>
             {sessionRemainingMs === null ? "—" : formatMinutesSeconds(sessionRemainingMs)}
           </Text>
-          <View style={styles.phasePill}>
-            <Text style={styles.phaseLabel}>{t(PHASE_LABEL_KEYS[phase])}</Text>
+          <View style={styles.phaseRow}>
+            <Text style={styles.phaseCaption}>{t("label.state")}</Text>
+            <View style={styles.phasePill}>
+              <Text style={styles.phaseLabel}>{t(PHASE_LABEL_KEYS[phase])}</Text>
+            </View>
           </View>
 
           <View style={styles.progressTrack}>
