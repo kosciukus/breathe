@@ -1,4 +1,5 @@
 import { useAudioPlayer } from "expo-audio";
+import * as Haptics from "expo-haptics";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Animated, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -11,6 +12,7 @@ import { styles } from "./styles";
 
 export default function BreathingScreen() {
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [vibrationEnabled, setVibrationEnabled] = useState(true);
   const {
     draft,
     phase,
@@ -34,7 +36,10 @@ export default function BreathingScreen() {
     if (!phaseTonePlayer.isLoaded) return;
     phaseTonePlayer.seekTo(0).catch(() => undefined);
     phaseTonePlayer.play();
-  }, [phaseTonePlayer, soundEnabled]);
+    if (vibrationEnabled) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy).catch(() => undefined);
+    }
+  }, [phaseTonePlayer, soundEnabled, vibrationEnabled]);
 
   const prevPhaseRef = useRef(phase);
 
@@ -42,7 +47,7 @@ export default function BreathingScreen() {
   const rowAnims = useRef<Animated.Value[]>([]);
   if (rowAnims.current.length === 0) {
     rowAnims.current = Array.from(
-      { length: SLIDER_ITEMS.length + 1 },
+      { length: SLIDER_ITEMS.length + 2 },
       () => new Animated.Value(0)
     );
   }
@@ -170,17 +175,37 @@ export default function BreathingScreen() {
               ],
             }}
           >
-            <SoundToggleRow value={soundEnabled} onChange={setSoundEnabled} />
+            <SoundToggleRow label="Phase sound" value={soundEnabled} onChange={setSoundEnabled} />
+          </Animated.View>
+
+          <Animated.View
+            style={{
+              opacity: rowAnims.current[1],
+              transform: [
+                {
+                  translateY: rowAnims.current[1].interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [12, 0],
+                  }),
+                },
+              ],
+            }}
+          >
+            <SoundToggleRow
+              label="Vibration"
+              value={vibrationEnabled}
+              onChange={setVibrationEnabled}
+            />
           </Animated.View>
 
           {SLIDER_ITEMS.map((item, index) => (
             <Animated.View
               key={item.key}
               style={{
-                opacity: rowAnims.current[index + 1],
+                opacity: rowAnims.current[index + 2],
                 transform: [
                   {
-                    translateY: rowAnims.current[index + 1].interpolate({
+                    translateY: rowAnims.current[index + 2].interpolate({
                       inputRange: [0, 1],
                       outputRange: [12, 0],
                     }),

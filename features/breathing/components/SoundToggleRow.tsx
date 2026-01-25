@@ -3,15 +3,16 @@ import { Switch, Text, View } from "react-native";
 import { COLORS, styles } from "../styles";
 
 type SoundToggleRowProps = {
+  label: string;
   value: boolean;
   onChange: (next: boolean) => void;
 };
 
-const SoundToggleRow = ({ value, onChange }: SoundToggleRowProps) => {
+const SoundToggleRow = ({ label, value, onChange }: SoundToggleRowProps) => {
   return (
     <View style={styles.row}>
       <View style={styles.toggleRow}>
-        <Text style={styles.rowLabel}>Phase sound</Text>
+        <Text style={styles.rowLabel}>{label}</Text>
         <Switch
           value={value}
           onValueChange={onChange}
