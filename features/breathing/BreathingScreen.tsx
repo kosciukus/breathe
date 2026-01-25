@@ -137,12 +137,13 @@ export default function BreathingScreen() {
             },
           ]}
         >
-          <View style={styles.phasePill}>
-            <Text style={styles.phaseLabel}>{t(PHASE_LABEL_KEYS[phase])}</Text>
-          </View>
+          <Text style={styles.remainingLabel}>{t("label.remaining")}</Text>
           <Text style={styles.countdown}>
             {sessionRemainingMs === null ? "—" : formatMinutesSeconds(sessionRemainingMs)}
           </Text>
+          <View style={styles.phasePill}>
+            <Text style={styles.phaseLabel}>{t(PHASE_LABEL_KEYS[phase])}</Text>
+          </View>
 
           <View style={styles.progressTrack}>
             <View style={[styles.progressFill, { width: `${progress * 100}%` }]} />
@@ -193,36 +194,6 @@ export default function BreathingScreen() {
               selectedName={selectedPresetName}
               onSelect={applyPreset}
             />
-          </Animated.View>
-
-          <Animated.View
-            style={{
-              opacity: rowAnims.current[1],
-              transform: [
-                {
-                  translateY: rowAnims.current[1].interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [12, 0],
-                  }),
-                },
-              ],
-            }}
-          >
-            <View style={styles.presetSection}>
-              <Text style={styles.presetTitle}>{t("section.preferences")}</Text>
-              <View style={styles.controls}>
-                <ToggleRow
-                  label={t("label.phaseSound")}
-                  value={soundEnabled}
-                  onChange={setSoundEnabled}
-                />
-                <ToggleRow
-                  label={t("label.vibration")}
-                  value={vibrationEnabled}
-                  onChange={setVibrationEnabled}
-                />
-              </View>
-            </View>
           </Animated.View>
 
           <View style={styles.presetSection}>
@@ -277,6 +248,36 @@ export default function BreathingScreen() {
               ))}
             </View>
           </View>
+
+          <Animated.View
+            style={{
+              opacity: rowAnims.current[1],
+              transform: [
+                {
+                  translateY: rowAnims.current[1].interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [12, 0],
+                  }),
+                },
+              ],
+            }}
+          >
+            <View style={styles.presetSection}>
+              <Text style={styles.presetTitle}>{t("section.preferences")}</Text>
+              <View style={styles.controls}>
+                <ToggleRow
+                  label={t("label.phaseSound")}
+                  value={soundEnabled}
+                  onChange={setSoundEnabled}
+                />
+                <ToggleRow
+                  label={t("label.vibration")}
+                  value={vibrationEnabled}
+                  onChange={setVibrationEnabled}
+                />
+              </View>
+            </View>
+          </Animated.View>
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -26,6 +26,7 @@ const resources = {
         settings: "Settings",
       },
       label: {
+        remaining: "Remaining",
         phaseSound: "Phase sound",
         vibration: "Vibration",
         repeatFor: "Repeat for",
@@ -69,6 +70,7 @@ const resources = {
         settings: "Ajustes",
       },
       label: {
+        remaining: "Restante",
         phaseSound: "Sonido de fase",
         vibration: "Vibracion",
         repeatFor: "Repetir durante",
@@ -112,6 +114,7 @@ const resources = {
         settings: "Parametres",
       },
       label: {
+        remaining: "Restant",
         phaseSound: "Son de phase",
         vibration: "Vibration",
         repeatFor: "Repeter pendant",
@@ -155,6 +158,7 @@ const resources = {
         settings: "Ustawienia",
       },
       label: {
+        remaining: "Pozostalo",
         phaseSound: "Dzwiek fazy",
         vibration: "Wibracje",
         repeatFor: "Powtarzaj przez",

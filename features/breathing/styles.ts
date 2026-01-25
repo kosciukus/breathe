@@ -113,6 +113,13 @@ export const styles = StyleSheet.create({
       default: {},
     }),
   },
+  remainingLabel: {
+    fontSize: 12,
+    fontWeight: "700",
+    letterSpacing: 1.2,
+    color: COLORS.muted,
+    textTransform: "uppercase",
+  },
   progressTrack: {
     height: 12,
     backgroundColor: COLORS.track,
@@ -163,6 +170,11 @@ export const styles = StyleSheet.create({
     letterSpacing: 1.2,
   },
   presetRow: { gap: 10 },
+  presetGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+  },
   presetChip: {
     backgroundColor: COLORS.card,
     borderRadius: 999,
