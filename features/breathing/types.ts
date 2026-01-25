@@ -1,0 +1,15 @@
+export type PhaseKey = "inhale" | "hold1" | "exhale" | "hold2";
+
+export type DurationsSec = {
+  inhale: number;
+  hold1: number;
+  exhale: number;
+  hold2: number;
+};
+
+export type SliderItem = {
+  key: keyof DurationsSec;
+  label: string;
+  min: number;
+  max: number;
+};
