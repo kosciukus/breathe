@@ -154,9 +154,12 @@ export const useBreathingTimer = (): BreathingTimerState => {
   useEffect(() => {
     if (isRunningRef.current) return;
 
-    const maxMs = active[phase] * 1000;
-    if (remainingMs > maxMs) setRemainingMs(maxMs);
-  }, [active, phase, remainingMs]);
+    const targetMs = Math.max(0, draft[phase] * 1000);
+    if (remainingMs !== targetMs) {
+      setRemainingMs(targetMs);
+      remainingRef.current = targetMs;
+    }
+  }, [draft, phase, remainingMs]);
 
   const setDraftField = useCallback((key: keyof DurationsSec, v: number) => {
     setDraft((prev) => ({ ...prev, [key]: clampSec(v) }));
