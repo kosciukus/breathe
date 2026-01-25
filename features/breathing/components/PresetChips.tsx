@@ -1,5 +1,6 @@
 import React from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
+import { useTranslation } from "react-i18next";
 import { BreathingPreset } from "../types";
 import { styles } from "../styles";
 
@@ -10,9 +11,10 @@ type PresetChipsProps = {
 };
 
 const PresetChips = ({ presets, selectedName, onSelect }: PresetChipsProps) => {
+  const { t } = useTranslation();
   return (
     <View style={styles.presetSection}>
-      <Text style={styles.presetTitle}>Presets</Text>
+      <Text style={styles.presetTitle}>{t("section.presets")}</Text>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -31,7 +33,7 @@ const PresetChips = ({ presets, selectedName, onSelect }: PresetChipsProps) => {
               ]}
             >
               <Text style={[styles.presetChipText, isSelected && styles.presetChipTextSelected]}>
-                {preset.name}
+                {t(preset.labelKey)}
               </Text>
             </Pressable>
           );

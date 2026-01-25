@@ -9,13 +9,14 @@ export type DurationsSec = {
 
 export type SliderItem = {
   key: keyof DurationsSec;
-  label: string;
+  labelKey: string;
   min: number;
   max: number;
 };
 
 export type BreathingPreset = {
   name: string;
+  labelKey: string;
   durations: DurationsSec;
   repeatMinutes: number;
 };

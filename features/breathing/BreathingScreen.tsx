@@ -3,16 +3,18 @@ import * as Haptics from "expo-haptics";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Animated, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 
 import DurationSliderRow from "./components/DurationSliderRow";
 import PresetChips from "./components/PresetChips";
 import ToggleRow from "./components/ToggleRow";
-import { PHASE_LABEL, PHASE_TONE, SLIDER_ITEMS } from "./constants";
+import { PHASE_LABEL_KEYS, PHASE_TONE, SLIDER_ITEMS } from "./constants";
 import { useBreathingTimer } from "./hooks/useBreathingTimer";
 import { styles } from "./styles";
 import { formatMinutesSeconds, isSameDurations } from "./utils";
 
 export default function BreathingScreen() {
+  const { t } = useTranslation();
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [vibrationEnabled, setVibrationEnabled] = useState(true);
   const {
@@ -114,9 +116,9 @@ export default function BreathingScreen() {
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
-          <Text style={styles.eyebrow}>BREATHWORK</Text>
-          <Text style={styles.title}>Breathing Coach</Text>
-          <Text style={styles.subtitle}>Set a rhythm that feels calm and steady.</Text>
+          <Text style={styles.eyebrow}>{t("app.eyebrow")}</Text>
+          <Text style={styles.title}>{t("app.title")}</Text>
+          <Text style={styles.subtitle}>{t("app.subtitle")}</Text>
         </View>
 
         <Animated.View
@@ -136,7 +138,7 @@ export default function BreathingScreen() {
           ]}
         >
           <View style={styles.phasePill}>
-            <Text style={styles.phaseLabel}>{PHASE_LABEL[phase]}</Text>
+            <Text style={styles.phaseLabel}>{t(PHASE_LABEL_KEYS[phase])}</Text>
           </View>
           <Text style={styles.countdown}>
             {sessionRemainingMs === null ? "—" : formatMinutesSeconds(sessionRemainingMs)}
@@ -157,14 +159,16 @@ export default function BreathingScreen() {
               ]}
               disabled={totalActiveSec <= 0}
             >
-              <Text style={styles.buttonText}>{isRunning ? "Pause" : "Start"}</Text>
+              <Text style={styles.buttonText}>
+                {isRunning ? t("action.pause") : t("action.start")}
+              </Text>
             </Pressable>
 
             <Pressable
               onPress={reset}
               style={({ pressed }) => [styles.button, styles.secondaryButton, pressed && styles.pressed]}
             >
-              <Text style={[styles.buttonText, styles.secondaryText]}>Reset</Text>
+              <Text style={[styles.buttonText, styles.secondaryText]}>{t("action.reset")}</Text>
             </Pressable>
           </View>
           
@@ -205,11 +209,15 @@ export default function BreathingScreen() {
             }}
           >
             <View style={styles.presetSection}>
-              <Text style={styles.presetTitle}>Preferences</Text>
+              <Text style={styles.presetTitle}>{t("section.preferences")}</Text>
               <View style={styles.controls}>
-                <ToggleRow label="Phase sound" value={soundEnabled} onChange={setSoundEnabled} />
                 <ToggleRow
-                  label="Vibration"
+                  label={t("label.phaseSound")}
+                  value={soundEnabled}
+                  onChange={setSoundEnabled}
+                />
+                <ToggleRow
+                  label={t("label.vibration")}
                   value={vibrationEnabled}
                   onChange={setVibrationEnabled}
                 />
@@ -218,7 +226,7 @@ export default function BreathingScreen() {
           </Animated.View>
 
           <View style={styles.presetSection}>
-            <Text style={styles.presetTitle}>Settings</Text>
+            <Text style={styles.presetTitle}>{t("section.settings")}</Text>
             <View style={styles.controls}>
               <Animated.View
                 style={{
@@ -234,12 +242,12 @@ export default function BreathingScreen() {
                 }}
               >
                 <DurationSliderRow
-                  label="Repeat for"
+                  label={t("label.repeatFor")}
                   value={repeatMinutes}
                   onChange={setRepeatMinutes}
                   min={0}
                   max={30}
-                  unitLabel=" min"
+                  unitLabel={` ${t("unit.minuteShort")}`}
                 />
               </Animated.View>
               {SLIDER_ITEMS.map((item, index) => (
@@ -258,11 +266,12 @@ export default function BreathingScreen() {
                   }}
                 >
                   <DurationSliderRow
-                    label={item.label}
+                    label={t(item.labelKey)}
                     value={draft[item.key]}
                     onChange={sliderHandlers[item.key]}
                     min={item.min}
                     max={item.max}
+                    unitLabel={` ${t("unit.secondShort")}`}
                   />
                 </Animated.View>
               ))}
