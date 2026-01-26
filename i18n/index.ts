@@ -7,7 +7,7 @@ const resources = {
     translation: {
       app: {
         eyebrow: "BREATHWORK",
-        title: "Breathing Coach",
+        title: "Mindful Breathe",
         subtitle: "Set a rhythm that feels calm and steady.",
       },
       phase: {
@@ -52,7 +52,7 @@ const resources = {
     translation: {
       app: {
         eyebrow: "RESPIRACION",
-        title: "Coach de respiracion",
+        title: "Respiracion consciente",
         subtitle: "Define un ritmo que se sienta tranquilo y estable.",
       },
       phase: {
@@ -97,7 +97,7 @@ const resources = {
     translation: {
       app: {
         eyebrow: "RESPIRATION",
-        title: "Coach de respiration",
+        title: "Respiration consciente",
         subtitle: "Definissez un rythme calme et stable.",
       },
       phase: {
@@ -142,7 +142,7 @@ const resources = {
     translation: {
       app: {
         eyebrow: "ODDECH",
-        title: "Trener oddechu",
+        title: "Świadomy oddech",
         subtitle: "Ustaw spokojny i rowny rytm.",
       },
       phase: {

@@ -25,3 +25,10 @@ npx expo start
 ```
 
 You can open it in Expo Go, an Android emulator, or the iOS simulator from the Expo CLI.
+
+### iOS (Xcode)
+If you need a native iOS build, the easiest path is:
+```bash
+npx expo run:ios
+```
+This generates the native project (if needed), installs Pods, and launches the app in the iOS simulator.

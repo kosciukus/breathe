@@ -138,7 +138,6 @@ export default function BreathingScreen() {
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
-          <Text style={styles.eyebrow}>{t("app.eyebrow")}</Text>
           <Text style={styles.title}>{t("app.title")}</Text>
           <Text style={styles.subtitle}>{t("app.subtitle")}</Text>
         </View>
