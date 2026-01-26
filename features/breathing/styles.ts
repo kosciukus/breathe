@@ -177,6 +177,16 @@ export const styles = StyleSheet.create({
     color: COLORS.muted,
     letterSpacing: 1.2,
   },
+  sectionHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  sectionToggle: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: COLORS.muted,
+  },
   presetRow: { gap: 10 },
   presetGrid: {
     flexDirection: "row",

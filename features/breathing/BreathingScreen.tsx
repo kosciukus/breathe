@@ -17,6 +17,9 @@ export default function BreathingScreen() {
   const { t } = useTranslation();
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [vibrationEnabled, setVibrationEnabled] = useState(true);
+  const [presetsOpen, setPresetsOpen] = useState(true);
+  const [settingsOpen, setSettingsOpen] = useState(true);
+  const [preferencesOpen, setPreferencesOpen] = useState(true);
   const {
     draft,
     phase,
@@ -192,46 +195,40 @@ export default function BreathingScreen() {
               ],
             }}
           >
-            <PresetChips
-              presets={presets}
-              selectedName={selectedPresetName}
-              onSelect={applyPreset}
-            />
+            <View style={styles.presetSection}>
+              <Pressable
+                onPress={() => setPresetsOpen((value) => !value)}
+                style={styles.sectionHeader}
+              >
+                <Text style={styles.presetTitle}>{t("section.presets")}</Text>
+                <Text style={styles.sectionToggle}>{presetsOpen ? "v" : ">"}</Text>
+              </Pressable>
+              {presetsOpen && (
+                <PresetChips
+                  presets={presets}
+                  selectedName={selectedPresetName}
+                  onSelect={applyPreset}
+                />
+              )}
+            </View>
           </Animated.View>
 
           <View style={styles.presetSection}>
-            <Text style={styles.presetTitle}>{t("section.settings")}</Text>
-            <View style={styles.controls}>
-              <Animated.View
-                style={{
-                  opacity: rowAnims.current[2],
-                  transform: [
-                    {
-                      translateY: rowAnims.current[2].interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [12, 0],
-                      }),
-                    },
-                  ],
-                }}
-              >
-                <DurationSliderRow
-                  label={t("label.repeatFor")}
-                  value={repeatMinutes}
-                  onChange={setRepeatMinutes}
-                  min={0}
-                  max={30}
-                  unitLabel={` ${t("unit.minuteShort")}`}
-                />
-              </Animated.View>
-              {SLIDER_ITEMS.map((item, index) => (
+            <Pressable
+              onPress={() => setSettingsOpen((value) => !value)}
+              style={styles.sectionHeader}
+            >
+              <Text style={styles.presetTitle}>{t("section.settings")}</Text>
+              <Text style={styles.sectionToggle}>{settingsOpen ? "v" : ">"}</Text>
+            </Pressable>
+            {settingsOpen && (
+              <View style={styles.controls}>
                 <Animated.View
-                  key={item.key}
                   style={{
-                    opacity: rowAnims.current[index + 3],
+                    opacity: rowAnims.current[2],
                     transform: [
                       {
-                        translateY: rowAnims.current[index + 3].interpolate({
+                        translateY: rowAnims.current[2].interpolate({
                           inputRange: [0, 1],
                           outputRange: [12, 0],
                         }),
@@ -240,16 +237,41 @@ export default function BreathingScreen() {
                   }}
                 >
                   <DurationSliderRow
-                    label={t(item.labelKey)}
-                    value={draft[item.key]}
-                    onChange={sliderHandlers[item.key]}
-                    min={item.min}
-                    max={item.max}
-                    unitLabel={` ${t("unit.secondShort")}`}
+                    label={t("label.repeatFor")}
+                    value={repeatMinutes}
+                    onChange={setRepeatMinutes}
+                    min={0}
+                    max={30}
+                    unitLabel={` ${t("unit.minuteShort")}`}
                   />
                 </Animated.View>
-              ))}
-            </View>
+                {SLIDER_ITEMS.map((item, index) => (
+                  <Animated.View
+                    key={item.key}
+                    style={{
+                      opacity: rowAnims.current[index + 3],
+                      transform: [
+                        {
+                          translateY: rowAnims.current[index + 3].interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [12, 0],
+                          }),
+                        },
+                      ],
+                    }}
+                  >
+                    <DurationSliderRow
+                      label={t(item.labelKey)}
+                      value={draft[item.key]}
+                      onChange={sliderHandlers[item.key]}
+                      min={item.min}
+                      max={item.max}
+                      unitLabel={` ${t("unit.secondShort")}`}
+                    />
+                  </Animated.View>
+                ))}
+              </View>
+            )}
           </View>
 
           <Animated.View
@@ -266,19 +288,27 @@ export default function BreathingScreen() {
             }}
           >
             <View style={styles.presetSection}>
-              <Text style={styles.presetTitle}>{t("section.preferences")}</Text>
-              <View style={styles.controls}>
-                <ToggleRow
-                  label={t("label.phaseSound")}
-                  value={soundEnabled}
-                  onChange={setSoundEnabled}
-                />
-                <ToggleRow
-                  label={t("label.vibration")}
-                  value={vibrationEnabled}
-                  onChange={setVibrationEnabled}
-                />
-              </View>
+              <Pressable
+                onPress={() => setPreferencesOpen((value) => !value)}
+                style={styles.sectionHeader}
+              >
+                <Text style={styles.presetTitle}>{t("section.preferences")}</Text>
+                <Text style={styles.sectionToggle}>{preferencesOpen ? "v" : ">"}</Text>
+              </Pressable>
+              {preferencesOpen && (
+                <View style={styles.controls}>
+                  <ToggleRow
+                    label={t("label.phaseSound")}
+                    value={soundEnabled}
+                    onChange={setSoundEnabled}
+                  />
+                  <ToggleRow
+                    label={t("label.vibration")}
+                    value={vibrationEnabled}
+                    onChange={setVibrationEnabled}
+                  />
+                </View>
+              )}
             </View>
           </Animated.View>
         </View>

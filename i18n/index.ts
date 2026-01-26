@@ -30,7 +30,7 @@ const resources = {
         state: "State:",
         phaseSound: "Phase sound",
         vibration: "Vibration",
-        repeatFor: "Repeat for",
+        repeatFor: "Duration",
         inhale: "Inhale",
         hold1: "Pause after inhale",
         exhale: "Exhale",

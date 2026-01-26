@@ -13,28 +13,25 @@ type PresetChipsProps = {
 const PresetChips = ({ presets, selectedName, onSelect }: PresetChipsProps) => {
   const { t } = useTranslation();
   return (
-    <View style={styles.presetSection}>
-      <Text style={styles.presetTitle}>{t("section.presets")}</Text>
-      <View style={styles.presetGrid}>
-        {presets.map((preset) => {
-          const isSelected = preset.name === selectedName;
-          return (
-            <Pressable
-              key={preset.name}
-              onPress={() => onSelect(preset.name)}
-              style={({ pressed }) => [
-                styles.presetChip,
-                isSelected && styles.presetChipSelected,
-                pressed && styles.pressed,
-              ]}
-            >
-              <Text style={[styles.presetChipText, isSelected && styles.presetChipTextSelected]}>
-                {t(preset.labelKey)}
-              </Text>
-            </Pressable>
-          );
-        })}
-      </View>
+    <View style={styles.presetGrid}>
+      {presets.map((preset) => {
+        const isSelected = preset.name === selectedName;
+        return (
+          <Pressable
+            key={preset.name}
+            onPress={() => onSelect(preset.name)}
+            style={({ pressed }) => [
+              styles.presetChip,
+              isSelected && styles.presetChipSelected,
+              pressed && styles.pressed,
+            ]}
+          >
+            <Text style={[styles.presetChipText, isSelected && styles.presetChipTextSelected]}>
+              {t(preset.labelKey)}
+            </Text>
+          </Pressable>
+        );
+      })}
     </View>
   );
 };
