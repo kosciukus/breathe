@@ -14,7 +14,7 @@ export const COLORS = {
 
 export const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: COLORS.bg },
-  scrollContent: { paddingBottom: 24 },
+  scrollContent: { paddingBottom: 24, flexGrow: 1 },
   background: {
     ...StyleSheet.absoluteFillObject,
   },
@@ -172,8 +172,8 @@ export const styles = StyleSheet.create({
   controls: { marginTop: 14, gap: 10 },
   presetSection: { gap: 8 },
   presetTitle: {
-    fontSize: 13,
-    fontWeight: "700",
+    fontSize: 15,
+    fontWeight: "800",
     color: COLORS.muted,
     letterSpacing: 1.2,
   },

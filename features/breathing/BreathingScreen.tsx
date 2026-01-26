@@ -2,7 +2,7 @@ import { useAudioPlayer } from "expo-audio";
 import * as Haptics from "expo-haptics";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Animated, Pressable, ScrollView, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 
 import DurationSliderRow from "./components/DurationSliderRow";
@@ -15,6 +15,7 @@ import { formatMinutesSeconds, isSameDurations } from "./utils";
 
 export default function BreathingScreen() {
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [vibrationEnabled, setVibrationEnabled] = useState(true);
   const [presetsOpen, setPresetsOpen] = useState(true);
