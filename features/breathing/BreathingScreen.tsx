@@ -1,14 +1,14 @@
 import { useAudioPlayer } from "expo-audio";
 import * as Haptics from "expo-haptics";
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Animated, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
-import { useTranslation } from "react-i18next";
 
 import DurationSliderRow from "./components/DurationSliderRow";
 import PresetChips from "./components/PresetChips";
 import ToggleRow from "./components/ToggleRow";
-import { PHASE_LABEL_KEYS, PHASE_TONE, SLIDER_ITEMS } from "./constants";
+import { PHASE_LABEL_KEYS, PHASE_SOUNDS, SLIDER_ITEMS } from "./constants";
 import { useBreathingTimer } from "./hooks/useBreathingTimer";
 import { styles } from "./styles";
 import { formatMinutesSeconds, isSameDurations } from "./utils";
@@ -37,21 +37,35 @@ export default function BreathingScreen() {
     setDraftField,
   } = useBreathingTimer();
 
-  const phaseTonePlayer = useAudioPlayer(PHASE_TONE);
+  const inhalePlayer = useAudioPlayer(PHASE_SOUNDS.inhale);
+  const hold1Player = useAudioPlayer(PHASE_SOUNDS.hold1);
+  const exhalePlayer = useAudioPlayer(PHASE_SOUNDS.exhale);
+  const hold2Player = useAudioPlayer(PHASE_SOUNDS.hold2);
 
   useEffect(() => {
-    phaseTonePlayer.volume = 0.35;
-  }, [phaseTonePlayer]);
+    inhalePlayer.volume = 0.8;
+    hold1Player.volume = 0.8;
+    exhalePlayer.volume = 0.8;
+    hold2Player.volume = 0.8;
+  }, [exhalePlayer, hold1Player, hold2Player, inhalePlayer]);
 
-  const playPhaseTone = React.useCallback(() => {
+  const playPhaseTone = React.useCallback((phaseKey: typeof phase) => {
     if (!soundEnabled) return;
-    if (!phaseTonePlayer.isLoaded) return;
-    phaseTonePlayer.seekTo(0).catch(() => undefined);
-    phaseTonePlayer.play();
+    const player =
+      phaseKey === "inhale"
+        ? inhalePlayer
+        : phaseKey === "hold1"
+        ? hold1Player
+        : phaseKey === "exhale"
+        ? exhalePlayer
+        : hold2Player;
+    if (!player.isLoaded) return;
+    player.seekTo(0).catch(() => undefined);
+    player.play();
     if (vibrationEnabled) {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy).catch(() => undefined);
     }
-  }, [phaseTonePlayer, soundEnabled, vibrationEnabled]);
+  }, [exhalePlayer, hold1Player, hold2Player, inhalePlayer, soundEnabled, vibrationEnabled]);
 
   const prevPhaseRef = useRef(phase);
 
@@ -89,8 +103,12 @@ export default function BreathingScreen() {
       return;
     }
 
+    if (prevPhaseRef.current === phase) {
+      playPhaseTone(phase);
+    }
+
     if (prevPhaseRef.current !== phase) {
-      playPhaseTone();
+      playPhaseTone(phase);
       prevPhaseRef.current = phase;
     }
   }, [isRunning, phase, playPhaseTone]);
