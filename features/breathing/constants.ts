@@ -19,8 +19,8 @@ export const SLIDER_ITEMS: SliderItem[] = [
 ];
 
 export const PHASE_SOUNDS: Record<PhaseKey, number> = {
-  inhale: require("../../assets/sounds/phase-inhale.wav"),
-  hold1: require("../../assets/sounds/phase-hold.wav"),
-  exhale: require("../../assets/sounds/phase-exhale.wav"),
-  hold2: require("../../assets/sounds/phase-hold.wav"),
+  inhale: require("../../assets/sounds/phase-inhale.mp3"),
+  hold1: require("../../assets/sounds/phase-hold.mp3"),
+  exhale: require("../../assets/sounds/phase-exhale.mp3"),
+  hold2: require("../../assets/sounds/phase-hold.mp3"),
 };
