@@ -3,7 +3,7 @@ import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 
-import { languageOptions } from "@/i18n";
+import { languageOptions, persistLanguage } from "@/i18n";
 import { styles } from "../lib/styles";
 
 export default function LanguageScreen() {
@@ -30,7 +30,10 @@ export default function LanguageScreen() {
               return (
                 <Pressable
                   key={option.code}
-                  onPress={() => i18n.changeLanguage(option.code)}
+                  onPress={() => {
+                    persistLanguage(option.code);
+                    i18n.changeLanguage(option.code);
+                  }}
                   style={({ pressed }) => [
                     styles.row,
                     styles.languageRow,

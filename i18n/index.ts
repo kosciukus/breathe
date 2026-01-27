@@ -1,4 +1,5 @@
 import * as Localization from "expo-localization";
+import * as SecureStore from "expo-secure-store";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
@@ -219,9 +220,10 @@ export const resources = {
 
 const locale = Localization.locale || "en";
 const language = locale.split("-")[0];
-const supported = ["en", "es", "fr", "pl"];
 
 export type AppLanguage = keyof typeof resources;
+const supported: AppLanguage[] = ["en", "es", "fr", "pl"];
+const LANGUAGE_KEY = "breathe.language";
 export const languageOptions = (Object.keys(resources) as AppLanguage[]).map((code) => ({
   code,
   label: resources[code].translation.language.name,
@@ -233,5 +235,26 @@ i18n.use(initReactI18next).init({
   fallbackLng: "en",
   interpolation: { escapeValue: false },
 });
+
+const loadSavedLanguage = async () => {
+  try {
+    const saved = await SecureStore.getItemAsync(LANGUAGE_KEY);
+    if (saved && supported.includes(saved as AppLanguage) && saved !== i18n.language) {
+      i18n.changeLanguage(saved);
+    }
+  } catch {
+    // Ignore storage errors and fall back to device locale.
+  }
+};
+
+loadSavedLanguage();
+
+export const persistLanguage = async (code: AppLanguage) => {
+  try {
+    await SecureStore.setItemAsync(LANGUAGE_KEY, code);
+  } catch {
+    // Ignore storage errors; language will still update in memory.
+  }
+};
 
 export default i18n;
