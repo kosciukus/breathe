@@ -31,27 +31,25 @@ export default function BreathingScreen() {
   } = useBreathing();
 
   const inhalePlayer = useAudioPlayer(PHASE_SOUNDS.inhale);
-  const hold1Player = useAudioPlayer(PHASE_SOUNDS.hold1);
+  const holdPlayer = useAudioPlayer(PHASE_SOUNDS.hold1);
   const exhalePlayer = useAudioPlayer(PHASE_SOUNDS.exhale);
-  const hold2Player = useAudioPlayer(PHASE_SOUNDS.hold2);
 
   useEffect(() => {
     inhalePlayer.volume = 0.8;
-    hold1Player.volume = 0.8;
+    holdPlayer.volume = 0.8;
     exhalePlayer.volume = 0.8;
-    hold2Player.volume = 0.8;
-  }, [exhalePlayer, hold1Player, hold2Player, inhalePlayer]);
+  }, [exhalePlayer, holdPlayer, inhalePlayer]);
 
   const playPhaseTone = React.useCallback((phaseKey: typeof phase) => {
     if (soundEnabled) {
       const player =
         phaseKey === "inhale"
           ? inhalePlayer
-          : phaseKey === "hold1"
-          ? hold1Player
+          : phaseKey === "hold1" || phaseKey === "hold2"
+          ? holdPlayer
           : phaseKey === "exhale"
           ? exhalePlayer
-          : hold2Player;
+          : holdPlayer;
       if (player.isLoaded) {
         player.seekTo(0).catch(() => undefined);
         player.play();
@@ -60,7 +58,7 @@ export default function BreathingScreen() {
     if (vibrationEnabled) {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy).catch(() => undefined);
     }
-  }, [exhalePlayer, hold1Player, hold2Player, inhalePlayer, soundEnabled, vibrationEnabled]);
+  }, [exhalePlayer, holdPlayer, inhalePlayer, soundEnabled, vibrationEnabled]);
 
   const prevPhaseRef = useRef(phase);
 
