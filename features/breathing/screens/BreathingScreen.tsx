@@ -5,11 +5,11 @@ import { useTranslation } from "react-i18next";
 import { Animated, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import DurationSliderRow from "./components/DurationSliderRow";
-import { PHASE_LABEL_KEYS, PHASE_SOUNDS, SLIDER_ITEMS } from "./constants";
-import { useBreathing } from "./context/BreathingContext";
-import { styles } from "./styles";
-import { formatMinutesSeconds } from "./utils";
+import DurationSliderRow from "../components/DurationSliderRow";
+import { PHASE_LABEL_KEYS, PHASE_SOUNDS, SLIDER_ITEMS } from "../lib/constants";
+import { useBreathing } from "../context/BreathingContext";
+import { styles } from "../lib/styles";
+import { formatMinutesSeconds } from "../lib/utils";
 
 export default function BreathingScreen() {
   const { t } = useTranslation();

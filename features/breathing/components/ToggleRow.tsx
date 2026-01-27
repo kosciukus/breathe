@@ -1,6 +1,6 @@
 import React from "react";
 import { Switch, Text, View } from "react-native";
-import { COLORS, styles } from "../styles";
+import { COLORS, styles } from "../lib/styles";
 
 type ToggleRowProps = {
   label: string;

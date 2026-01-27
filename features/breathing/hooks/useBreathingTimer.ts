@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { PHASE_ORDER, TICK_MS } from "../constants";
-import { BREATHING_PRESETS } from "../presets";
-import { DurationsSec, PhaseKey } from "../types";
-import { clampSec, nextPhase } from "../utils";
+import { PHASE_ORDER, TICK_MS } from "../lib/constants";
+import { BREATHING_PRESETS } from "../data/presets";
+import { DurationsSec, PhaseKey } from "../lib/types";
+import { clampSec, nextPhase } from "../lib/utils";
 
 export type BreathingTimerState = {
   active: DurationsSec;

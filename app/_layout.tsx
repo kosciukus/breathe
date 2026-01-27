@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import '@/i18n';
 
-import { BreathingProvider } from '@/features/breathing/context/BreathingContext';
+import { BreathingProvider } from '@/features/breathing';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export const unstable_settings = {

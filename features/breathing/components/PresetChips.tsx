@@ -1,8 +1,8 @@
 import React from "react";
 import { Pressable, Text, View } from "react-native";
 import { useTranslation } from "react-i18next";
-import { BreathingPreset } from "../types";
-import { styles } from "../styles";
+import { BreathingPreset } from "../lib/types";
+import { styles } from "../lib/styles";
 
 type PresetChipsProps = {
   presets: BreathingPreset[];

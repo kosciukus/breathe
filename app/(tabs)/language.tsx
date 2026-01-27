@@ -1,4 +1,4 @@
-import LanguageScreen from "../../features/breathing/LanguageScreen";
+import { LanguageScreen } from "@/features/breathing";
 
 export default function LanguageTab() {
   return <LanguageScreen />;

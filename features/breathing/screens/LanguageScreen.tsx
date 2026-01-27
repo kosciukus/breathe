@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 
 import { languageOptions } from "@/i18n";
-import { styles } from "./styles";
+import { styles } from "../lib/styles";
 
 export default function LanguageScreen() {
   const { t, i18n } = useTranslation();

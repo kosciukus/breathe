@@ -3,10 +3,10 @@ import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 
-import PresetChips from "./components/PresetChips";
-import { useBreathing } from "./context/BreathingContext";
-import { styles } from "./styles";
-import { isSameDurations } from "./utils";
+import PresetChips from "../components/PresetChips";
+import { useBreathing } from "../context/BreathingContext";
+import { styles } from "../lib/styles";
+import { isSameDurations } from "../lib/utils";
 
 export default function PresetsScreen() {
   const { t } = useTranslation();

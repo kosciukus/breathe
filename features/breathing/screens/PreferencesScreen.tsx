@@ -3,9 +3,9 @@ import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 
-import ToggleRow from "./components/ToggleRow";
-import { useBreathing } from "./context/BreathingContext";
-import { styles } from "./styles";
+import ToggleRow from "../components/ToggleRow";
+import { useBreathing } from "../context/BreathingContext";
+import { styles } from "../lib/styles";
 
 export default function PreferencesScreen() {
   const { t } = useTranslation();

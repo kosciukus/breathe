@@ -1,8 +1,8 @@
 import Slider from "@react-native-community/slider";
 import React from "react";
 import { Platform, Text, View } from "react-native";
-import { COLORS, styles } from "../styles";
-import { clampSec } from "../utils";
+import { COLORS, styles } from "../lib/styles";
+import { clampSec } from "../lib/utils";
 
 type DurationSliderRowProps = {
   label: string;
