@@ -224,4 +224,8 @@ export const styles = StyleSheet.create({
   toggleRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
   rowLabel: { fontSize: 15, fontWeight: "600", color: COLORS.ink },
   rowValue: { fontSize: 15, fontWeight: "700", color: COLORS.ink },
+  languageRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
+  languageRowSelected: { backgroundColor: COLORS.accentSoft, borderColor: COLORS.accent },
+  languageHint: { marginTop: 2, fontSize: 12, color: COLORS.muted },
+  languageCheck: { fontSize: 18, fontWeight: "800", color: COLORS.accent },
 });

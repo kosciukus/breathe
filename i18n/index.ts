@@ -2,13 +2,19 @@ import * as Localization from "expo-localization";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
-const resources = {
+export const resources = {
   en: {
     translation: {
       app: {
         eyebrow: "BREATHWORK",
         title: "Mindful Breathe",
         subtitle: "Set a rhythm that feels calm and steady.",
+      },
+      language: {
+        title: "Language",
+        subtitle: "Choose the language of the app.",
+        name: "English",
+        current: "Current",
       },
       phase: {
         inhale: "INHALE",
@@ -21,8 +27,10 @@ const resources = {
         reset: "Reset",
       },
       section: {
+        home: "Home",
         presets: "Presets",
         preferences: "Preferences",
+        language: "Language",
         settings: "Settings",
       },
       label: {
@@ -51,13 +59,19 @@ const resources = {
   es: {
     translation: {
       app: {
-        eyebrow: "RESPIRACION",
-        title: "Respiracion consciente",
+        eyebrow: "RESPIRACIÓN",
+        title: "Respiración consciente",
         subtitle: "Define un ritmo que se sienta tranquilo y estable.",
+      },
+      language: {
+        title: "Idioma",
+        subtitle: "Elige el idioma de la aplicación.",
+        name: "Español",
+        current: "Actual",
       },
       phase: {
         inhale: "INHALA",
-        hold: "RETEN",
+        hold: "RETÉN",
         exhale: "EXHALA",
       },
       action: {
@@ -66,25 +80,27 @@ const resources = {
         reset: "Reiniciar",
       },
       section: {
+        home: "Inicio",
         presets: "Preajustes",
         preferences: "Preferencias",
+        language: "Idioma",
         settings: "Ajustes",
       },
       label: {
         remaining: "Restante",
         state: "Estado:",
         phaseSound: "Sonido de fase",
-        vibration: "Vibracion",
-        repeatFor: "Repetir durante",
+        vibration: "Vibración",
+        repeatFor: "Duración",
         inhale: "Inhala",
-        hold1: "Pausa despues de inhalar",
+        hold1: "Pausa después de inhalar",
         exhale: "Exhala",
-        hold2: "Pausa despues de exhalar",
+        hold2: "Pausa después de exhalar",
       },
       presets: {
         calm_4_6: "Calma 4-6",
         box_4_4_4_4: "Caja 4-4-4-4",
-        relax_4_7_8: "Relajacion 4-7-8",
+        relax_4_7_8: "Relajación 4-7-8",
         focus_5_5: "Enfoque 5-5",
       },
       unit: {
@@ -98,7 +114,13 @@ const resources = {
       app: {
         eyebrow: "RESPIRATION",
         title: "Respiration consciente",
-        subtitle: "Definissez un rythme calme et stable.",
+        subtitle: "Définissez un rythme calme et régulier.",
+      },
+      language: {
+        title: "Langue",
+        subtitle: "Choisissez la langue de l’application.",
+        name: "Français",
+        current: "Actuelle",
       },
       phase: {
         inhale: "INSPIRER",
@@ -106,31 +128,33 @@ const resources = {
         exhale: "EXPIRER",
       },
       action: {
-        start: "Demarrer",
+        start: "Démarrer",
         pause: "Pause",
-        reset: "Reinitialiser",
+        reset: "Réinitialiser",
       },
       section: {
-        presets: "Presets",
-        preferences: "Preferences",
-        settings: "Parametres",
+        home: "Accueil",
+        presets: "Préréglages",
+        preferences: "Préférences",
+        language: "Langue",
+        settings: "Paramètres",
       },
       label: {
         remaining: "Restant",
-        state: "Etat:",
+        state: "État:",
         phaseSound: "Son de phase",
         vibration: "Vibration",
-        repeatFor: "Repeter pendant",
-        inhale: "Inspirer",
-        hold1: "Pause apres inspiration",
-        exhale: "Expirer",
-        hold2: "Pause apres expiration",
+        repeatFor: "Durée",
+        inhale: "Inspiration",
+        hold1: "Pause après l'inspiration",
+        exhale: "Expiration",
+        hold2: "Pause après l'expiration",
       },
       presets: {
         calm_4_6: "Calme 4-6",
-        box_4_4_4_4: "Carre 4-4-4-4",
-        relax_4_7_8: "Relax 4-7-8",
-        focus_5_5: "Focus 5-5",
+        box_4_4_4_4: "Carré 4-4-4-4",
+        relax_4_7_8: "Relaxation 4-7-8",
+        focus_5_5: "Concentration 5-5",
       },
       unit: {
         minuteShort: "min",
@@ -143,7 +167,13 @@ const resources = {
       app: {
         eyebrow: "ODDECH",
         title: "Świadomy oddech",
-        subtitle: "Ustaw spokojny i rowny rytm.",
+        subtitle: "Ustaw spokojny i równy rytm.",
+      },
+      language: {
+        title: "Język",
+        subtitle: "Wybierz język aplikacji.",
+        name: "Polski",
+        current: "Bieżący",
       },
       phase: {
         inhale: "WDECH",
@@ -156,23 +186,25 @@ const resources = {
         reset: "Reset",
       },
       section: {
+        home: "Start",
         presets: "Presety",
         preferences: "Preferencje",
+        language: "Język",
         settings: "Ustawienia",
       },
       label: {
-        remaining: "Pozostalo",
-        state: "Czynność:",
-        phaseSound: "Dzwiek fazy",
+        remaining: "Pozostało",
+        state: "Stan:",
+        phaseSound: "Dźwięk fazy",
         vibration: "Wibracje",
-        repeatFor: "Powtarzaj przez",
+        repeatFor: "Czas trwania",
         inhale: "Wdech",
         hold1: "Pauza po wdechu",
         exhale: "Wydech",
         hold2: "Pauza po wydechu",
       },
       presets: {
-        calm_4_6: "Spokoj 4-6",
+        calm_4_6: "Spokój 4-6",
         box_4_4_4_4: "Kwadrat 4-4-4-4",
         relax_4_7_8: "Relaks 4-7-8",
         focus_5_5: "Skupienie 5-5",
@@ -188,6 +220,12 @@ const resources = {
 const locale = Localization.locale || "en";
 const language = locale.split("-")[0];
 const supported = ["en", "es", "fr", "pl"];
+
+export type AppLanguage = keyof typeof resources;
+export const languageOptions = (Object.keys(resources) as AppLanguage[]).map((code) => ({
+  code,
+  label: resources[code].translation.language.name,
+}));
 
 i18n.use(initReactI18next).init({
   resources,
