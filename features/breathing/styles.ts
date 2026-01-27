@@ -14,7 +14,7 @@ export const COLORS = {
 
 export const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: COLORS.bg },
-  scrollContent: { paddingBottom: 24, flexGrow: 1 },
+  scrollContent: { paddingBottom: 0, flexGrow: 1 },
   background: {
     ...StyleSheet.absoluteFillObject,
   },

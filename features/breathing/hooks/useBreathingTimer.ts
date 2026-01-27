@@ -4,7 +4,7 @@ import { BREATHING_PRESETS } from "../presets";
 import { DurationsSec, PhaseKey } from "../types";
 import { clampSec, nextPhase } from "../utils";
 
-type BreathingTimerState = {
+export type BreathingTimerState = {
   active: DurationsSec;
   draft: DurationsSec;
   repeatMinutes: number;

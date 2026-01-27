@@ -3,24 +3,17 @@ import * as Haptics from "expo-haptics";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Animated, Pressable, ScrollView, Text, View } from "react-native";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import DurationSliderRow from "./components/DurationSliderRow";
-import PresetChips from "./components/PresetChips";
-import ToggleRow from "./components/ToggleRow";
 import { PHASE_LABEL_KEYS, PHASE_SOUNDS, SLIDER_ITEMS } from "./constants";
-import { useBreathingTimer } from "./hooks/useBreathingTimer";
+import { useBreathing } from "./context/BreathingContext";
 import { styles } from "./styles";
-import { formatMinutesSeconds, isSameDurations } from "./utils";
+import { formatMinutesSeconds } from "./utils";
 
 export default function BreathingScreen() {
   const { t } = useTranslation();
-  const insets = useSafeAreaInsets();
-  const [soundEnabled, setSoundEnabled] = useState(true);
-  const [vibrationEnabled, setVibrationEnabled] = useState(true);
-  const [presetsOpen, setPresetsOpen] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(true);
-  const [preferencesOpen, setPreferencesOpen] = useState(true);
   const {
     draft,
     phase,
@@ -29,13 +22,13 @@ export default function BreathingScreen() {
     totalActiveSec,
     repeatMinutes,
     sessionRemainingMs,
-    presets,
-    applyPreset,
     setRepeatMinutes,
     toggleRun,
     reset,
     setDraftField,
-  } = useBreathingTimer();
+    soundEnabled,
+    vibrationEnabled,
+  } = useBreathing();
 
   const inhalePlayer = useAudioPlayer(PHASE_SOUNDS.inhale);
   const hold1Player = useAudioPlayer(PHASE_SOUNDS.hold1);
@@ -50,18 +43,20 @@ export default function BreathingScreen() {
   }, [exhalePlayer, hold1Player, hold2Player, inhalePlayer]);
 
   const playPhaseTone = React.useCallback((phaseKey: typeof phase) => {
-    if (!soundEnabled) return;
-    const player =
-      phaseKey === "inhale"
-        ? inhalePlayer
-        : phaseKey === "hold1"
-        ? hold1Player
-        : phaseKey === "exhale"
-        ? exhalePlayer
-        : hold2Player;
-    if (!player.isLoaded) return;
-    player.seekTo(0).catch(() => undefined);
-    player.play();
+    if (soundEnabled) {
+      const player =
+        phaseKey === "inhale"
+          ? inhalePlayer
+          : phaseKey === "hold1"
+          ? hold1Player
+          : phaseKey === "exhale"
+          ? exhalePlayer
+          : hold2Player;
+      if (player.isLoaded) {
+        player.seekTo(0).catch(() => undefined);
+        player.play();
+      }
+    }
     if (vibrationEnabled) {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy).catch(() => undefined);
     }
@@ -73,7 +68,7 @@ export default function BreathingScreen() {
   const rowAnims = useRef<Animated.Value[]>([]);
   if (rowAnims.current.length === 0) {
     rowAnims.current = Array.from(
-      { length: SLIDER_ITEMS.length + 3 },
+      { length: SLIDER_ITEMS.length + 1 },
       () => new Animated.Value(0)
     );
   }
@@ -123,14 +118,8 @@ export default function BreathingScreen() {
     [setDraftField]
   );
 
-  const selectedPresetName = useMemo(() => {
-    const matched = presets.find((preset) => isSameDurations(preset.durations, draft));
-    if (!matched) return null;
-    return matched.repeatMinutes === repeatMinutes ? matched.name : null;
-  }, [draft, presets, repeatMinutes]);
-
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
       <View pointerEvents="none" style={styles.background}>
         <View style={styles.bgOrbOne} />
         <View style={styles.bgOrbTwo} />
@@ -200,37 +189,6 @@ export default function BreathingScreen() {
         </Animated.View>
 
         <View style={styles.controls}>
-          <Animated.View
-            style={{
-              opacity: rowAnims.current[0],
-              transform: [
-                {
-                  translateY: rowAnims.current[0].interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [12, 0],
-                  }),
-                },
-              ],
-            }}
-          >
-            <View style={styles.presetSection}>
-              <Pressable
-                onPress={() => setPresetsOpen((value) => !value)}
-                style={styles.sectionHeader}
-              >
-                <Text style={styles.presetTitle}>{t("section.presets")}</Text>
-                <Text style={styles.sectionToggle}>{presetsOpen ? "v" : ">"}</Text>
-              </Pressable>
-              {presetsOpen && (
-                <PresetChips
-                  presets={presets}
-                  selectedName={selectedPresetName}
-                  onSelect={applyPreset}
-                />
-              )}
-            </View>
-          </Animated.View>
-
           <View style={styles.presetSection}>
             <Pressable
               onPress={() => setSettingsOpen((value) => !value)}
@@ -243,10 +201,10 @@ export default function BreathingScreen() {
               <View style={styles.controls}>
                 <Animated.View
                   style={{
-                    opacity: rowAnims.current[2],
+                    opacity: rowAnims.current[0],
                     transform: [
                       {
-                        translateY: rowAnims.current[2].interpolate({
+                        translateY: rowAnims.current[0].interpolate({
                           inputRange: [0, 1],
                           outputRange: [12, 0],
                         }),
@@ -267,10 +225,10 @@ export default function BreathingScreen() {
                   <Animated.View
                     key={item.key}
                     style={{
-                      opacity: rowAnims.current[index + 3],
+                      opacity: rowAnims.current[index + 1],
                       transform: [
                         {
-                          translateY: rowAnims.current[index + 3].interpolate({
+                          translateY: rowAnims.current[index + 1].interpolate({
                             inputRange: [0, 1],
                             outputRange: [12, 0],
                           }),
@@ -285,50 +243,12 @@ export default function BreathingScreen() {
                       min={item.min}
                       max={item.max}
                       unitLabel={` ${t("unit.secondShort")}`}
-                    />
-                  </Animated.View>
+                  />
+                </Animated.View>
                 ))}
               </View>
             )}
           </View>
-
-          <Animated.View
-            style={{
-              opacity: rowAnims.current[1],
-              transform: [
-                {
-                  translateY: rowAnims.current[1].interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [12, 0],
-                  }),
-                },
-              ],
-            }}
-          >
-            <View style={styles.presetSection}>
-              <Pressable
-                onPress={() => setPreferencesOpen((value) => !value)}
-                style={styles.sectionHeader}
-              >
-                <Text style={styles.presetTitle}>{t("section.preferences")}</Text>
-                <Text style={styles.sectionToggle}>{preferencesOpen ? "v" : ">"}</Text>
-              </Pressable>
-              {preferencesOpen && (
-                <View style={styles.controls}>
-                  <ToggleRow
-                    label={t("label.phaseSound")}
-                    value={soundEnabled}
-                    onChange={setSoundEnabled}
-                  />
-                  <ToggleRow
-                    label={t("label.vibration")}
-                    value={vibrationEnabled}
-                    onChange={setVibrationEnabled}
-                  />
-                </View>
-              )}
-            </View>
-          </Animated.View>
         </View>
       </ScrollView>
     </SafeAreaView>
