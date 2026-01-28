@@ -1,16 +1,5 @@
 [
   {
-    "name": "calm_4_6",
-    "labelKey": "presets.calm_4_6",
-    "durations": {
-      "inhale": 4,
-      "hold1": 0,
-      "exhale": 6,
-      "hold2": 0
-    },
-    "repeatMinutes": 5
-  },
-  {
     "name": "box_4_4_4_4",
     "labelKey": "presets.box_4_4_4_4",
     "durations": {
@@ -33,14 +22,36 @@
     "repeatMinutes": 6
   },
   {
-    "name": "focus_5_5",
-    "labelKey": "presets.focus_5_5",
+    "name": "coherent_5_5",
+    "labelKey": "presets.coherent_5_5",
     "durations": {
       "inhale": 5,
       "hold1": 0,
       "exhale": 5,
       "hold2": 0
     },
-    "repeatMinutes": 10
+    "repeatMinutes": 5
+  },
+  {
+    "name": "pursed_2_4",
+    "labelKey": "presets.pursed_2_4",
+    "durations": {
+      "inhale": 2,
+      "hold1": 0,
+      "exhale": 4,
+      "hold2": 0
+    },
+    "repeatMinutes": 5
+  },
+  {
+    "name": "calm_4_4_6_2",
+    "labelKey": "presets.calm_4_4_6_2",
+    "durations": {
+      "inhale": 4,
+      "hold1": 4,
+      "exhale": 6,
+      "hold2": 2
+    },
+    "repeatMinutes": 5
   }
 ]

@@ -1,6 +1,6 @@
 import { useAudioPlayer } from "expo-audio";
 import * as Haptics from "expo-haptics";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Animated, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -13,7 +13,6 @@ import { formatMinutesSeconds } from "../lib/utils";
 
 export default function BreathingScreen() {
   const { t } = useTranslation();
-  const [settingsOpen, setSettingsOpen] = useState(true);
   const {
     draft,
     phase,
@@ -188,21 +187,37 @@ export default function BreathingScreen() {
 
         <View style={styles.controls}>
           <View style={styles.presetSection}>
-            <Pressable
-              onPress={() => setSettingsOpen((value) => !value)}
-              style={styles.sectionHeader}
-            >
-              <Text style={styles.presetTitle}>{t("section.settings")}</Text>
-              <Text style={styles.sectionToggle}>{settingsOpen ? "v" : ">"}</Text>
-            </Pressable>
-            {settingsOpen && (
-              <View style={styles.controls}>
+            <View style={styles.controls}>
+              <Animated.View
+                style={{
+                  opacity: rowAnims.current[0],
+                  transform: [
+                    {
+                      translateY: rowAnims.current[0].interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [12, 0],
+                      }),
+                    },
+                  ],
+                }}
+              >
+                <DurationSliderRow
+                  label={t("label.repeatFor")}
+                  value={repeatMinutes}
+                  onChange={setRepeatMinutes}
+                  min={0}
+                  max={30}
+                  unitLabel={` ${t("unit.minuteShort")}`}
+                />
+              </Animated.View>
+              {SLIDER_ITEMS.map((item, index) => (
                 <Animated.View
+                  key={item.key}
                   style={{
-                    opacity: rowAnims.current[0],
+                    opacity: rowAnims.current[index + 1],
                     transform: [
                       {
-                        translateY: rowAnims.current[0].interpolate({
+                        translateY: rowAnims.current[index + 1].interpolate({
                           inputRange: [0, 1],
                           outputRange: [12, 0],
                         }),
@@ -211,41 +226,16 @@ export default function BreathingScreen() {
                   }}
                 >
                   <DurationSliderRow
-                    label={t("label.repeatFor")}
-                    value={repeatMinutes}
-                    onChange={setRepeatMinutes}
-                    min={0}
-                    max={30}
-                    unitLabel={` ${t("unit.minuteShort")}`}
+                    label={t(item.labelKey)}
+                    value={draft[item.key]}
+                    onChange={sliderHandlers[item.key]}
+                    min={item.min}
+                    max={item.max}
+                    unitLabel={` ${t("unit.secondShort")}`}
                   />
                 </Animated.View>
-                {SLIDER_ITEMS.map((item, index) => (
-                  <Animated.View
-                    key={item.key}
-                    style={{
-                      opacity: rowAnims.current[index + 1],
-                      transform: [
-                        {
-                          translateY: rowAnims.current[index + 1].interpolate({
-                            inputRange: [0, 1],
-                            outputRange: [12, 0],
-                          }),
-                        },
-                      ],
-                    }}
-                  >
-                    <DurationSliderRow
-                      label={t(item.labelKey)}
-                      value={draft[item.key]}
-                      onChange={sliderHandlers[item.key]}
-                      min={item.min}
-                      max={item.max}
-                      unitLabel={` ${t("unit.secondShort")}`}
-                  />
-                </Animated.View>
-                ))}
-              </View>
-            )}
+              ))}
+            </View>
           </View>
         </View>
       </ScrollView>

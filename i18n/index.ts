@@ -46,10 +46,11 @@ export const resources = {
         hold2: "Pause after exhale",
       },
       presets: {
-        calm_4_6: "Calm 4-6",
         box_4_4_4_4: "Box 4-4-4-4",
         relax_4_7_8: "Relax 4-7-8",
-        focus_5_5: "Focus 5-5",
+        coherent_5_5: "Coherent 5-5",
+        pursed_2_4: "Pursed-lip 2-4",
+        calm_4_4_6_2: "Calm 4-4-6-2",
       },
       unit: {
         minuteShort: "min",
@@ -99,10 +100,11 @@ export const resources = {
         hold2: "Pausa después de exhalar",
       },
       presets: {
-        calm_4_6: "Calma 4-6",
         box_4_4_4_4: "Caja 4-4-4-4",
         relax_4_7_8: "Relajación 4-7-8",
-        focus_5_5: "Enfoque 5-5",
+        coherent_5_5: "Coherente 5-5",
+        pursed_2_4: "Labios fruncidos 2-4",
+        calm_4_4_6_2: "Calma 4-4-6-2",
       },
       unit: {
         minuteShort: "min",
@@ -152,10 +154,11 @@ export const resources = {
         hold2: "Pause après l'expiration",
       },
       presets: {
-        calm_4_6: "Calme 4-6",
         box_4_4_4_4: "Carré 4-4-4-4",
         relax_4_7_8: "Relaxation 4-7-8",
-        focus_5_5: "Concentration 5-5",
+        coherent_5_5: "Cohérente 5-5",
+        pursed_2_4: "Lèvres pincées 2-4",
+        calm_4_4_6_2: "Calme 4-4-6-2",
       },
       unit: {
         minuteShort: "min",
@@ -205,10 +208,11 @@ export const resources = {
         hold2: "Pauza po wydechu",
       },
       presets: {
-        calm_4_6: "Spokój 4-6",
         box_4_4_4_4: "Kwadrat 4-4-4-4",
         relax_4_7_8: "Relaks 4-7-8",
-        focus_5_5: "Skupienie 5-5",
+        coherent_5_5: "Spójny 5-5",
+        pursed_2_4: "Usta zaciśnięte 2-4",
+        calm_4_4_6_2: "Spokój 4-4-6-2",
       },
       unit: {
         minuteShort: "min",
@@ -218,11 +222,13 @@ export const resources = {
   },
 } as const;
 
-const locale = Localization.locale || "en";
+const locale = Localization.getLocales()[0]?.languageTag ?? "en";
 const language = locale.split("-")[0];
 
 export type AppLanguage = keyof typeof resources;
 const supported: AppLanguage[] = ["en", "es", "fr", "pl"];
+const isSupportedLanguage = (value: string): value is AppLanguage =>
+  supported.includes(value as AppLanguage);
 const LANGUAGE_KEY = "breathe.language";
 export const languageOptions = (Object.keys(resources) as AppLanguage[]).map((code) => ({
   code,
@@ -231,7 +237,7 @@ export const languageOptions = (Object.keys(resources) as AppLanguage[]).map((co
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: supported.includes(language) ? language : "en",
+  lng: isSupportedLanguage(language) ? language : "en",
   fallbackLng: "en",
   interpolation: { escapeValue: false },
 });
