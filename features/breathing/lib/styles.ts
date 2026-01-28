@@ -133,6 +133,11 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
+  cardHeaderActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
   favoriteButton: {
     width: 32,
     height: 32,
@@ -140,6 +145,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  iconButtonDisabled: { opacity: 0.45 },
   progressTrack: {
     height: 12,
     backgroundColor: COLORS.track,
@@ -153,7 +159,6 @@ export const styles = StyleSheet.create({
     borderRadius: 999,
   },
   buttonRow: { flexDirection: "row", gap: 12, marginTop: 14 },
-  singleButtonRow: { flexDirection: "row", marginTop: 6 },
   button: {
     flex: 1,
     height: 48,
@@ -184,6 +189,7 @@ export const styles = StyleSheet.create({
   noteBold: { fontWeight: "700" },
   controls: { marginTop: 14, gap: 10 },
   presetSection: { gap: 8 },
+  favoritesSection: { marginBottom: 12 },
   presetTitle: {
     fontSize: 15,
     fontWeight: "800",

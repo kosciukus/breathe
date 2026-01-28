@@ -29,6 +29,7 @@ export default function BreathingScreen() {
     reset,
     setDraftField,
     addPreset,
+    removePreset,
     toggleFavorite,
     soundEnabled,
     vibrationEnabled,
@@ -170,6 +171,7 @@ export default function BreathingScreen() {
     if (!matched) return null;
     return matched.repeatMinutes === repeatMinutes ? matched : null;
   }, [draft, presets, repeatMinutes]);
+  const canSavePreset = !matchedPreset;
   const favoritePresets = useMemo(
     () => presets.filter((preset) => preset.isFavorite),
     [presets]
@@ -204,14 +206,17 @@ export default function BreathingScreen() {
         </View>
       ) : null}
 
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.header}>
           <Text style={styles.title}>{t("app.title")}</Text>
           <Text style={styles.subtitle}>{t("app.subtitle")}</Text>
         </View>
 
         {favoritePresets.length > 0 ? (
-          <View style={styles.presetSection}>
+          <View style={[styles.presetSection, styles.favoritesSection]}>
             <Text style={styles.presetTitle}>{t("section.favorites")}</Text>
             <ScrollView
               horizontal
@@ -259,19 +264,67 @@ export default function BreathingScreen() {
         >
           <View style={styles.cardHeaderRow}>
             <Text style={styles.remainingLabel}>{t("label.remaining")}</Text>
-            {matchedPreset ? (
+            <View style={styles.cardHeaderActions}>
               <Pressable
-                onPress={() => toggleFavorite(matchedPreset.name)}
-                style={({ pressed }) => [styles.favoriteButton, pressed && styles.pressed]}
+                onPress={matchedPreset ? () => toggleFavorite(matchedPreset.name) : undefined}
+                disabled={!matchedPreset}
+                style={({ pressed }) => [
+                  styles.favoriteButton,
+                  pressed && matchedPreset && styles.pressed,
+                  !matchedPreset && styles.iconButtonDisabled,
+                ]}
                 hitSlop={8}
               >
                 <Ionicons
-                  name={matchedPreset.isFavorite ? "heart" : "heart-outline"}
+                  name={matchedPreset?.isFavorite ? "heart" : "heart-outline"}
                   size={20}
-                  color={matchedPreset.isFavorite ? COLORS.accent : COLORS.muted}
+                  color={matchedPreset?.isFavorite ? COLORS.accent : COLORS.muted}
                 />
               </Pressable>
-            ) : null}
+              <Pressable
+                onPress={async () => {
+                  if (matchedPreset) {
+                    if (matchedPreset.isCustom) {
+                      removePreset(matchedPreset.name);
+                      const message = t("action.presetRemoved");
+                      if (Platform.OS === "android") {
+                        ToastAndroid.show(message, ToastAndroid.SHORT);
+                      } else {
+                        showToast(message);
+                      }
+                    }
+                    return;
+                  }
+
+                  await addPreset(formatPresetLabel(draft), draft, repeatMinutes);
+                  const message = t("action.presetSaved");
+                  if (Platform.OS === "android") {
+                    ToastAndroid.show(message, ToastAndroid.SHORT);
+                  } else {
+                    showToast(message);
+                  }
+                }}
+                style={({ pressed }) => [
+                  styles.favoriteButton,
+                  pressed && styles.pressed,
+                  matchedPreset && !matchedPreset.isCustom && styles.iconButtonDisabled,
+                ]}
+                disabled={Boolean(matchedPreset && !matchedPreset.isCustom)}
+                hitSlop={8}
+              >
+                <Ionicons
+                  name={matchedPreset ? "trash-outline" : "add-circle-outline"}
+                  size={20}
+                  color={
+                    matchedPreset
+                      ? matchedPreset.isCustom
+                        ? COLORS.accent
+                        : COLORS.muted
+                      : COLORS.accent
+                  }
+                />
+              </Pressable>
+            </View>
           </View>
           <Text style={styles.countdown}>
             {sessionRemainingMs === null ? "—" : formatMinutesSeconds(sessionRemainingMs)}
@@ -364,26 +417,6 @@ export default function BreathingScreen() {
                 </Animated.View>
               ))}
             </View>
-          </View>
-          <View style={styles.singleButtonRow}>
-            <Pressable
-              onPress={async () => {
-                await addPreset(
-                  formatPresetLabel(draft),
-                  draft,
-                  repeatMinutes
-                );
-                const message = t("action.presetSaved");
-                if (Platform.OS === "android") {
-                  ToastAndroid.show(message, ToastAndroid.SHORT);
-                } else {
-                  showToast(message);
-                }
-              }}
-              style={({ pressed }) => [styles.button, styles.primaryButton, pressed && styles.pressed]}
-            >
-              <Text style={styles.buttonText}>{t("action.savePreset")}</Text>
-            </Pressable>
           </View>
         </View>
       </ScrollView>

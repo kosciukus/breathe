@@ -1,7 +1,8 @@
 import React from "react";
-import { ScrollView, Text, View } from "react-native";
+import { Alert, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
+import * as SecureStore from "expo-secure-store";
 
 import ToggleRow from "../components/ToggleRow";
 import { useBreathing } from "../context/BreathingContext";
@@ -10,6 +11,29 @@ import { styles } from "../lib/styles";
 export default function PreferencesScreen() {
   const { t } = useTranslation();
   const { soundEnabled, setSoundEnabled, vibrationEnabled, setVibrationEnabled } = useBreathing();
+
+  const handleResetData = () => {
+    Alert.alert(
+      t("action.resetDataTitle"),
+      t("action.resetDataMessage"),
+      [
+        { text: t("action.cancel"), style: "cancel" },
+        {
+          text: t("action.reset"),
+          style: "destructive",
+          onPress: async () => {
+            await Promise.all([
+              SecureStore.deleteItemAsync("breathe.language"),
+              SecureStore.deleteItemAsync("breathe.presets.custom"),
+              SecureStore.deleteItemAsync("breathe.presets.favorites"),
+              SecureStore.deleteItemAsync("breathe.presets.last"),
+            ]);
+            Alert.alert(t("action.resetDataDone"));
+          },
+        },
+      ]
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
@@ -36,6 +60,12 @@ export default function PreferencesScreen() {
               value={vibrationEnabled}
               onChange={setVibrationEnabled}
             />
+            <Pressable
+              onPress={handleResetData}
+              style={({ pressed }) => [styles.button, styles.secondaryButton, pressed && styles.pressed]}
+            >
+              <Text style={[styles.buttonText, styles.secondaryText]}>{t("action.resetData")}</Text>
+            </Pressable>
           </View>
         </View>
       </ScrollView>
