@@ -21,4 +21,5 @@ export type BreathingPreset = {
   durations: DurationsSec;
   repeatMinutes: number;
   isCustom?: boolean;
+  isFavorite?: boolean;
 };

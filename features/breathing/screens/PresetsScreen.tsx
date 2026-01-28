@@ -18,6 +18,15 @@ export default function PresetsScreen() {
     return matched.repeatMinutes === repeatMinutes ? matched.name : null;
   }, [draft, presets, repeatMinutes]);
 
+  const favoritePresets = useMemo(
+    () => presets.filter((preset) => preset.isFavorite),
+    [presets]
+  );
+  const otherPresets = useMemo(
+    () => presets.filter((preset) => !preset.isFavorite),
+    [presets]
+  );
+
   return (
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
       <View pointerEvents="none" style={styles.background}>
@@ -31,9 +40,39 @@ export default function PresetsScreen() {
           <Text style={styles.subtitle}>{t("app.subtitle")}</Text>
         </View>
 
+        {favoritePresets.length > 0 ? (
+          <View style={styles.presetSection}>
+            <Text style={styles.presetTitle}>{t("section.favorites")}</Text>
+            <PresetChips
+              presets={favoritePresets}
+              selectedName={selectedPresetName}
+              onSelect={applyPreset}
+              onLongPress={(preset) => {
+                if (!preset.isCustom) return;
+                const label =
+                  preset.label ?? (preset.labelKey ? t(preset.labelKey) : preset.name);
+                Alert.alert(
+                  t("action.deletePresetTitle"),
+                  t("action.deletePresetMessage", { name: label }),
+                  [
+                    { text: t("action.cancel"), style: "cancel" },
+                    {
+                      text: t("action.delete"),
+                      style: "destructive",
+                      onPress: () => removePreset(preset.name),
+                    },
+                  ]
+                );
+              }}
+            />
+          </View>
+        ) : null}
         <View style={styles.presetSection}>
+          {favoritePresets.length > 0 ? (
+            <Text style={styles.presetTitle}>{t("section.presets")}</Text>
+          ) : null}
           <PresetChips
-            presets={presets}
+            presets={otherPresets}
             selectedName={selectedPresetName}
             onSelect={applyPreset}
             onLongPress={(preset) => {

@@ -128,6 +128,18 @@ export const styles = StyleSheet.create({
     color: COLORS.muted,
     textTransform: "uppercase",
   },
+  cardHeaderRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  favoriteButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   progressTrack: {
     height: 12,
     backgroundColor: COLORS.track,

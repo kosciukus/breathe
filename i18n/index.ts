@@ -39,6 +39,7 @@ export const resources = {
         preferences: "Preferences",
         language: "Language",
         settings: "Settings",
+        favorites: "Favorites",
       },
       label: {
         remaining: "Remaining",
@@ -100,6 +101,7 @@ export const resources = {
         preferences: "Preferencias",
         language: "Idioma",
         settings: "Ajustes",
+        favorites: "Favoritos",
       },
       label: {
         remaining: "Restante",
@@ -161,6 +163,7 @@ export const resources = {
         preferences: "Préférences",
         language: "Langue",
         settings: "Paramètres",
+        favorites: "Favoris",
       },
       label: {
         remaining: "Restant",
@@ -222,6 +225,7 @@ export const resources = {
         preferences: "Preferencje",
         language: "Język",
         settings: "Ustawienia",
+        favorites: "Ulubione",
       },
       label: {
         remaining: "Pozostało",

@@ -20,6 +20,7 @@ export type BreathingTimerState = {
   applyPreset: (name: string) => void;
   addPreset: (label: string, durations: DurationsSec, repeatMinutes: number) => Promise<void>;
   removePreset: (name: string) => void;
+  toggleFavorite: (name: string) => void;
   setRepeatMinutes: (next: number) => void;
   toggleRun: () => void;
   reset: () => void;
@@ -27,6 +28,8 @@ export type BreathingTimerState = {
 };
 
 const CUSTOM_PRESETS_KEY = "breathe.presets.custom";
+const FAVORITE_PRESETS_KEY = "breathe.presets.favorites";
+const LAST_PRESET_KEY = "breathe.presets.last";
 
 const sanitizeCustomPreset = (value: unknown): BreathingPreset | null => {
   if (!value || typeof value !== "object") return null;
@@ -65,6 +68,8 @@ const sanitizeCustomPreset = (value: unknown): BreathingPreset | null => {
 
 export const useBreathingTimer = (): BreathingTimerState => {
   const [customPresets, setCustomPresets] = useState<BreathingPreset[]>([]);
+  const [customPresetsLoaded, setCustomPresetsLoaded] = useState(false);
+  const [favorites, setFavorites] = useState<string[]>([]);
   const [draft, setDraft] = useState<DurationsSec>({
     inhale: 4,
     hold1: 0,
@@ -80,10 +85,15 @@ export const useBreathingTimer = (): BreathingTimerState => {
   );
   const [isRunning, setIsRunning] = useState(false);
 
-  const presets = useMemo(
-    () => [...BREATHING_PRESETS, ...customPresets],
-    [customPresets]
-  );
+  const favoriteSet = useMemo(() => new Set(favorites), [favorites]);
+  const presets = useMemo(() => {
+    const withFavorites = (items: BreathingPreset[]) =>
+      items.map((preset) => ({
+        ...preset,
+        isFavorite: favoriteSet.has(preset.name),
+      }));
+    return [...withFavorites(BREATHING_PRESETS), ...withFavorites(customPresets)];
+  }, [customPresets, favoriteSet]);
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isRunningRef = useRef(isRunning);
@@ -114,6 +124,8 @@ export const useBreathingTimer = (): BreathingTimerState => {
         }
       } catch {
         // Ignore storage errors and fall back to base presets.
+      } finally {
+        if (!cancelled) setCustomPresetsLoaded(true);
       }
     };
     loadCustomPresets();
@@ -121,6 +133,55 @@ export const useBreathingTimer = (): BreathingTimerState => {
       cancelled = true;
     };
   }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    const loadFavorites = async () => {
+      try {
+        const raw = await SecureStore.getItemAsync(FAVORITE_PRESETS_KEY);
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return;
+        const nextFavorites = parsed.filter((name) => typeof name === "string");
+        if (!cancelled) {
+          setFavorites(nextFavorites);
+        }
+      } catch {
+        // Ignore storage errors and fall back to no favorites.
+      }
+    };
+    loadFavorites();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const initialPresetLoadedRef = useRef(false);
+  useEffect(() => {
+    if (initialPresetLoadedRef.current) return;
+    if (!customPresetsLoaded) return;
+    initialPresetLoadedRef.current = true;
+    let cancelled = false;
+    const loadLastPreset = async () => {
+      try {
+        const lastName = await SecureStore.getItemAsync(LAST_PRESET_KEY);
+        if (cancelled) return;
+        const target =
+          (lastName ? presets.find((preset) => preset.name === lastName) : null) ??
+          BREATHING_PRESETS[0];
+        if (target) {
+          setDraft(target.durations);
+          setRepeatMinutes(target.repeatMinutes);
+        }
+      } catch {
+        // Ignore storage errors and fall back to defaults.
+      }
+    };
+    loadLastPreset();
+    return () => {
+      cancelled = true;
+    };
+  }, [customPresetsLoaded, presets]);
 
   useEffect(() => {
     isRunningRef.current = isRunning;
@@ -283,6 +344,7 @@ export const useBreathingTimer = (): BreathingTimerState => {
     if (!preset) return;
     setDraft(preset.durations);
     setRepeatMinutes(preset.repeatMinutes);
+    SecureStore.setItemAsync(LAST_PRESET_KEY, name).catch(() => undefined);
   }, []);
 
   const addPreset = useCallback(
@@ -346,6 +408,21 @@ export const useBreathingTimer = (): BreathingTimerState => {
       ).catch(() => undefined);
       return next;
     });
+    setFavorites((prev) => {
+      if (!prev.includes(name)) return prev;
+      const next = prev.filter((item) => item !== name);
+      SecureStore.setItemAsync(FAVORITE_PRESETS_KEY, JSON.stringify(next)).catch(() => undefined);
+      return next;
+    });
+  }, []);
+
+  const toggleFavorite = useCallback((name: string) => {
+    setFavorites((prev) => {
+      const exists = prev.includes(name);
+      const next = exists ? prev.filter((item) => item !== name) : [...prev, name];
+      SecureStore.setItemAsync(FAVORITE_PRESETS_KEY, JSON.stringify(next)).catch(() => undefined);
+      return next;
+    });
   }, []);
 
   const totalActiveSec = active.inhale + active.hold1 + active.exhale + active.hold2;
@@ -365,6 +442,7 @@ export const useBreathingTimer = (): BreathingTimerState => {
     applyPreset,
     addPreset,
     removePreset,
+    toggleFavorite,
     setRepeatMinutes,
     toggleRun,
     reset,

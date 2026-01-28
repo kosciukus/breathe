@@ -2,14 +2,15 @@ import { useAudioPlayer } from "expo-audio";
 import * as Haptics from "expo-haptics";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Ionicons } from "@expo/vector-icons";
 import { Animated, Platform, Pressable, ScrollView, Text, ToastAndroid, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import DurationSliderRow from "../components/DurationSliderRow";
 import { useBreathing } from "../context/BreathingContext";
 import { PHASE_LABEL_KEYS, PHASE_SOUNDS, SLIDER_ITEMS } from "../lib/constants";
-import { styles } from "../lib/styles";
-import { formatMinutesSeconds } from "../lib/utils";
+import { COLORS, styles } from "../lib/styles";
+import { formatMinutesSeconds, isSameDurations } from "../lib/utils";
 
 export default function BreathingScreen() {
   const { t } = useTranslation();
@@ -27,6 +28,7 @@ export default function BreathingScreen() {
     reset,
     setDraftField,
     addPreset,
+    toggleFavorite,
     soundEnabled,
     vibrationEnabled,
   } = useBreathing();
@@ -162,6 +164,12 @@ export default function BreathingScreen() {
     [t]
   );
 
+  const matchedPreset = useMemo(() => {
+    const matched = presets.find((preset) => isSameDurations(preset.durations, draft));
+    if (!matched) return null;
+    return matched.repeatMinutes === repeatMinutes ? matched : null;
+  }, [draft, presets, repeatMinutes]);
+
   return (
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
       <View pointerEvents="none" style={styles.background}>
@@ -213,7 +221,22 @@ export default function BreathingScreen() {
             },
           ]}
         >
-          <Text style={styles.remainingLabel}>{t("label.remaining")}</Text>
+          <View style={styles.cardHeaderRow}>
+            <Text style={styles.remainingLabel}>{t("label.remaining")}</Text>
+            {matchedPreset ? (
+              <Pressable
+                onPress={() => toggleFavorite(matchedPreset.name)}
+                style={({ pressed }) => [styles.favoriteButton, pressed && styles.pressed]}
+                hitSlop={8}
+              >
+                <Ionicons
+                  name={matchedPreset.isFavorite ? "heart" : "heart-outline"}
+                  size={20}
+                  color={matchedPreset.isFavorite ? COLORS.accent : COLORS.muted}
+                />
+              </Pressable>
+            ) : null}
+          </View>
           <Text style={styles.countdown}>
             {sessionRemainingMs === null ? "—" : formatMinutesSeconds(sessionRemainingMs)}
           </Text>
