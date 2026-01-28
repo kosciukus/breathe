@@ -28,6 +28,10 @@ export const resources = {
         reset: "Reset",
         savePreset: "Save preset",
         presetSaved: "Preset saved",
+        deletePresetTitle: "Delete preset?",
+        deletePresetMessage: "Are you sure you want to delete {{name}}?",
+        cancel: "Cancel",
+        delete: "Delete",
       },
       section: {
         home: "Home",
@@ -85,6 +89,10 @@ export const resources = {
         reset: "Reiniciar",
         savePreset: "Guardar preajuste",
         presetSaved: "Preajuste guardado",
+        deletePresetTitle: "¿Eliminar preajuste?",
+        deletePresetMessage: "¿Seguro que deseas eliminar {{name}}?",
+        cancel: "Cancelar",
+        delete: "Eliminar",
       },
       section: {
         home: "Inicio",
@@ -142,6 +150,10 @@ export const resources = {
         reset: "Réinitialiser",
         savePreset: "Enregistrer un préréglage",
         presetSaved: "Préréglage enregistré",
+        deletePresetTitle: "Supprimer le préréglage ?",
+        deletePresetMessage: "Voulez-vous supprimer {{name}} ?",
+        cancel: "Annuler",
+        delete: "Supprimer",
       },
       section: {
         home: "Accueil",
@@ -199,6 +211,10 @@ export const resources = {
         reset: "Reset",
         savePreset: "Zapisz preset",
         presetSaved: "Preset zapisany",
+        deletePresetTitle: "Usunąć preset?",
+        deletePresetMessage: "Czy na pewno usunąć {{name}}?",
+        cancel: "Anuluj",
+        delete: "Usuń",
       },
       section: {
         home: "Start",

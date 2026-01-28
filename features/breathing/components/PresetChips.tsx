@@ -8,9 +8,10 @@ type PresetChipsProps = {
   presets: BreathingPreset[];
   selectedName: string | null;
   onSelect: (name: string) => void;
+  onLongPress?: (preset: BreathingPreset) => void;
 };
 
-const PresetChips = ({ presets, selectedName, onSelect }: PresetChipsProps) => {
+const PresetChips = ({ presets, selectedName, onSelect, onLongPress }: PresetChipsProps) => {
   const { t } = useTranslation();
   return (
     <View style={styles.presetGrid}>
@@ -21,6 +22,7 @@ const PresetChips = ({ presets, selectedName, onSelect }: PresetChipsProps) => {
           <Pressable
             key={preset.name}
             onPress={() => onSelect(preset.name)}
+            onLongPress={onLongPress ? () => onLongPress(preset) : undefined}
             style={({ pressed }) => [
               styles.presetChip,
               isSelected && styles.presetChipSelected,

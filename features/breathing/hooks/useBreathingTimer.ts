@@ -19,6 +19,7 @@ export type BreathingTimerState = {
   presets: BreathingPreset[];
   applyPreset: (name: string) => void;
   addPreset: (label: string, durations: DurationsSec, repeatMinutes: number) => Promise<void>;
+  removePreset: (name: string) => void;
   setRepeatMinutes: (next: number) => void;
   toggleRun: () => void;
   reset: () => void;
@@ -328,6 +329,25 @@ export const useBreathingTimer = (): BreathingTimerState => {
     []
   );
 
+  const removePreset = useCallback((name: string) => {
+    setCustomPresets((prev) => {
+      const next = prev.filter((preset) => preset.name !== name);
+      if (next.length === prev.length) return prev;
+      SecureStore.setItemAsync(
+        CUSTOM_PRESETS_KEY,
+        JSON.stringify(
+          next.map(({ name: storedName, label: storedLabel, durations: storedDurations, repeatMinutes }) => ({
+            name: storedName,
+            label: storedLabel,
+            durations: storedDurations,
+            repeatMinutes,
+          }))
+        )
+      ).catch(() => undefined);
+      return next;
+    });
+  }, []);
+
   const totalActiveSec = active.inhale + active.hold1 + active.exhale + active.hold2;
 
   return {
@@ -344,6 +364,7 @@ export const useBreathingTimer = (): BreathingTimerState => {
     presets,
     applyPreset,
     addPreset,
+    removePreset,
     setRepeatMinutes,
     toggleRun,
     reset,
