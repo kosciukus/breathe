@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import * as SecureStore from "expo-secure-store";
 import { PHASE_ORDER, TICK_MS } from "../lib/constants";
 import { BREATHING_PRESETS } from "../data/presets";
-import { DurationsSec, PhaseKey } from "../lib/types";
-import { clampSec, nextPhase } from "../lib/utils";
+import { BreathingPreset, DurationsSec, PhaseKey } from "../lib/types";
+import { clampSec, isSameDurations, nextPhase } from "../lib/utils";
 
 export type BreathingTimerState = {
   active: DurationsSec;
@@ -15,15 +16,54 @@ export type BreathingTimerState = {
   progress: number;
   remainingSecDisplay: number;
   totalActiveSec: number;
-  presets: typeof BREATHING_PRESETS;
+  presets: BreathingPreset[];
   applyPreset: (name: string) => void;
+  addPreset: (label: string, durations: DurationsSec, repeatMinutes: number) => Promise<void>;
   setRepeatMinutes: (next: number) => void;
   toggleRun: () => void;
   reset: () => void;
   setDraftField: (key: keyof DurationsSec, v: number) => void;
 };
 
+const CUSTOM_PRESETS_KEY = "breathe.presets.custom";
+
+const sanitizeCustomPreset = (value: unknown): BreathingPreset | null => {
+  if (!value || typeof value !== "object") return null;
+  const record = value as Record<string, unknown>;
+  if (typeof record.name !== "string") return null;
+  if (!record.durations || typeof record.durations !== "object") return null;
+  const durationsRecord = record.durations as Record<string, unknown>;
+  const inhale = Number(durationsRecord.inhale);
+  const hold1 = Number(durationsRecord.hold1);
+  const exhale = Number(durationsRecord.exhale);
+  const hold2 = Number(durationsRecord.hold2);
+  const repeatMinutes = Number(record.repeatMinutes);
+  if (
+    !Number.isFinite(inhale) ||
+    !Number.isFinite(hold1) ||
+    !Number.isFinite(exhale) ||
+    !Number.isFinite(hold2) ||
+    !Number.isFinite(repeatMinutes)
+  ) {
+    return null;
+  }
+  const label = typeof record.label === "string" ? record.label : undefined;
+  return {
+    name: record.name,
+    label,
+    durations: {
+      inhale: clampSec(inhale),
+      hold1: clampSec(hold1),
+      exhale: clampSec(exhale),
+      hold2: clampSec(hold2),
+    },
+    repeatMinutes: clampSec(repeatMinutes),
+    isCustom: true,
+  };
+};
+
 export const useBreathingTimer = (): BreathingTimerState => {
+  const [customPresets, setCustomPresets] = useState<BreathingPreset[]>([]);
   const [draft, setDraft] = useState<DurationsSec>({
     inhale: 4,
     hold1: 0,
@@ -39,6 +79,11 @@ export const useBreathingTimer = (): BreathingTimerState => {
   );
   const [isRunning, setIsRunning] = useState(false);
 
+  const presets = useMemo(
+    () => [...BREATHING_PRESETS, ...customPresets],
+    [customPresets]
+  );
+
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isRunningRef = useRef(isRunning);
   const phaseRef = useRef<PhaseKey>(phase);
@@ -46,6 +91,35 @@ export const useBreathingTimer = (): BreathingTimerState => {
   const draftRef = useRef<DurationsSec>(draft);
   const repeatMinutesRef = useRef(repeatMinutes);
   const sessionRemainingRef = useRef<number | null>(repeatMinutes * 60 * 1000);
+  const presetsRef = useRef(presets);
+
+  useEffect(() => {
+    presetsRef.current = presets;
+  }, [presets]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const loadCustomPresets = async () => {
+      try {
+        const raw = await SecureStore.getItemAsync(CUSTOM_PRESETS_KEY);
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return;
+        const nextCustom = parsed
+          .map((item) => sanitizeCustomPreset(item))
+          .filter((item): item is BreathingPreset => Boolean(item));
+        if (!cancelled) {
+          setCustomPresets(nextCustom);
+        }
+      } catch {
+        // Ignore storage errors and fall back to base presets.
+      }
+    };
+    loadCustomPresets();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     isRunningRef.current = isRunning;
@@ -204,11 +278,55 @@ export const useBreathingTimer = (): BreathingTimerState => {
   }, []);
 
   const applyPreset = useCallback((name: string) => {
-    const preset = BREATHING_PRESETS.find((item) => item.name === name);
+    const preset = presetsRef.current.find((item) => item.name === name);
     if (!preset) return;
     setDraft(preset.durations);
     setRepeatMinutes(preset.repeatMinutes);
   }, []);
+
+  const addPreset = useCallback(
+    async (label: string, durations: DurationsSec, nextRepeatMinutes: number) => {
+      const normalizedDurations = {
+        inhale: clampSec(durations.inhale),
+        hold1: clampSec(durations.hold1),
+        exhale: clampSec(durations.exhale),
+        hold2: clampSec(durations.hold2),
+      };
+      const normalizedRepeat = clampSec(nextRepeatMinutes);
+
+      setCustomPresets((prev) => {
+        const exists = prev.some(
+          (preset) =>
+            isSameDurations(preset.durations, normalizedDurations) &&
+            preset.repeatMinutes === normalizedRepeat
+        );
+        if (exists) return prev;
+
+        const nextPreset: BreathingPreset = {
+          name: `custom_${Date.now()}`,
+          label,
+          durations: normalizedDurations,
+          repeatMinutes: normalizedRepeat,
+          isCustom: true,
+        };
+
+        const next = [...prev, nextPreset];
+        SecureStore.setItemAsync(
+          CUSTOM_PRESETS_KEY,
+          JSON.stringify(
+            next.map(({ name, label: storedLabel, durations: storedDurations, repeatMinutes }) => ({
+              name,
+              label: storedLabel,
+              durations: storedDurations,
+              repeatMinutes,
+            }))
+          )
+        ).catch(() => undefined);
+        return next;
+      });
+    },
+    []
+  );
 
   const totalActiveSec = active.inhale + active.hold1 + active.exhale + active.hold2;
 
@@ -223,8 +341,9 @@ export const useBreathingTimer = (): BreathingTimerState => {
     remainingSecDisplay,
     totalActiveSec,
     sessionRemainingMs,
-    presets: BREATHING_PRESETS,
+    presets,
     applyPreset,
+    addPreset,
     setRepeatMinutes,
     toggleRun,
     reset,

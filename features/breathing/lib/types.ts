@@ -16,7 +16,9 @@ export type SliderItem = {
 
 export type BreathingPreset = {
   name: string;
-  labelKey: string;
+  labelKey?: string;
+  label?: string;
   durations: DurationsSec;
   repeatMinutes: number;
+  isCustom?: boolean;
 };

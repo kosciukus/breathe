@@ -16,6 +16,7 @@ const PresetChips = ({ presets, selectedName, onSelect }: PresetChipsProps) => {
     <View style={styles.presetGrid}>
       {presets.map((preset) => {
         const isSelected = preset.name === selectedName;
+        const label = preset.label ?? (preset.labelKey ? t(preset.labelKey) : preset.name);
         return (
           <Pressable
             key={preset.name}
@@ -27,7 +28,7 @@ const PresetChips = ({ presets, selectedName, onSelect }: PresetChipsProps) => {
             ]}
           >
             <Text style={[styles.presetChipText, isSelected && styles.presetChipTextSelected]}>
-              {t(preset.labelKey)}
+              {label}
             </Text>
           </Pressable>
         );

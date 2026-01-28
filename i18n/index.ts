@@ -26,6 +26,8 @@ export const resources = {
         start: "Start",
         pause: "Pause",
         reset: "Reset",
+        savePreset: "Save preset",
+        presetSaved: "Preset saved",
       },
       section: {
         home: "Home",
@@ -44,6 +46,7 @@ export const resources = {
         hold1: "Pause after inhale",
         exhale: "Exhale",
         hold2: "Pause after exhale",
+        customPreset: "Custom",
       },
       presets: {
         box_4_4_4_4: "Box 4-4-4-4",
@@ -80,6 +83,8 @@ export const resources = {
         start: "Iniciar",
         pause: "Pausar",
         reset: "Reiniciar",
+        savePreset: "Guardar preajuste",
+        presetSaved: "Preajuste guardado",
       },
       section: {
         home: "Inicio",
@@ -98,6 +103,7 @@ export const resources = {
         hold1: "Pausa después de inhalar",
         exhale: "Exhala",
         hold2: "Pausa después de exhalar",
+        customPreset: "Personalizado",
       },
       presets: {
         box_4_4_4_4: "Caja 4-4-4-4",
@@ -134,6 +140,8 @@ export const resources = {
         start: "Démarrer",
         pause: "Pause",
         reset: "Réinitialiser",
+        savePreset: "Enregistrer un préréglage",
+        presetSaved: "Préréglage enregistré",
       },
       section: {
         home: "Accueil",
@@ -152,6 +160,7 @@ export const resources = {
         hold1: "Pause après l'inspiration",
         exhale: "Expiration",
         hold2: "Pause après l'expiration",
+        customPreset: "Personnalisé",
       },
       presets: {
         box_4_4_4_4: "Carré 4-4-4-4",
@@ -188,6 +197,8 @@ export const resources = {
         start: "Start",
         pause: "Pauza",
         reset: "Reset",
+        savePreset: "Zapisz preset",
+        presetSaved: "Preset zapisany",
       },
       section: {
         home: "Start",
@@ -206,6 +217,7 @@ export const resources = {
         hold1: "Pauza po wdechu",
         exhale: "Wydech",
         hold2: "Pauza po wydechu",
+        customPreset: "Własny",
       },
       presets: {
         box_4_4_4_4: "Kwadrat 4-4-4-4",
