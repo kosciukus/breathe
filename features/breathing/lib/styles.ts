@@ -206,6 +206,11 @@ export const styles = StyleSheet.create({
     flexWrap: "wrap",
     gap: 10,
   },
+  favoriteBarContent: {
+    flexDirection: "row",
+    gap: 10,
+    paddingVertical: 4,
+  },
   presetChip: {
     backgroundColor: COLORS.card,
     borderRadius: 999,

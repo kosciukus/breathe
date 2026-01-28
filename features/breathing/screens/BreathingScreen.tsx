@@ -23,6 +23,7 @@ export default function BreathingScreen() {
     repeatMinutes,
     sessionRemainingMs,
     presets,
+    applyPreset,
     setRepeatMinutes,
     toggleRun,
     reset,
@@ -169,6 +170,10 @@ export default function BreathingScreen() {
     if (!matched) return null;
     return matched.repeatMinutes === repeatMinutes ? matched : null;
   }, [draft, presets, repeatMinutes]);
+  const favoritePresets = useMemo(
+    () => presets.filter((preset) => preset.isFavorite),
+    [presets]
+  );
 
   return (
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
@@ -204,6 +209,37 @@ export default function BreathingScreen() {
           <Text style={styles.title}>{t("app.title")}</Text>
           <Text style={styles.subtitle}>{t("app.subtitle")}</Text>
         </View>
+
+        {favoritePresets.length > 0 ? (
+          <View style={styles.presetSection}>
+            <Text style={styles.presetTitle}>{t("section.favorites")}</Text>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.favoriteBarContent}
+            >
+              {favoritePresets.map((preset) => {
+                const isSelected = preset.name === matchedPreset?.name;
+                const label = preset.label ?? (preset.labelKey ? t(preset.labelKey) : preset.name);
+                return (
+                  <Pressable
+                    key={preset.name}
+                    onPress={() => applyPreset(preset.name)}
+                    style={({ pressed }) => [
+                      styles.presetChip,
+                      isSelected && styles.presetChipSelected,
+                      pressed && styles.pressed,
+                    ]}
+                  >
+                    <Text style={[styles.presetChipText, isSelected && styles.presetChipTextSelected]}>
+                      {label}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+          </View>
+        ) : null}
 
         <Animated.View
           style={[
