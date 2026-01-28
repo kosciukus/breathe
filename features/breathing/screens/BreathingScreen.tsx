@@ -1,9 +1,9 @@
 import { useAudioPlayer } from "expo-audio";
 import * as Haptics from "expo-haptics";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
-import { Animated, Platform, Pressable, ScrollView, Text, ToastAndroid, View } from "react-native";
+import { Animated, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import DurationSliderRow from "../components/DurationSliderRow";
@@ -34,9 +34,6 @@ export default function BreathingScreen() {
     soundEnabled,
     vibrationEnabled,
   } = useBreathing();
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const toastAnim = useRef(new Animated.Value(0)).current;
-  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const inhalePlayer = useAudioPlayer(PHASE_SOUNDS.inhale);
   const holdPlayer = useAudioPlayer(PHASE_SOUNDS.hold1);
@@ -124,41 +121,6 @@ export default function BreathingScreen() {
     [setDraftField]
   );
 
-  const showToast = useCallback(
-    (message: string) => {
-      if (toastTimerRef.current) {
-        clearTimeout(toastTimerRef.current);
-        toastTimerRef.current = null;
-      }
-      toastAnim.stopAnimation();
-      toastAnim.setValue(0);
-      setToastMessage(message);
-      requestAnimationFrame(() => {
-        Animated.timing(toastAnim, {
-          toValue: 1,
-          duration: 180,
-          useNativeDriver: true,
-        }).start(() => {
-          toastTimerRef.current = setTimeout(() => {
-            Animated.timing(toastAnim, {
-              toValue: 0,
-              duration: 220,
-              useNativeDriver: true,
-            }).start(({ finished }) => {
-              if (finished) setToastMessage(null);
-            });
-          }, 1400);
-        });
-      });
-    },
-    [toastAnim]
-  );
-
-  useEffect(() => {
-    return () => {
-      if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
-    };
-  }, []);
 
   const formatPresetLabel = useCallback(
     (durations: typeof draft) =>
@@ -183,28 +145,6 @@ export default function BreathingScreen() {
         <View style={styles.bgOrbOne} />
         <View style={styles.bgOrbTwo} />
       </View>
-      {toastMessage ? (
-        <View pointerEvents="none" style={styles.toastHost}>
-          <Animated.View
-            style={[
-              styles.toast,
-              {
-                opacity: toastAnim,
-                transform: [
-                  {
-                    translateY: toastAnim.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [-8, 0],
-                    }),
-                  },
-                ],
-              },
-            ]}
-          >
-            <Text style={styles.toastText}>{toastMessage}</Text>
-          </Animated.View>
-        </View>
-      ) : null}
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
@@ -286,23 +226,11 @@ export default function BreathingScreen() {
                   if (matchedPreset) {
                     if (matchedPreset.isCustom) {
                       removePreset(matchedPreset.name);
-                      const message = t("action.presetRemoved");
-                      if (Platform.OS === "android") {
-                        ToastAndroid.show(message, ToastAndroid.SHORT);
-                      } else {
-                        showToast(message);
-                      }
                     }
                     return;
                   }
 
                   await addPreset(formatPresetLabel(draft), draft, repeatMinutes);
-                  const message = t("action.presetSaved");
-                  if (Platform.OS === "android") {
-                    ToastAndroid.show(message, ToastAndroid.SHORT);
-                  } else {
-                    showToast(message);
-                  }
                 }}
                 style={({ pressed }) => [
                   styles.favoriteButton,
