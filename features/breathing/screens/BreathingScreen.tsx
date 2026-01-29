@@ -76,6 +76,27 @@ export default function BreathingScreen() {
     }
   }, [exhalePlayer, holdPlayer, inhalePlayer, soundEnabled, vibrationEnabled]);
 
+  const stopPhaseTones = useCallback(() => {
+    const stopPlayer = (player: typeof inhalePlayer) => {
+      if (!player.isLoaded) return;
+      try {
+        player.stop?.();
+      } catch {
+        // Ignore unsupported stop implementations.
+      }
+      try {
+        player.pause?.();
+      } catch {
+        // Ignore unsupported pause implementations.
+      }
+      player.seekTo?.(0).catch(() => undefined);
+    };
+
+    stopPlayer(inhalePlayer);
+    stopPlayer(holdPlayer);
+    stopPlayer(exhalePlayer);
+  }, [exhalePlayer, holdPlayer, inhalePlayer]);
+
   const prevPhaseRef = useRef(phase);
 
   const cardAnim = useRef(new Animated.Value(0)).current;
@@ -260,7 +281,7 @@ export default function BreathingScreen() {
                 hitSlop={8}
               >
                 <Ionicons
-                  name={matchedPreset ? "trash-outline" : "add-circle-outline"}
+                  name={matchedPreset ? "trash-outline" : "save-outline"}
                   size={20}
                   color={
                     matchedPreset
@@ -289,7 +310,14 @@ export default function BreathingScreen() {
 
           <View style={styles.buttonRow}>
             <Pressable
-              onPress={toggleRun}
+              onPress={() => {
+                if (isRunning) {
+                  stopPhaseTones();
+                  reset();
+                } else {
+                  toggleRun();
+                }
+              }}
               style={({ pressed }) => [
                 styles.button,
                 styles.primaryButton,
@@ -299,15 +327,8 @@ export default function BreathingScreen() {
               disabled={totalActiveSec <= 0}
             >
               <Text style={styles.buttonText}>
-                {isRunning ? t("action.pause") : t("action.start")}
+                {isRunning ? t("action.reset") : t("action.start")}
               </Text>
-            </Pressable>
-
-            <Pressable
-              onPress={reset}
-              style={({ pressed }) => [styles.button, styles.secondaryButton, pressed && styles.pressed]}
-            >
-              <Text style={[styles.buttonText, styles.secondaryText]}>{t("action.reset")}</Text>
             </Pressable>
           </View>
           
