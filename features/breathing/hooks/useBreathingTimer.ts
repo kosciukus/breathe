@@ -30,6 +30,7 @@ export type BreathingTimerState = {
 const CUSTOM_PRESETS_KEY = "breathe.presets.custom";
 const FAVORITE_PRESETS_KEY = "breathe.presets.favorites";
 const LAST_PRESET_KEY = "breathe.presets.last";
+const HIDDEN_PRESETS_KEY = "breathe.presets.hidden";
 
 const sanitizeCustomPreset = (value: unknown): BreathingPreset | null => {
   if (!value || typeof value !== "object") return null;
@@ -70,6 +71,8 @@ export const useBreathingTimer = (): BreathingTimerState => {
   const [customPresets, setCustomPresets] = useState<BreathingPreset[]>([]);
   const [customPresetsLoaded, setCustomPresetsLoaded] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [hiddenPresets, setHiddenPresets] = useState<string[]>([]);
+  const [hiddenPresetsLoaded, setHiddenPresetsLoaded] = useState(false);
   const [draft, setDraft] = useState<DurationsSec>({
     inhale: 4,
     hold1: 0,
@@ -86,14 +89,16 @@ export const useBreathingTimer = (): BreathingTimerState => {
   const [isRunning, setIsRunning] = useState(false);
 
   const favoriteSet = useMemo(() => new Set(favorites), [favorites]);
+  const hiddenSet = useMemo(() => new Set(hiddenPresets), [hiddenPresets]);
   const presets = useMemo(() => {
     const withFavorites = (items: BreathingPreset[]) =>
       items.map((preset) => ({
         ...preset,
         isFavorite: favoriteSet.has(preset.name),
       }));
-    return [...withFavorites(BREATHING_PRESETS), ...withFavorites(customPresets)];
-  }, [customPresets, favoriteSet]);
+    const basePresets = BREATHING_PRESETS.filter((preset) => !hiddenSet.has(preset.name));
+    return [...withFavorites(basePresets), ...withFavorites(customPresets)];
+  }, [customPresets, favoriteSet, hiddenSet]);
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isRunningRef = useRef(isRunning);
@@ -156,19 +161,43 @@ export const useBreathingTimer = (): BreathingTimerState => {
     };
   }, []);
 
+  useEffect(() => {
+    let cancelled = false;
+    const loadHiddenPresets = async () => {
+      try {
+        const raw = await SecureStore.getItemAsync(HIDDEN_PRESETS_KEY);
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return;
+        const nextHidden = parsed.filter((name) => typeof name === "string");
+        if (!cancelled) {
+          setHiddenPresets(nextHidden);
+        }
+      } catch {
+        // Ignore storage errors and fall back to showing all base presets.
+      } finally {
+        if (!cancelled) setHiddenPresetsLoaded(true);
+      }
+    };
+    loadHiddenPresets();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const initialPresetLoadedRef = useRef(false);
   useEffect(() => {
     if (initialPresetLoadedRef.current) return;
-    if (!customPresetsLoaded) return;
+    if (!customPresetsLoaded || !hiddenPresetsLoaded) return;
     initialPresetLoadedRef.current = true;
     let cancelled = false;
     const loadLastPreset = async () => {
       try {
         const lastName = await SecureStore.getItemAsync(LAST_PRESET_KEY);
         if (cancelled) return;
-        const target =
-          (lastName ? presets.find((preset) => preset.name === lastName) : null) ??
-          BREATHING_PRESETS[0];
+        const fallbackPreset = presets[0] ?? BREATHING_PRESETS[0];
+        const target = (lastName ? presets.find((preset) => preset.name === lastName) : null) ??
+          fallbackPreset;
         if (target) {
           setDraft(target.durations);
           setRepeatMinutes(target.repeatMinutes);
@@ -181,7 +210,7 @@ export const useBreathingTimer = (): BreathingTimerState => {
     return () => {
       cancelled = true;
     };
-  }, [customPresetsLoaded, presets]);
+  }, [customPresetsLoaded, hiddenPresetsLoaded, presets]);
 
   useEffect(() => {
     isRunningRef.current = isRunning;
@@ -406,6 +435,14 @@ export const useBreathingTimer = (): BreathingTimerState => {
           }))
         )
       ).catch(() => undefined);
+      return next;
+    });
+    setHiddenPresets((prev) => {
+      if (prev.includes(name)) return prev;
+      const isBasePreset = BREATHING_PRESETS.some((preset) => preset.name === name);
+      if (!isBasePreset) return prev;
+      const next = [...prev, name];
+      SecureStore.setItemAsync(HIDDEN_PRESETS_KEY, JSON.stringify(next)).catch(() => undefined);
       return next;
     });
     setFavorites((prev) => {

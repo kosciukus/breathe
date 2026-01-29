@@ -30,6 +30,7 @@ export default function PreferencesPanel({ onClose }: PreferencesPanelProps) {
               SecureStore.deleteItemAsync("breathe.language"),
               SecureStore.deleteItemAsync("breathe.presets.custom"),
               SecureStore.deleteItemAsync("breathe.presets.favorites"),
+              SecureStore.deleteItemAsync("breathe.presets.hidden"),
               SecureStore.deleteItemAsync("breathe.presets.last"),
             ]);
             Alert.alert(t("action.resetDataDone"));

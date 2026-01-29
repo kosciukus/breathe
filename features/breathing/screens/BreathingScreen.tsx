@@ -304,9 +304,7 @@ export default function BreathingScreen() {
               <Pressable
                 onPress={async () => {
                   if (matchedPreset) {
-                    if (matchedPreset.isCustom) {
-                      removePreset(matchedPreset.name);
-                    }
+                    removePreset(matchedPreset.name);
                     return;
                   }
 
@@ -315,21 +313,13 @@ export default function BreathingScreen() {
                 style={({ pressed }) => [
                   styles.favoriteButton,
                   pressed && styles.pressed,
-                  matchedPreset && !matchedPreset.isCustom && styles.iconButtonDisabled,
                 ]}
-                disabled={Boolean(matchedPreset && !matchedPreset.isCustom)}
                 hitSlop={8}
               >
                 <Ionicons
                   name={matchedPreset ? "trash-outline" : "save-outline"}
                   size={20}
-                  color={
-                    matchedPreset
-                      ? matchedPreset.isCustom
-                        ? COLORS.accent
-                        : COLORS.muted
-                      : COLORS.accent
-                  }
+                  color={COLORS.accent}
                 />
               </Pressable>
             </View>
