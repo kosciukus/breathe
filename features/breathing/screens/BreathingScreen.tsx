@@ -3,10 +3,14 @@ import * as Haptics from "expo-haptics";
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
-import { Animated, Pressable, ScrollView, Text, View } from "react-native";
+import { Animated, Modal, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useIsFocused } from "@react-navigation/native";
 
 import DurationSliderRow from "../components/DurationSliderRow";
+import LanguagePanel from "../components/LanguagePanel";
+import PreferencesPanel from "../components/PreferencesPanel";
+import PresetsPanel from "../components/PresetsPanel";
 import { useBreathing } from "../context/BreathingContext";
 import { PHASE_LABEL_KEYS, PHASE_SOUNDS, SLIDER_ITEMS } from "../lib/constants";
 import { COLORS, styles } from "../lib/styles";
@@ -33,7 +37,14 @@ export default function BreathingScreen() {
     toggleFavorite,
     soundEnabled,
     vibrationEnabled,
+    presetsOpen,
+    setPresetsOpen,
+    preferencesOpen,
+    setPreferencesOpen,
+    languageOpen,
+    setLanguageOpen,
   } = useBreathing();
+  const isFocused = useIsFocused();
 
   const inhalePlayer = useAudioPlayer(PHASE_SOUNDS.inhale);
   const holdPlayer = useAudioPlayer(PHASE_SOUNDS.hold1);
@@ -110,6 +121,14 @@ export default function BreathingScreen() {
       prevPhaseRef.current = phase;
     }
   }, [isRunning, phase, playPhaseTone]);
+
+  useEffect(() => {
+    if (!isFocused && (presetsOpen || preferencesOpen || languageOpen)) {
+      setPresetsOpen(false);
+      setPreferencesOpen(false);
+      setLanguageOpen(false);
+    }
+  }, [isFocused, presetsOpen, preferencesOpen, languageOpen, setPresetsOpen, setPreferencesOpen, setLanguageOpen]);
 
   const sliderHandlers = useMemo(
     () => ({
@@ -348,6 +367,54 @@ export default function BreathingScreen() {
           </View>
         </View>
       </ScrollView>
+
+      <Modal
+        animationType="slide"
+        transparent
+        visible={presetsOpen}
+        onRequestClose={() => setPresetsOpen(false)}
+      >
+        <View style={styles.sheetOverlay}>
+          <Pressable style={styles.sheetBackdrop} onPress={() => setPresetsOpen(false)} />
+          <View style={styles.sheetContainer}>
+            <SafeAreaView style={styles.sheetContent} edges={["bottom"]}>
+              <PresetsPanel onClose={() => setPresetsOpen(false)} />
+            </SafeAreaView>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent
+        visible={preferencesOpen}
+        onRequestClose={() => setPreferencesOpen(false)}
+      >
+        <View style={styles.sheetOverlay}>
+          <Pressable style={styles.sheetBackdrop} onPress={() => setPreferencesOpen(false)} />
+          <View style={styles.sheetContainer}>
+            <SafeAreaView style={styles.sheetContent} edges={["bottom"]}>
+              <PreferencesPanel onClose={() => setPreferencesOpen(false)} />
+            </SafeAreaView>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent
+        visible={languageOpen}
+        onRequestClose={() => setLanguageOpen(false)}
+      >
+        <View style={styles.sheetOverlay}>
+          <Pressable style={styles.sheetBackdrop} onPress={() => setLanguageOpen(false)} />
+          <View style={styles.sheetContainer}>
+            <SafeAreaView style={styles.sheetContent} edges={["bottom"]}>
+              <LanguagePanel onClose={() => setLanguageOpen(false)} />
+            </SafeAreaView>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
