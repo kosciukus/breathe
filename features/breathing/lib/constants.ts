@@ -13,9 +13,9 @@ export const TICK_MS = 100;
 
 export const SLIDER_ITEMS: SliderItem[] = [
   { key: "inhale", labelKey: "label.inhale", min: 0, max: 20 },
-  { key: "hold1", labelKey: "label.hold1", min: 0, max: 300 },
+  { key: "hold1", labelKey: "label.hold1", min: 0, max: 20 },
   { key: "exhale", labelKey: "label.exhale", min: 0, max: 20 },
-  { key: "hold2", labelKey: "label.hold2", min: 0, max: 300 },
+  { key: "hold2", labelKey: "label.hold2", min: 0, max: 20 },
 ];
 
 export const PHASE_SOUNDS: Record<PhaseKey, number> = {

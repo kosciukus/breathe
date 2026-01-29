@@ -1,11 +1,12 @@
-import { useAudioPlayer } from "expo-audio";
-import * as Haptics from "expo-haptics";
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
-import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
-import { Animated, Modal, Pressable, ScrollView, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useIsFocused } from "@react-navigation/native";
+import { setAudioModeAsync, setIsAudioActiveAsync, useAudioPlayer } from "expo-audio";
+import * as Haptics from "expo-haptics";
+import * as React from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useTranslation } from "react-i18next";
+import { Animated, Modal, Platform, Pressable, ScrollView, Text, Vibration, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import DurationSliderRow from "../components/DurationSliderRow";
 import LanguagePanel from "../components/LanguagePanel";
@@ -46,35 +47,73 @@ export default function BreathingScreen() {
   } = useBreathing();
   const isFocused = useIsFocused();
 
-  const inhalePlayer = useAudioPlayer(PHASE_SOUNDS.inhale);
-  const holdPlayer = useAudioPlayer(PHASE_SOUNDS.hold1);
-  const exhalePlayer = useAudioPlayer(PHASE_SOUNDS.exhale);
+  const inhalePlayer = useAudioPlayer(PHASE_SOUNDS.inhale, { keepAudioSessionActive: true });
+  const holdPlayer = useAudioPlayer(PHASE_SOUNDS.hold1, { keepAudioSessionActive: true });
+  const hold2Player = useAudioPlayer(PHASE_SOUNDS.hold2, { keepAudioSessionActive: true });
+  const exhalePlayer = useAudioPlayer(PHASE_SOUNDS.exhale, { keepAudioSessionActive: true });
+
+  useEffect(() => {
+    // Keep audio session active across short SFX on Android.
+    setAudioModeAsync({
+      playsInSilentMode: true,
+      allowsRecording: false,
+      shouldPlayInBackground: false,
+      shouldRouteThroughEarpiece: false,
+      interruptionMode: "doNotMix",
+    }).catch(() => undefined);
+  }, []);
 
   useEffect(() => {
     inhalePlayer.volume = 0.8;
     holdPlayer.volume = 0.8;
+    hold2Player.volume = 0.8;
     exhalePlayer.volume = 0.8;
-  }, [exhalePlayer, holdPlayer, inhalePlayer]);
+  }, [exhalePlayer, holdPlayer, hold2Player, inhalePlayer]);
 
   const playPhaseTone = React.useCallback((phaseKey: typeof phase) => {
     if (soundEnabled) {
-      const player =
+      const entry =
         phaseKey === "inhale"
-          ? inhalePlayer
-          : phaseKey === "hold1" || phaseKey === "hold2"
-          ? holdPlayer
+          ? { player: inhalePlayer, source: PHASE_SOUNDS.inhale }
+          : phaseKey === "hold1"
+          ? { player: holdPlayer, source: PHASE_SOUNDS.hold1 }
+          : phaseKey === "hold2"
+          ? { player: hold2Player, source: PHASE_SOUNDS.hold2 }
           : phaseKey === "exhale"
-          ? exhalePlayer
-          : holdPlayer;
-      if (player.isLoaded) {
-        player.seekTo(0).catch(() => undefined);
+          ? { player: exhalePlayer, source: PHASE_SOUNDS.exhale }
+          : { player: holdPlayer, source: PHASE_SOUNDS.hold1 };
+      const player = entry.player;
+      if (!player.isLoaded) {
+        try {
+          player.replace?.(entry.source);
+        } catch {
+          // Ignore replace errors and try to play anyway.
+        }
+      }
+      // Android can ignore play() after rapid previous playback; force a clean start.
+      if ("stop" in player) {
+        (player as { stop?: () => void }).stop?.();
+      }
+      if ("pause" in player) {
+        (player as { pause?: () => void }).pause?.();
+      }
+      if ("seekTo" in player) {
+        (player as { seekTo?: (t: number) => Promise<void> }).seekTo?.(0).catch(() => undefined);
+      }
+      setIsAudioActiveAsync(true).catch(() => undefined);
+      if (Platform.OS === "android") {
+        setTimeout(() => player.play(), 30);
+      } else {
         player.play();
       }
     }
     if (vibrationEnabled) {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy).catch(() => undefined);
+      if (Platform.OS === "android") {
+        Vibration.vibrate([0, 100, 100, 100]);
+      }
     }
-  }, [exhalePlayer, holdPlayer, inhalePlayer, soundEnabled, vibrationEnabled]);
+  }, [exhalePlayer, hold2Player, holdPlayer, inhalePlayer, soundEnabled, vibrationEnabled]);
 
   const stopPhaseTones = useCallback(() => {
     const stopPlayer = (player: typeof inhalePlayer) => {
@@ -94,8 +133,9 @@ export default function BreathingScreen() {
 
     stopPlayer(inhalePlayer);
     stopPlayer(holdPlayer);
+    stopPlayer(hold2Player);
     stopPlayer(exhalePlayer);
-  }, [exhalePlayer, holdPlayer, inhalePlayer]);
+  }, [exhalePlayer, hold2Player, holdPlayer, inhalePlayer]);
 
   const prevPhaseRef = useRef(phase);
 
