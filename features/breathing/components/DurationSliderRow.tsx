@@ -2,7 +2,7 @@ import Slider from "@react-native-community/slider";
 import React from "react";
 import { Platform, Text, View } from "react-native";
 import { COLORS, styles } from "../lib/styles";
-import { clampSec } from "../lib/utils";
+import { clampSec, formatMinutesSeconds } from "../lib/utils";
 
 type DurationSliderRowProps = {
   label: string;
@@ -21,14 +21,13 @@ const DurationSliderRow = ({
   max = 20,
   unitLabel = "s",
 }: DurationSliderRowProps) => {
+  const displayValue =
+    value > 60 ? formatMinutesSeconds(value * 1000) : `${value}${unitLabel}`;
   return (
     <View style={styles.row}>
       <View style={styles.rowHeader}>
         <Text style={styles.rowLabel}>{label}</Text>
-        <Text style={styles.rowValue}>
-          {value}
-          {unitLabel}
-        </Text>
+        <Text style={styles.rowValue}>{displayValue}</Text>
       </View>
       <Slider
         value={value}
