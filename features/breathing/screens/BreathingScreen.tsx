@@ -91,12 +91,8 @@ export default function BreathingScreen() {
         }
       }
       // Android can ignore play() after rapid previous playback; force a clean start.
-      if ("stop" in player) {
-        (player as { stop?: () => void }).stop?.();
-      }
-      if ("pause" in player) {
-        (player as { pause?: () => void }).pause?.();
-      }
+      (player as { stop?: () => void }).stop?.();
+      (player as { pause?: () => void }).pause?.();
       if ("seekTo" in player) {
         (player as { seekTo?: (t: number) => Promise<void> }).seekTo?.(0).catch(() => undefined);
       }
@@ -118,17 +114,22 @@ export default function BreathingScreen() {
   const stopPhaseTones = useCallback(() => {
     const stopPlayer = (player: typeof inhalePlayer) => {
       if (!player.isLoaded) return;
+      const controllable = player as {
+        stop?: () => void;
+        pause?: () => void;
+        seekTo?: (t: number) => Promise<void>;
+      };
       try {
-        player.stop?.();
+        controllable.stop?.();
       } catch {
         // Ignore unsupported stop implementations.
       }
       try {
-        player.pause?.();
+        controllable.pause?.();
       } catch {
         // Ignore unsupported pause implementations.
       }
-      player.seekTo?.(0).catch(() => undefined);
+      controllable.seekTo?.(0).catch(() => undefined);
     };
 
     stopPlayer(inhalePlayer);

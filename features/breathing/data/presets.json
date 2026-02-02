@@ -33,6 +33,28 @@
     "repeatMinutes": 5
   },
   {
+    "name": "resonant_6_6",
+    "labelKey": "presets.resonant_6_6",
+    "durations": {
+      "inhale": 6,
+      "hold1": 0,
+      "exhale": 6,
+      "hold2": 0
+    },
+    "repeatMinutes": 5
+  },
+  {
+    "name": "equal_4_4",
+    "labelKey": "presets.equal_4_4",
+    "durations": {
+      "inhale": 4,
+      "hold1": 0,
+      "exhale": 4,
+      "hold2": 0
+    },
+    "repeatMinutes": 5
+  },
+  {
     "name": "pursed_2_4",
     "labelKey": "presets.pursed_2_4",
     "durations": {
@@ -42,6 +64,39 @@
       "hold2": 0
     },
     "repeatMinutes": 5
+  },
+  {
+    "name": "extended_4_6",
+    "labelKey": "presets.extended_4_6",
+    "durations": {
+      "inhale": 4,
+      "hold1": 0,
+      "exhale": 6,
+      "hold2": 0
+    },
+    "repeatMinutes": 5
+  },
+  {
+    "name": "extended_4_8",
+    "labelKey": "presets.extended_4_8",
+    "durations": {
+      "inhale": 4,
+      "hold1": 0,
+      "exhale": 8,
+      "hold2": 0
+    },
+    "repeatMinutes": 5
+  },
+  {
+    "name": "triangle_3_3_3",
+    "labelKey": "presets.triangle_3_3_3",
+    "durations": {
+      "inhale": 3,
+      "hold1": 3,
+      "exhale": 3,
+      "hold2": 0
+    },
+    "repeatMinutes": 4
   },
   {
     "name": "calm_4_4_6_2",
