@@ -55,6 +55,16 @@ Use short, descriptive commits. Common style:
 - `docs: update setup instructions`
 - `refactor: simplify timer state flow`
 
+Automatic changelog generation uses Conventional Commits, so prefer commit prefixes like `feat:`, `fix:`, `docs:`, `refactor:`, `chore:`, and `perf:`.
+
+## Releases and Changelog
+
+`release-please` runs on pushes to `main` and opens/updates a release PR.
+
+- Merging the release PR updates `CHANGELOG.md`
+- A GitHub release is created automatically
+- Version updates are written back to `package.json`
+
 ## Reporting Issues
 
 When reporting a bug, include:
