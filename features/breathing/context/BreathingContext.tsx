@@ -34,6 +34,8 @@ export type BreathingContextValue = BreathingTimerState & {
 
 const BreathingContext = createContext<BreathingContextValue | null>(null);
 const DARK_MODE_KEY = "breathe.theme.darkMode";
+const SOUND_ENABLED_KEY = "breathe.preferences.soundEnabled";
+const VIBRATION_ENABLED_KEY = "breathe.preferences.vibrationEnabled";
 const KEEP_AWAKE_TAG = "breathing-session";
 
 export function BreathingProvider({ children }: PropsWithChildren) {
@@ -42,6 +44,9 @@ export function BreathingProvider({ children }: PropsWithChildren) {
   const [vibrationEnabled, setVibrationEnabled] = useState(true);
   const [darkModeEnabled, setDarkModeEnabled] = useState(false);
   const [hasLoadedDarkMode, setHasLoadedDarkMode] = useState(false);
+  const [hasLoadedSoundEnabled, setHasLoadedSoundEnabled] = useState(false);
+  const [hasLoadedVibrationEnabled, setHasLoadedVibrationEnabled] =
+    useState(false);
   const [presetsOpen, setPresetsOpen] = useState(false);
   const [preferencesOpen, setPreferencesOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
@@ -108,6 +113,41 @@ export function BreathingProvider({ children }: PropsWithChildren) {
       () => undefined,
     );
   }, [darkModeEnabled, hasLoadedDarkMode]);
+
+  useEffect(() => {
+    SecureStore.getItemAsync(SOUND_ENABLED_KEY)
+      .then((saved) => {
+        if (saved === null) return;
+        setSoundEnabled(saved === "true");
+      })
+      .finally(() => setHasLoadedSoundEnabled(true))
+      .catch(() => undefined);
+  }, []);
+
+  useEffect(() => {
+    if (!hasLoadedSoundEnabled) return;
+    SecureStore.setItemAsync(SOUND_ENABLED_KEY, String(soundEnabled)).catch(
+      () => undefined,
+    );
+  }, [soundEnabled, hasLoadedSoundEnabled]);
+
+  useEffect(() => {
+    SecureStore.getItemAsync(VIBRATION_ENABLED_KEY)
+      .then((saved) => {
+        if (saved === null) return;
+        setVibrationEnabled(saved === "true");
+      })
+      .finally(() => setHasLoadedVibrationEnabled(true))
+      .catch(() => undefined);
+  }, []);
+
+  useEffect(() => {
+    if (!hasLoadedVibrationEnabled) return;
+    SecureStore.setItemAsync(
+      VIBRATION_ENABLED_KEY,
+      String(vibrationEnabled),
+    ).catch(() => undefined);
+  }, [vibrationEnabled, hasLoadedVibrationEnabled]);
 
   const value = useMemo(
     () => ({

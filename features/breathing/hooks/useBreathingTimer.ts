@@ -109,11 +109,14 @@ export const useBreathingTimer = (): BreathingTimerState => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isRunningRef = useRef(isRunning);
   const phaseRef = useRef<PhaseKey>(phase);
-  const remainingRef = useRef<number>(remainingMs);
   const draftRef = useRef<DurationsSec>(draft);
   const repeatMinutesRef = useRef(repeatMinutes);
   const sessionRemainingRef = useRef<number | null>(repeatMinutes * 60 * 1000);
   const presetsRef = useRef(presets);
+  const phaseEndAtRef = useRef<number>(Date.now() + active.inhale * 1000);
+  const sessionEndAtRef = useRef<number | null>(
+    repeatMinutes > 0 ? Date.now() + repeatMinutes * 60 * 1000 : null,
+  );
 
   useEffect(() => {
     presetsRef.current = presets;
@@ -229,10 +232,6 @@ export const useBreathingTimer = (): BreathingTimerState => {
   }, [phase]);
 
   useEffect(() => {
-    remainingRef.current = remainingMs;
-  }, [remainingMs]);
-
-  useEffect(() => {
     draftRef.current = draft;
   }, [draft]);
 
@@ -286,22 +285,27 @@ export const useBreathingTimer = (): BreathingTimerState => {
         : null;
     sessionRemainingRef.current = nextSession;
     setSessionRemainingMs(nextSession);
+    phaseEndAtRef.current = Date.now() + draftRef.current.inhale * 1000;
+    sessionEndAtRef.current =
+      repeatMinutesRef.current > 0 ? Date.now() + nextSession! : null;
   }, [clearTimer, setPhaseAndRemaining]);
 
   const start = useCallback(() => {
     if (isRunningRef.current) return;
 
     const d = draftRef.current;
+    const now = Date.now();
     setActive(d);
     const nextMs = Math.max(0, d[phaseRef.current] * 1000);
     setRemainingMs(nextMs);
-    remainingRef.current = nextMs;
+    phaseEndAtRef.current = now + nextMs;
     const nextSession =
       repeatMinutesRef.current > 0
         ? repeatMinutesRef.current * 60 * 1000
         : null;
     sessionRemainingRef.current = nextSession;
     setSessionRemainingMs(nextSession);
+    sessionEndAtRef.current = nextSession === null ? null : now + nextSession;
 
     setIsRunning(true);
   }, []);
@@ -321,50 +325,67 @@ export const useBreathingTimer = (): BreathingTimerState => {
     if (!isRunning) return;
 
     intervalRef.current = setInterval(() => {
-      if (sessionRemainingRef.current !== null) {
-        const nextSession = sessionRemainingRef.current - TICK_MS;
+      const now = Date.now();
+
+      if (sessionEndAtRef.current !== null) {
+        const nextSession = Math.max(0, sessionEndAtRef.current - now);
         sessionRemainingRef.current = nextSession;
         setSessionRemainingMs(nextSession);
         if (nextSession <= 0) {
           setIsRunning(false);
           setRemainingMs(0);
-          remainingRef.current = 0;
           return;
         }
       }
 
-      const rem = remainingRef.current;
+      const phaseEndAt = phaseEndAtRef.current;
+      const phaseRemaining = phaseEndAt - now;
 
-      if (rem <= 0) {
-        const nextActive = draftRef.current;
-        setActive(nextActive);
-
-        const p = phaseRef.current;
-        let np = nextPhase(p);
-
-        for (let i = 0; i < PHASE_ORDER.length; i++) {
-          if (nextActive[np] > 0) break;
-          np = nextPhase(np);
-        }
-
-        const totalSec =
-          nextActive.inhale +
-          nextActive.hold1 +
-          nextActive.exhale +
-          nextActive.hold2;
-        if (totalSec <= 0) {
-          setIsRunning(false);
-          return;
-        }
-
-        setPhase(np);
-        setRemainingMs(Math.max(0, nextActive[np] * 1000));
+      if (phaseRemaining > 0) {
+        setRemainingMs(phaseRemaining);
         return;
       }
 
-      const nextRem = rem - TICK_MS;
-      remainingRef.current = nextRem;
-      setRemainingMs(nextRem);
+      const nextActive = draftRef.current;
+      setActive(nextActive);
+
+      const totalSec =
+        nextActive.inhale +
+        nextActive.hold1 +
+        nextActive.exhale +
+        nextActive.hold2;
+      if (totalSec <= 0) {
+        setIsRunning(false);
+        return;
+      }
+
+      const cycleMs = totalSec * 1000;
+      let spillMs = now - phaseEndAt;
+      if (spillMs >= cycleMs) {
+        spillMs = spillMs % cycleMs;
+      }
+      let phaseCursor = phaseRef.current;
+
+      for (let i = 0; i < PHASE_ORDER.length + 1; i++) {
+        phaseCursor = nextPhase(phaseCursor);
+
+        let phaseDurationMs = Math.max(0, nextActive[phaseCursor] * 1000);
+        if (phaseDurationMs <= 0) continue;
+
+        if (spillMs < phaseDurationMs) {
+          const nextRemaining = Math.max(0, phaseDurationMs - spillMs);
+          phaseRef.current = phaseCursor;
+          setPhase(phaseCursor);
+          setRemainingMs(nextRemaining);
+          phaseEndAtRef.current = now + nextRemaining;
+          return;
+        }
+
+        spillMs -= phaseDurationMs;
+      }
+
+      // Fallback: if we couldn't find a non-zero phase (should be impossible with totalSec > 0).
+      setIsRunning(false);
     }, TICK_MS);
 
     return () => {
@@ -378,7 +399,7 @@ export const useBreathingTimer = (): BreathingTimerState => {
     const targetMs = Math.max(0, active[phase] * 1000);
     if (remainingMs !== targetMs) {
       setRemainingMs(targetMs);
-      remainingRef.current = targetMs;
+      phaseEndAtRef.current = Date.now() + targetMs;
     }
   }, [active, phase, remainingMs]);
 

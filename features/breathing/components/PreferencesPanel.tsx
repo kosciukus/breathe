@@ -9,6 +9,8 @@ import { useBreathing } from "../context/BreathingContext";
 import { useBreathingTheme } from "../hooks/useBreathingTheme";
 
 const DARK_MODE_KEY = "breathe.theme.darkMode";
+const SOUND_ENABLED_KEY = "breathe.preferences.soundEnabled";
+const VIBRATION_ENABLED_KEY = "breathe.preferences.vibrationEnabled";
 
 type PreferencesPanelProps = {
   onClose?: () => void;
@@ -40,8 +42,12 @@ export default function PreferencesPanel({ onClose }: PreferencesPanelProps) {
             SecureStore.deleteItemAsync("breathe.presets.hidden"),
             SecureStore.deleteItemAsync("breathe.presets.last"),
             SecureStore.deleteItemAsync(DARK_MODE_KEY),
+            SecureStore.deleteItemAsync(SOUND_ENABLED_KEY),
+            SecureStore.deleteItemAsync(VIBRATION_ENABLED_KEY),
           ]);
           setDarkModeEnabled(false);
+          setSoundEnabled(true);
+          setVibrationEnabled(true);
           Alert.alert(t("action.resetDataDone"));
         },
       },
