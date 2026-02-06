@@ -1,0 +1,93 @@
+import { Tabs, useRouter } from "expo-router";
+import React from "react";
+import { useTranslation } from "react-i18next";
+
+import { IconSymbol } from "@/components/ui/icon-symbol";
+import { Colors } from "@/constants/theme";
+import { useBreathing } from "@/features/breathing";
+
+export default function TabLayout() {
+  const { t } = useTranslation();
+  const router = useRouter();
+  const { darkModeEnabled, setPresetsOpen, setPreferencesOpen, setLanguageOpen } =
+    useBreathing();
+  const colorScheme = darkModeEnabled ? "dark" : "light";
+
+  return (
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: colorScheme === "dark" ? "#FFFFFF" : "#111111",
+        tabBarInactiveTintColor: Colors[colorScheme].tabIconDefault,
+        tabBarStyle: {
+          backgroundColor: colorScheme === "dark" ? "#161C22" : "#FFFFFF",
+          borderTopColor: colorScheme === "dark" ? "#2D353D" : "#EAE6E0",
+        },
+      }}
+    >
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: t("section.home"),
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={22} name="house.fill" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="presets"
+        options={{
+          title: t("section.presets"),
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={22} name="leaf.fill" color={color} />
+          ),
+        }}
+        listeners={{
+          tabPress: (event) => {
+            event.preventDefault();
+            setPresetsOpen(true);
+            setPreferencesOpen(false);
+            setLanguageOpen(false);
+            router.navigate("/");
+          },
+        }}
+      />
+      <Tabs.Screen
+        name="preferences"
+        options={{
+          title: t("section.preferences"),
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={22} name="slider.horizontal.3" color={color} />
+          ),
+        }}
+        listeners={{
+          tabPress: (event) => {
+            event.preventDefault();
+            setPreferencesOpen(true);
+            setPresetsOpen(false);
+            setLanguageOpen(false);
+            router.navigate("/");
+          },
+        }}
+      />
+      <Tabs.Screen
+        name="language"
+        options={{
+          title: t("section.language"),
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={22} name="globe" color={color} />
+          ),
+        }}
+        listeners={{
+          tabPress: (event) => {
+            event.preventDefault();
+            setLanguageOpen(true);
+            setPresetsOpen(false);
+            setPreferencesOpen(false);
+            router.navigate("/");
+          },
+        }}
+      />
+    </Tabs>
+  );
+}

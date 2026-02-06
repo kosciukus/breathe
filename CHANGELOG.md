@@ -1,0 +1,46 @@
+# Changelog
+
+## Unreleased
+
+- Add dark mode
+- Add education section in Presets popup
+- New translations
+- Add 5 more presets
+- Allow to remove pre-built presets
+- New images
+- Support android devices, update readme
+- Expand pause sliders to 5 minutes
+- Use single button to controll single run. Use floppy disc icon to save preset
+- Show Presets, Preferences and Languages views as popups
+- Remove toast after preset save
+- Restyle the main screen to include save preset and favourites icons in the main timer view
+- Add Favourites section at the top of the main screen
+- Add marking preset as favourite
+- Remove preset
+- Save preset
+- New presets
+- Persist language selection after restarting the app
+- Major structure refactor
+- Fix missing breath hold after inhale
+- Add language selection screen
+- New sounds
+- Move Presets and Preferences to bottom navigation
+- Change status bar style to dark
+- Update readme. Add build number. Remove top title
+- Move Privacy Policy to repository markdown
+- Separate sounds for each phase
+- Remove bottom nav
+- Add EAS to distribute the app
+- Adjust readme file
+- New images
+- Collapsable sections
+- Add state label
+- Display presets in grid. Reorder labels
+- Add i18n
+- Add duration setting
+- Update main countdown on preset and inhale slider change
+- Add Presets and Labels for each section
+- Add haptic toggle
+- Add sound file
+- Firs phase
+- Initial commit
