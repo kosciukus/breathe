@@ -12,6 +12,8 @@ type BreathingSessionCardProps = {
   cardAnim: Animated.Value;
   matchedPreset: BreathingPreset | null;
   sessionRemainingMs: number | null;
+  isPreparing: boolean;
+  preStartRemainingSec: number | null;
   phase: PhaseKey;
   progress: number;
   isRunning: boolean;
@@ -25,6 +27,8 @@ export default function BreathingSessionCard({
   cardAnim,
   matchedPreset,
   sessionRemainingMs,
+  isPreparing,
+  preStartRemainingSec,
   phase,
   progress,
   isRunning,
@@ -54,7 +58,11 @@ export default function BreathingSessionCard({
       ]}
     >
       <View style={styles.cardHeaderRow}>
-        <Text style={styles.remainingLabel}>{t("label.remaining")}</Text>
+        <Text style={styles.remainingLabel}>
+          {isPreparing
+            ? t("label.startingIn", { defaultValue: "Starting in" })
+            : t("label.remaining")}
+        </Text>
         <View style={styles.cardHeaderActions}>
           <Pressable
             onPress={
@@ -92,20 +100,31 @@ export default function BreathingSessionCard({
       </View>
 
       <Text style={styles.countdown}>
-        {sessionRemainingMs === null
-          ? "—"
-          : formatMinutesSeconds(sessionRemainingMs)}
+        {isPreparing
+          ? String(preStartRemainingSec ?? 0)
+          : sessionRemainingMs === null
+            ? "—"
+            : formatMinutesSeconds(sessionRemainingMs)}
       </Text>
 
       <View style={styles.phaseRow}>
         <Text style={styles.phaseCaption}>{t("label.state")}</Text>
         <View style={styles.phasePill}>
-          <Text style={styles.phaseLabel}>{t(PHASE_LABEL_KEYS[phase])}</Text>
+          <Text style={styles.phaseLabel}>
+            {isPreparing
+              ? t("phase.getReady", { defaultValue: "Get ready" })
+              : t(PHASE_LABEL_KEYS[phase])}
+          </Text>
         </View>
       </View>
 
       <View style={styles.progressTrack}>
-        <View style={[styles.progressFill, { width: `${progress * 100}%` }]} />
+        <View
+          style={[
+            styles.progressFill,
+            { width: `${(isPreparing ? 0 : progress) * 100}%` },
+          ]}
+        />
       </View>
 
       <View style={styles.buttonRow}>

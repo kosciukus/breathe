@@ -2,7 +2,7 @@
   "expo": {
     "name": "Mindful Breathe",
     "slug": "breathe",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "breathe",
@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "12",
+      "buildNumber": "1",
       "bundleIdentifier": "com.arcsoftware.breathe",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false

@@ -24,6 +24,8 @@ export default function BreathingScreen() {
     draft,
     phase,
     isRunning,
+    isPreparing,
+    preStartRemainingSec,
     progress,
     totalActiveSec,
     repeatMinutes,
@@ -81,9 +83,9 @@ export default function BreathingScreen() {
   }, [cardAnim]);
 
   useEffect(() => {
-    if (!isRunning) return;
+    if (!isRunning || isPreparing) return;
     void playPhaseTone(phase);
-  }, [isRunning, phase, playPhaseTone]);
+  }, [isPreparing, isRunning, phase, playPhaseTone]);
 
   useEffect(() => {
     if (!isFocused && (presetsOpen || preferencesOpen || languageOpen)) {
@@ -166,6 +168,8 @@ export default function BreathingScreen() {
           cardAnim={cardAnim}
           matchedPreset={matchedPreset}
           sessionRemainingMs={sessionRemainingMs}
+          isPreparing={isPreparing}
+          preStartRemainingSec={preStartRemainingSec}
           phase={phase}
           progress={progress}
           isRunning={isRunning}

@@ -21,6 +21,7 @@ export const resources = {
         inhale: "INHALE",
         hold: "HOLD",
         exhale: "EXHALE",
+        getReady: "GET READY",
       },
       action: {
         start: "Start",
@@ -50,6 +51,7 @@ export const resources = {
       },
       label: {
         remaining: "Remaining",
+        startingIn: "Starting in",
         state: "State:",
         phaseSound: "Phase sound",
         vibration: "Vibration",
@@ -185,6 +187,7 @@ export const resources = {
         inhale: "INHALA",
         hold: "RETÉN",
         exhale: "EXHALA",
+        getReady: "PREPÁRATE",
       },
       action: {
         start: "Iniciar",
@@ -214,6 +217,7 @@ export const resources = {
       },
       label: {
         remaining: "Restante",
+        startingIn: "Comienza en",
         state: "Estado:",
         phaseSound: "Sonido de fase",
         vibration: "Vibración",
@@ -349,6 +353,7 @@ export const resources = {
         inhale: "INSPIRER",
         hold: "RETENIR",
         exhale: "EXPIRER",
+        getReady: "PRÉPAREZ-VOUS",
       },
       action: {
         start: "Démarrer",
@@ -378,6 +383,7 @@ export const resources = {
       },
       label: {
         remaining: "Restant",
+        startingIn: "Début dans",
         state: "État:",
         phaseSound: "Son de phase",
         vibration: "Vibration",
@@ -511,6 +517,7 @@ export const resources = {
         inhale: "WDECH",
         hold: "WSTRZYMAJ",
         exhale: "WYDECH",
+        getReady: "PRZYGOTUJ SIĘ",
       },
       action: {
         start: "Start",
@@ -539,6 +546,7 @@ export const resources = {
       },
       label: {
         remaining: "Pozostało",
+        startingIn: "Start za",
         state: "Stan:",
         phaseSound: "Dźwięk fazy",
         vibration: "Wibracje",
@@ -664,6 +672,7 @@ export const resources = {
         inhale: "EINATMEN",
         hold: "HALTEN",
         exhale: "AUSATMEN",
+        getReady: "BEREIT MACHEN",
       },
       action: {
         start: "Start",
@@ -693,6 +702,7 @@ export const resources = {
       },
       label: {
         remaining: "Verbleibend",
+        startingIn: "Start in",
         state: "Status:",
         phaseSound: "Phasenklang",
         vibration: "Vibration",
@@ -825,6 +835,7 @@ export const resources = {
         inhale: "INSPIRAR",
         hold: "SEGURAR",
         exhale: "EXPIRAR",
+        getReady: "PREPARE-SE",
       },
       action: {
         start: "Iniciar",
@@ -853,6 +864,7 @@ export const resources = {
       },
       label: {
         remaining: "Restante",
+        startingIn: "Começa em",
         state: "Estado:",
         phaseSound: "Som de fase",
         vibration: "Vibração",
@@ -981,6 +993,7 @@ export const resources = {
         inhale: "ВДОХ",
         hold: "ЗАДЕРЖКА",
         exhale: "ВЫДОХ",
+        getReady: "ПРИГОТОВЬТЕСЬ",
       },
       action: {
         start: "Старт",
@@ -1009,6 +1022,7 @@ export const resources = {
       },
       label: {
         remaining: "Осталось",
+        startingIn: "Начало через",
         state: "Состояние:",
         phaseSound: "Звук фазы",
         vibration: "Вибрация",
@@ -1137,6 +1151,7 @@ export const resources = {
         inhale: "ВДИХ",
         hold: "ЗАТРИМКА",
         exhale: "ВИДИХ",
+        getReady: "ПРИГОТУЙТЕСЯ",
       },
       action: {
         start: "Старт",
@@ -1165,6 +1180,7 @@ export const resources = {
       },
       label: {
         remaining: "Залишилось",
+        startingIn: "Початок через",
         state: "Стан:",
         phaseSound: "Звук фази",
         vibration: "Вібрація",
@@ -1295,6 +1311,7 @@ export const resources = {
         inhale: "श्वास लें",
         hold: "रोकें",
         exhale: "श्वास छोड़ें",
+        getReady: "तैयार हो जाएं",
       },
       action: {
         start: "शुरू करें",
@@ -1323,6 +1340,7 @@ export const resources = {
       },
       label: {
         remaining: "शेष",
+        startingIn: "शुरू होने में",
         state: "स्थिति:",
         phaseSound: "चरण ध्वनि",
         vibration: "वाइब्रेशन",
@@ -1452,6 +1470,7 @@ export const resources = {
         inhale: "吸う",
         hold: "止める",
         exhale: "吐く",
+        getReady: "準備",
       },
       action: {
         start: "開始",
@@ -1481,6 +1500,7 @@ export const resources = {
       },
       label: {
         remaining: "残り",
+        startingIn: "開始まで",
         state: "状態:",
         phaseSound: "フェーズ音",
         vibration: "バイブレーション",
