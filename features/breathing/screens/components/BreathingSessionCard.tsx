@@ -11,6 +11,7 @@ import { formatMinutesSeconds } from "../../lib/utils";
 type BreathingSessionCardProps = {
   cardAnim: Animated.Value;
   matchedPreset: BreathingPreset | null;
+  isFavorite: boolean;
   sessionRemainingMs: number | null;
   isPreparing: boolean;
   preStartRemainingSec: number | null;
@@ -18,7 +19,7 @@ type BreathingSessionCardProps = {
   progress: number;
   isRunning: boolean;
   totalActiveSec: number;
-  onToggleFavorite: (name: string) => void;
+  onToggleFavorite: () => void;
   onSaveOrRemovePreset: (matchedPreset: BreathingPreset | null) => Promise<void>;
   onResetOrStart: () => void;
 };
@@ -26,6 +27,7 @@ type BreathingSessionCardProps = {
 export default function BreathingSessionCard({
   cardAnim,
   matchedPreset,
+  isFavorite,
   sessionRemainingMs,
   isPreparing,
   preStartRemainingSec,
@@ -65,21 +67,17 @@ export default function BreathingSessionCard({
         </Text>
         <View style={styles.cardHeaderActions}>
           <Pressable
-            onPress={
-              matchedPreset ? () => onToggleFavorite(matchedPreset.name) : undefined
-            }
-            disabled={!matchedPreset}
+            onPress={onToggleFavorite}
             style={({ pressed }) => [
               styles.favoriteButton,
-              pressed && matchedPreset && styles.pressed,
-              !matchedPreset && styles.iconButtonDisabled,
+              pressed && styles.pressed,
             ]}
             hitSlop={8}
           >
             <Ionicons
-              name={matchedPreset?.isFavorite ? "heart" : "heart-outline"}
+              name={isFavorite ? "heart" : "heart-outline"}
               size={20}
-              color={matchedPreset?.isFavorite ? colors.accent : colors.muted}
+              color={isFavorite ? colors.accent : colors.muted}
             />
           </Pressable>
           <Pressable

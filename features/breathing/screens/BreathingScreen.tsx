@@ -121,6 +121,7 @@ export default function BreathingScreen() {
     () => presets.filter((preset) => preset.isFavorite),
     [presets],
   );
+  const isCurrentFavorite = Boolean(matchedPreset?.isFavorite);
 
   const handleSaveOrRemovePreset = useCallback(
     async (presetToRemove: typeof matchedPreset) => {
@@ -137,6 +138,24 @@ export default function BreathingScreen() {
     },
     [addPreset, draft, formatPresetLabel, removePreset, repeatMinutes],
   );
+
+  const handleToggleFavorite = useCallback(async () => {
+    if (matchedPreset) {
+      toggleFavorite(matchedPreset.name);
+      return;
+    }
+
+    await addPreset(formatPresetLabel(draft, repeatMinutes), draft, repeatMinutes, {
+      favorite: true,
+    });
+  }, [
+    addPreset,
+    draft,
+    formatPresetLabel,
+    matchedPreset,
+    repeatMinutes,
+    toggleFavorite,
+  ]);
 
   const handleResetOrStart = useCallback(() => {
     if (isRunning) {
@@ -172,6 +191,7 @@ export default function BreathingScreen() {
         <BreathingSessionCard
           cardAnim={cardAnim}
           matchedPreset={matchedPreset}
+          isFavorite={isCurrentFavorite}
           sessionRemainingMs={sessionRemainingMs}
           isPreparing={isPreparing}
           preStartRemainingSec={preStartRemainingSec}
@@ -179,7 +199,7 @@ export default function BreathingScreen() {
           progress={progress}
           isRunning={isRunning}
           totalActiveSec={totalActiveSec}
-          onToggleFavorite={toggleFavorite}
+          onToggleFavorite={handleToggleFavorite}
           onSaveOrRemovePreset={handleSaveOrRemovePreset}
           onResetOrStart={handleResetOrStart}
         />

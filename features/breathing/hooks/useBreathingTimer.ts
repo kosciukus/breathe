@@ -24,6 +24,7 @@ export type BreathingTimerState = {
     label: string,
     durations: DurationsSec,
     repeatMinutes: number,
+    options?: { favorite?: boolean },
   ) => Promise<void>;
   removePreset: (name: string) => void;
   toggleFavorite: (name: string) => void;
@@ -493,6 +494,7 @@ export const useBreathingTimer = (): BreathingTimerState => {
       label: string,
       durations: DurationsSec,
       nextRepeatMinutes: number,
+      options?: { favorite?: boolean },
     ) => {
       const normalizedDurations = {
         inhale: clampSec(durations.inhale),
@@ -503,11 +505,24 @@ export const useBreathingTimer = (): BreathingTimerState => {
       const normalizedRepeat = clampSec(nextRepeatMinutes);
 
       setCustomPresets((prev) => {
-        const exists = prev.some(
+        const existing = prev.find(
           (preset) =>
             isSamePresetConfig(preset, normalizedDurations, normalizedRepeat),
         );
-        if (exists) return prev;
+        if (existing) {
+          if (options?.favorite) {
+            setFavorites((prevFavorites) => {
+              if (prevFavorites.includes(existing.name)) return prevFavorites;
+              const nextFavorites = [...prevFavorites, existing.name];
+              SecureStore.setItemAsync(
+                FAVORITE_PRESETS_KEY,
+                JSON.stringify(nextFavorites),
+              ).catch(() => undefined);
+              return nextFavorites;
+            });
+          }
+          return prev;
+        }
 
         const nextPreset: BreathingPreset = {
           name: `custom_${Date.now()}`,
@@ -536,6 +551,17 @@ export const useBreathingTimer = (): BreathingTimerState => {
             ),
           ),
         ).catch(() => undefined);
+        if (options?.favorite) {
+          setFavorites((prevFavorites) => {
+            if (prevFavorites.includes(nextPreset.name)) return prevFavorites;
+            const nextFavorites = [...prevFavorites, nextPreset.name];
+            SecureStore.setItemAsync(
+              FAVORITE_PRESETS_KEY,
+              JSON.stringify(nextFavorites),
+            ).catch(() => undefined);
+            return nextFavorites;
+          });
+        }
         return next;
       });
     },
