@@ -11,7 +11,7 @@ import { useBreathing } from "../context/BreathingContext";
 import { usePhaseCues } from "../hooks/usePhaseCues";
 import { useBreathingTheme } from "../hooks/useBreathingTheme";
 import { SLIDER_ITEMS } from "../lib/constants";
-import { isSameDurations } from "../lib/utils";
+import { isSamePresetConfig } from "../lib/utils";
 import BreathingSessionCard from "./components/BreathingSessionCard";
 import BreathingSliders from "./components/BreathingSliders";
 import FavoritePresetBar from "./components/FavoritePresetBar";
@@ -104,17 +104,18 @@ export default function BreathingScreen() {
   ]);
 
   const formatPresetLabel = useCallback(
-    (durations: typeof draft) =>
-      `${t("label.customPreset")} ${durations.inhale}-${durations.hold1}-${durations.exhale}-${durations.hold2}`,
+    (durations: typeof draft, minutes: number) =>
+      `${t("label.customPreset")} ${durations.inhale}-${durations.hold1}-${durations.exhale}-${durations.hold2} (${minutes}${t("unit.minuteShort")})`,
     [t],
   );
 
   const matchedPreset = useMemo(() => {
-    const matched = presets.find((preset) =>
-      isSameDurations(preset.durations, draft),
+    return (
+      presets.find(
+        (preset) =>
+          isSamePresetConfig(preset, draft, repeatMinutes),
+      ) ?? null
     );
-    if (!matched) return null;
-    return matched.repeatMinutes === repeatMinutes ? matched : null;
   }, [draft, presets, repeatMinutes]);
   const favoritePresets = useMemo(
     () => presets.filter((preset) => preset.isFavorite),
@@ -128,7 +129,11 @@ export default function BreathingScreen() {
         return;
       }
 
-      await addPreset(formatPresetLabel(draft), draft, repeatMinutes);
+      await addPreset(
+        formatPresetLabel(draft, repeatMinutes),
+        draft,
+        repeatMinutes,
+      );
     },
     [addPreset, draft, formatPresetLabel, removePreset, repeatMinutes],
   );

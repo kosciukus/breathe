@@ -3,7 +3,7 @@ import * as SecureStore from "expo-secure-store";
 import { PHASE_ORDER, TICK_MS } from "../lib/constants";
 import { BREATHING_PRESETS } from "../data/presets";
 import { BreathingPreset, DurationsSec, PhaseKey } from "../lib/types";
-import { clampSec, isSameDurations, nextPhase } from "../lib/utils";
+import { clampSec, isSamePresetConfig, nextPhase } from "../lib/utils";
 
 export type BreathingTimerState = {
   active: DurationsSec;
@@ -505,8 +505,7 @@ export const useBreathingTimer = (): BreathingTimerState => {
       setCustomPresets((prev) => {
         const exists = prev.some(
           (preset) =>
-            isSameDurations(preset.durations, normalizedDurations) &&
-            preset.repeatMinutes === normalizedRepeat,
+            isSamePresetConfig(preset, normalizedDurations, normalizedRepeat),
         );
         if (exists) return prev;
 

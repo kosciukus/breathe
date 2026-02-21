@@ -1,5 +1,5 @@
 import { PHASE_ORDER } from "./constants";
-import { DurationsSec, PhaseKey } from "./types";
+import { BreathingPreset, DurationsSec, PhaseKey } from "./types";
 
 export const clampSec = (n: number) => Math.max(0, Math.round(n));
 
@@ -14,6 +14,17 @@ export const isSameDurations = (a: DurationsSec, b: DurationsSec) => {
     a.hold1 === b.hold1 &&
     a.exhale === b.exhale &&
     a.hold2 === b.hold2
+  );
+};
+
+export const isSamePresetConfig = (
+  preset: BreathingPreset,
+  durations: DurationsSec,
+  repeatMinutes: number,
+) => {
+  return (
+    isSameDurations(preset.durations, durations) &&
+    preset.repeatMinutes === repeatMinutes
   );
 };
 

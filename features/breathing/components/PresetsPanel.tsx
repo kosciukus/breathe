@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useBreathing } from "../context/BreathingContext";
 import { useBreathingTheme } from "../hooks/useBreathingTheme";
 import { BreathingPreset, BreathingRouteKey } from "../lib/types";
-import { isSameDurations } from "../lib/utils";
+import { isSamePresetConfig } from "../lib/utils";
 import PresetChips from "./PresetChips";
 
 type PresetsPanelProps = {
@@ -19,11 +19,12 @@ export default function PresetsPanel({ onClose }: PresetsPanelProps) {
   const { presets, applyPreset, draft, repeatMinutes } = useBreathing();
 
   const selectedPresetName = useMemo(() => {
-    const matched = presets.find((preset) =>
-      isSameDurations(preset.durations, draft),
-    );
-    if (!matched) return null;
-    return matched.repeatMinutes === repeatMinutes ? matched.name : null;
+    const matched =
+      presets.find(
+        (preset) =>
+          isSamePresetConfig(preset, draft, repeatMinutes),
+      ) ?? null;
+    return matched?.name ?? null;
   }, [draft, presets, repeatMinutes]);
 
   const favoritePresets = useMemo(
