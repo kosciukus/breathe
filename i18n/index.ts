@@ -1609,9 +1609,6 @@ export const resources = {
   },
 } as const;
 
-const locale = Localization.getLocales()[0]?.languageTag ?? "en";
-const language = locale.split("-")[0];
-
 export type AppLanguage = keyof typeof resources;
 const supported: AppLanguage[] = [
   "en",
@@ -1627,6 +1624,11 @@ const supported: AppLanguage[] = [
 ];
 const isSupportedLanguage = (value: string): value is AppLanguage =>
   supported.includes(value as AppLanguage);
+export const getDefaultLanguage = (): AppLanguage => {
+  const locale = Localization.getLocales()[0]?.languageTag ?? "en";
+  const language = locale.split("-")[0];
+  return isSupportedLanguage(language) ? language : "en";
+};
 const LANGUAGE_KEY = "breathe.language";
 export const languageOptions = (Object.keys(resources) as AppLanguage[]).map(
   (code) => ({
@@ -1637,7 +1639,7 @@ export const languageOptions = (Object.keys(resources) as AppLanguage[]).map(
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: isSupportedLanguage(language) ? language : "en",
+  lng: getDefaultLanguage(),
   fallbackLng: "en",
   interpolation: { escapeValue: false },
 });

@@ -2,15 +2,10 @@ import React from "react";
 import { Alert, Pressable, ScrollView, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import * as SecureStore from "expo-secure-store";
 
 import ToggleRow from "./ToggleRow";
 import { useBreathing } from "../context/BreathingContext";
 import { useBreathingTheme } from "../hooks/useBreathingTheme";
-
-const DARK_MODE_KEY = "breathe.theme.darkMode";
-const SOUND_ENABLED_KEY = "breathe.preferences.soundEnabled";
-const VIBRATION_ENABLED_KEY = "breathe.preferences.vibrationEnabled";
 
 type PreferencesPanelProps = {
   onClose?: () => void;
@@ -26,6 +21,7 @@ export default function PreferencesPanel({ onClose }: PreferencesPanelProps) {
     setVibrationEnabled,
     darkModeEnabled,
     setDarkModeEnabled,
+    resetAppData,
   } = useBreathing();
 
   const handleResetData = () => {
@@ -35,19 +31,7 @@ export default function PreferencesPanel({ onClose }: PreferencesPanelProps) {
         text: t("action.reset"),
         style: "destructive",
         onPress: async () => {
-          await Promise.all([
-            SecureStore.deleteItemAsync("breathe.language"),
-            SecureStore.deleteItemAsync("breathe.presets.custom"),
-            SecureStore.deleteItemAsync("breathe.presets.favorites"),
-            SecureStore.deleteItemAsync("breathe.presets.hidden"),
-            SecureStore.deleteItemAsync("breathe.presets.last"),
-            SecureStore.deleteItemAsync(DARK_MODE_KEY),
-            SecureStore.deleteItemAsync(SOUND_ENABLED_KEY),
-            SecureStore.deleteItemAsync(VIBRATION_ENABLED_KEY),
-          ]);
-          setDarkModeEnabled(false);
-          setSoundEnabled(true);
-          setVibrationEnabled(true);
+          await resetAppData();
           Alert.alert(t("action.resetDataDone"));
         },
       },

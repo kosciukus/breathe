@@ -10,6 +10,7 @@ import React, {
 import * as SecureStore from "expo-secure-store";
 import { AppState, AppStateStatus } from "react-native";
 import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
+import i18n, { getDefaultLanguage } from "@/i18n";
 
 import {
   BreathingTimerState,
@@ -30,12 +31,18 @@ export type BreathingContextValue = BreathingTimerState & {
   setPreferencesOpen: (next: boolean) => void;
   languageOpen: boolean;
   setLanguageOpen: (next: boolean) => void;
+  resetAppData: () => Promise<void>;
 };
 
 const BreathingContext = createContext<BreathingContextValue | null>(null);
 const DARK_MODE_KEY = "breathe.theme.darkMode";
 const SOUND_ENABLED_KEY = "breathe.preferences.soundEnabled";
 const VIBRATION_ENABLED_KEY = "breathe.preferences.vibrationEnabled";
+const LANGUAGE_KEY = "breathe.language";
+const CUSTOM_PRESETS_KEY = "breathe.presets.custom";
+const FAVORITE_PRESETS_KEY = "breathe.presets.favorites";
+const HIDDEN_PRESETS_KEY = "breathe.presets.hidden";
+const LAST_PRESET_KEY = "breathe.presets.last";
 const KEEP_AWAKE_TAG = "breathing-session";
 
 export function BreathingProvider({ children }: PropsWithChildren) {
@@ -149,6 +156,26 @@ export function BreathingProvider({ children }: PropsWithChildren) {
     ).catch(() => undefined);
   }, [vibrationEnabled, hasLoadedVibrationEnabled]);
 
+  const resetAppData = useCallback(async () => {
+    await Promise.all([
+      SecureStore.deleteItemAsync(LANGUAGE_KEY),
+      SecureStore.deleteItemAsync(CUSTOM_PRESETS_KEY),
+      SecureStore.deleteItemAsync(FAVORITE_PRESETS_KEY),
+      SecureStore.deleteItemAsync(HIDDEN_PRESETS_KEY),
+      SecureStore.deleteItemAsync(LAST_PRESET_KEY),
+      SecureStore.deleteItemAsync(DARK_MODE_KEY),
+      SecureStore.deleteItemAsync(SOUND_ENABLED_KEY),
+      SecureStore.deleteItemAsync(VIBRATION_ENABLED_KEY),
+    ]);
+
+    clearKeepAwake();
+    timer.resetAppDataState();
+    setDarkModeEnabled(false);
+    setSoundEnabled(true);
+    setVibrationEnabled(true);
+    await i18n.changeLanguage(getDefaultLanguage());
+  }, [clearKeepAwake, timer]);
+
   const value = useMemo(
     () => ({
       ...timer,
@@ -165,6 +192,7 @@ export function BreathingProvider({ children }: PropsWithChildren) {
       setPreferencesOpen,
       languageOpen,
       setLanguageOpen,
+      resetAppData,
     }),
     [
       timer,
@@ -174,6 +202,7 @@ export function BreathingProvider({ children }: PropsWithChildren) {
       presetsOpen,
       preferencesOpen,
       languageOpen,
+      resetAppData,
     ],
   );
 

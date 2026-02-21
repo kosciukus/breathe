@@ -31,6 +31,7 @@ export type BreathingTimerState = {
   setRepeatMinutes: (next: number) => void;
   toggleRun: () => void;
   reset: () => void;
+  resetAppDataState: () => void;
   setDraftField: (key: keyof DurationsSec, v: number) => void;
 };
 
@@ -76,6 +77,13 @@ const sanitizeCustomPreset = (value: unknown): BreathingPreset | null => {
 
 const MIN_TICK_MS = 16;
 const PRE_START_COUNTDOWN_SEC = 3;
+const DEFAULT_DRAFT: DurationsSec = {
+  inhale: 4,
+  hold1: 0,
+  exhale: 6,
+  hold2: 0,
+};
+const DEFAULT_REPEAT_MINUTES = 5;
 
 const nowMs = () => {
   const perf = globalThis.performance;
@@ -91,14 +99,9 @@ export const useBreathingTimer = (): BreathingTimerState => {
   const [favorites, setFavorites] = useState<string[]>([]);
   const [hiddenPresets, setHiddenPresets] = useState<string[]>([]);
   const [hiddenPresetsLoaded, setHiddenPresetsLoaded] = useState(false);
-  const [draft, setDraft] = useState<DurationsSec>({
-    inhale: 4,
-    hold1: 0,
-    exhale: 6,
-    hold2: 0,
-  });
+  const [draft, setDraft] = useState<DurationsSec>(DEFAULT_DRAFT);
   const [active, setActive] = useState<DurationsSec>(draft);
-  const [repeatMinutes, setRepeatMinutes] = useState(5);
+  const [repeatMinutes, setRepeatMinutes] = useState(DEFAULT_REPEAT_MINUTES);
   const [phase, setPhase] = useState<PhaseKey>("inhale");
   const [remainingMs, setRemainingMs] = useState<number>(active.inhale * 1000);
   const [preStartRemainingMs, setPreStartRemainingMs] = useState<number | null>(
@@ -315,6 +318,37 @@ export const useBreathingTimer = (): BreathingTimerState => {
     sessionEndAtRef.current =
       repeatMinutesRef.current > 0 ? nowMs() + nextSession! : null;
   }, [clearTimer, setPhaseAndRemaining]);
+
+  const resetAppDataState = useCallback(() => {
+    clearTimer();
+    setIsRunning(false);
+
+    const nextDraft: DurationsSec = { ...DEFAULT_DRAFT };
+    const nextRepeatMinutes = DEFAULT_REPEAT_MINUTES;
+    const nextSession =
+      nextRepeatMinutes > 0 ? nextRepeatMinutes * 60 * 1000 : null;
+    const nextInhaleMs = Math.max(0, nextDraft.inhale * 1000);
+
+    setCustomPresets([]);
+    setFavorites([]);
+    setHiddenPresets([]);
+    setDraft(nextDraft);
+    setActive(nextDraft);
+    setRepeatMinutes(nextRepeatMinutes);
+    setPhase("inhale");
+    setRemainingMs(nextInhaleMs);
+    setPreStartRemainingMs(null);
+    setSessionRemainingMs(nextSession);
+
+    isRunningRef.current = false;
+    phaseRef.current = "inhale";
+    draftRef.current = nextDraft;
+    repeatMinutesRef.current = nextRepeatMinutes;
+    sessionRemainingRef.current = nextSession;
+    preStartEndAtRef.current = null;
+    phaseEndAtRef.current = nowMs() + nextInhaleMs;
+    sessionEndAtRef.current = nextSession === null ? null : nowMs() + nextSession;
+  }, [clearTimer]);
 
   const start = useCallback(() => {
     if (isRunningRef.current) return;
@@ -655,6 +689,7 @@ export const useBreathingTimer = (): BreathingTimerState => {
     setRepeatMinutes,
     toggleRun,
     reset,
+    resetAppDataState,
     setDraftField,
   };
 };
