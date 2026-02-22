@@ -48,10 +48,16 @@ export const DARK_COLORS: BreathingColors = {
   chipBorder: "#3A444D",
 };
 
+const GOLDEN_RATIO = 1.618;
+const GOLDEN_INVERSE = 0.618;
+const GOLDEN_UNIT = 10;
+const GOLDEN_SPACE = Math.round(GOLDEN_UNIT * GOLDEN_RATIO);
+const GOLDEN_SPACE_COMPACT = Math.round(GOLDEN_SPACE * GOLDEN_INVERSE);
+
 export const createBreathingStyles = (colors: BreathingColors) =>
   StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: colors.bg },
-  scrollContent: { paddingBottom: 0, flexGrow: 1 },
+  scrollContent: { paddingBottom: GOLDEN_SPACE, flexGrow: 1 },
   sheetOverlay: {
     flex: 1,
     justifyContent: "flex-end",
@@ -115,9 +121,9 @@ export const createBreathingStyles = (colors: BreathingColors) =>
   },
   bgOrbOne: {
     position: "absolute",
-    width: 260,
-    height: 260,
-    borderRadius: 130,
+    width: 258,
+    height: 258,
+    borderRadius: 129,
     backgroundColor: colors.accentSoft,
     top: -90,
     left: -50,
@@ -125,15 +131,27 @@ export const createBreathingStyles = (colors: BreathingColors) =>
   },
   bgOrbTwo: {
     position: "absolute",
-    width: 220,
-    height: 220,
-    borderRadius: 110,
+    width: 160,
+    height: 160,
+    borderRadius: 80,
     backgroundColor: colors.coral,
-    bottom: -70,
-    right: -50,
+    bottom: -36,
+    right: -34,
     opacity: 0.7,
   },
-  header: { marginBottom: 14 },
+  goldenLayout: { flexGrow: 1, gap: GOLDEN_SPACE },
+  goldenPrimarySection: {
+    flexGrow: GOLDEN_RATIO,
+    justifyContent: "space-between",
+    gap: GOLDEN_SPACE_COMPACT,
+  },
+  goldenTopStack: { gap: GOLDEN_SPACE_COMPACT },
+  goldenCardAnchor: { gap: GOLDEN_SPACE_COMPACT },
+  goldenSecondarySection: {
+    flexGrow: 1,
+    justifyContent: "flex-end",
+  },
+  header: { marginBottom: GOLDEN_SPACE_COMPACT },
   eyebrow: {
     fontSize: 12,
     letterSpacing: 2,
@@ -283,8 +301,9 @@ export const createBreathingStyles = (colors: BreathingColors) =>
   note: { marginTop: 12, color: colors.muted },
   noteBold: { fontWeight: "700" },
   controls: { marginTop: 14, gap: 10 },
+  homeControls: { gap: 10 },
   presetSection: { gap: 8 },
-  favoritesSection: { marginBottom: 12 },
+  favoritesSection: { marginBottom: 0 },
   presetTitle: {
     fontSize: 15,
     fontWeight: "800",

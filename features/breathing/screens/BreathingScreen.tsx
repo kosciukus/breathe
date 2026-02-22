@@ -1,7 +1,7 @@
 import { useIsFocused } from "@react-navigation/native";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { Animated, ScrollView, Text, View } from "react-native";
+import { Animated, ScrollView, Text, View, useWindowDimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import LanguagePanel from "../components/LanguagePanel";
@@ -17,9 +17,12 @@ import BreathingSliders from "./components/BreathingSliders";
 import FavoritePresetBar from "./components/FavoritePresetBar";
 import SheetModal from "./components/SheetModal";
 
+const GOLDEN_LAYOUT_MIN_HEIGHT = 560;
+
 export default function BreathingScreen() {
   const { t } = useTranslation();
   const { styles } = useBreathingTheme();
+  const { height: viewportHeight } = useWindowDimensions();
   const {
     draft,
     phase,
@@ -166,6 +169,11 @@ export default function BreathingScreen() {
     toggleRun();
   }, [isRunning, reset, stopPhaseTones, toggleRun]);
 
+  const goldenCanvasMinHeight = useMemo(
+    () => Math.max(GOLDEN_LAYOUT_MIN_HEIGHT, viewportHeight - 80),
+    [viewportHeight],
+  );
+
   return (
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
       <View pointerEvents="none" style={styles.background}>
@@ -177,41 +185,56 @@ export default function BreathingScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.header}>
-          <Text style={styles.title}>{t("app.title")}</Text>
-          <Text style={styles.subtitle}>{t("app.subtitle")}</Text>
+        <View
+          style={[
+            styles.goldenLayout,
+            { minHeight: goldenCanvasMinHeight },
+          ]}
+        >
+          <View style={styles.goldenPrimarySection}>
+            <View style={styles.goldenTopStack}>
+              <View style={styles.header}>
+                <Text style={styles.title}>{t("app.title")}</Text>
+                <Text style={styles.subtitle}>{t("app.subtitle")}</Text>
+              </View>
+
+              <FavoritePresetBar
+                favorites={favoritePresets}
+                selectedPresetName={matchedPreset?.name ?? null}
+                onSelectPreset={applyPreset}
+              />
+            </View>
+
+            <View style={styles.goldenCardAnchor}>
+              <BreathingSessionCard
+                cardAnim={cardAnim}
+                matchedPreset={matchedPreset}
+                isFavorite={isCurrentFavorite}
+                sessionRemainingMs={sessionRemainingMs}
+                isPreparing={isPreparing}
+                preStartRemainingSec={preStartRemainingSec}
+                phase={phase}
+                progress={progress}
+                isRunning={isRunning}
+                totalActiveSec={totalActiveSec}
+                onToggleFavorite={handleToggleFavorite}
+                onSaveOrRemovePreset={handleSaveOrRemovePreset}
+                onResetOrStart={handleResetOrStart}
+              />
+            </View>
+          </View>
+
+          <View style={styles.goldenSecondarySection}>
+            <BreathingSliders
+              rowAnims={rowAnims.current}
+              sliderItems={SLIDER_ITEMS}
+              draft={draft}
+              repeatMinutes={repeatMinutes}
+              onSetRepeatMinutes={setRepeatMinutes}
+              onSetDraftField={setDraftField}
+            />
+          </View>
         </View>
-
-        <FavoritePresetBar
-          favorites={favoritePresets}
-          selectedPresetName={matchedPreset?.name ?? null}
-          onSelectPreset={applyPreset}
-        />
-
-        <BreathingSessionCard
-          cardAnim={cardAnim}
-          matchedPreset={matchedPreset}
-          isFavorite={isCurrentFavorite}
-          sessionRemainingMs={sessionRemainingMs}
-          isPreparing={isPreparing}
-          preStartRemainingSec={preStartRemainingSec}
-          phase={phase}
-          progress={progress}
-          isRunning={isRunning}
-          totalActiveSec={totalActiveSec}
-          onToggleFavorite={handleToggleFavorite}
-          onSaveOrRemovePreset={handleSaveOrRemovePreset}
-          onResetOrStart={handleResetOrStart}
-        />
-
-        <BreathingSliders
-          rowAnims={rowAnims.current}
-          sliderItems={SLIDER_ITEMS}
-          draft={draft}
-          repeatMinutes={repeatMinutes}
-          onSetRepeatMinutes={setRepeatMinutes}
-          onSetDraftField={setDraftField}
-        />
       </ScrollView>
 
       <SheetModal visible={presetsOpen} onClose={() => setPresetsOpen(false)}>
