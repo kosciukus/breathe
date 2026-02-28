@@ -404,6 +404,9 @@ export const createBreathingStyles = (colors: BreathingColors) =>
   },
   rowLabel: { fontSize: 15, fontWeight: "600", color: colors.ink },
   rowValue: { fontSize: 15, fontWeight: "700", color: colors.ink },
+  durationSlider: {
+    height: Platform.OS === "android" ? 44 : 32,
+  },
   languageRow: {
     flexDirection: "row",
     alignItems: "center",

@@ -1,5 +1,5 @@
 import { useIsFocused } from "@react-navigation/native";
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Animated, ScrollView, Text, View, useWindowDimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -59,6 +59,7 @@ export default function BreathingScreen() {
 
   const cardAnim = useRef(new Animated.Value(0)).current;
   const rowAnims = useRef<Animated.Value[]>([]);
+  const [isSliderInteracting, setIsSliderInteracting] = useState(false);
   if (rowAnims.current.length === 0) {
     rowAnims.current = Array.from(
       { length: SLIDER_ITEMS.length + 1 },
@@ -182,6 +183,7 @@ export default function BreathingScreen() {
       </View>
 
       <ScrollView
+        scrollEnabled={!isSliderInteracting}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
@@ -230,6 +232,8 @@ export default function BreathingScreen() {
               sliderItems={SLIDER_ITEMS}
               draft={draft}
               repeatMinutes={repeatMinutes}
+              onSliderDragStart={() => setIsSliderInteracting(true)}
+              onSliderDragEnd={() => setIsSliderInteracting(false)}
               onSetRepeatMinutes={setRepeatMinutes}
               onSetDraftField={setDraftField}
             />

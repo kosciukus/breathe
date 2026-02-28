@@ -10,6 +10,10 @@ type DurationSliderRowProps = {
   min?: number;
   max?: number;
   onChange: (v: number) => void;
+  onInteractionStart?: () => void;
+  onInteractionEnd?: () => void;
+  onSlidingStart?: () => void;
+  onSlidingComplete?: () => void;
   unitLabel?: string;
 };
 
@@ -17,6 +21,10 @@ const DurationSliderRow = ({
   label,
   value,
   onChange,
+  onInteractionStart,
+  onInteractionEnd,
+  onSlidingStart,
+  onSlidingComplete,
   min = 0,
   max = 20,
   unitLabel = "s",
@@ -30,18 +38,38 @@ const DurationSliderRow = ({
         <Text style={styles.rowLabel}>{label}</Text>
         <Text style={styles.rowValue}>{displayValue}</Text>
       </View>
-      <Slider
-        value={value}
-        onValueChange={(v) => onChange(clampSec(v))}
-        minimumValue={min}
-        maximumValue={max}
-        step={1}
-        minimumTrackTintColor={
-          Platform.OS === "ios" ? colors.accent : colors.accent
-        }
-        maximumTrackTintColor={colors.track}
-        thumbTintColor={Platform.OS === "android" ? colors.accent : undefined}
-      />
+      <View
+        onTouchStart={onInteractionStart}
+        onTouchEnd={onInteractionEnd}
+        onTouchCancel={onInteractionEnd}
+      >
+        <Slider
+          style={styles.durationSlider}
+          hitSlop={
+            Platform.OS === "android"
+              ? { top: 12, bottom: 12, left: 10, right: 10 }
+              : undefined
+          }
+          value={value}
+          onValueChange={(v) => onChange(clampSec(v))}
+          onSlidingStart={() => {
+            onInteractionStart?.();
+            onSlidingStart?.();
+          }}
+          onSlidingComplete={() => {
+            onSlidingComplete?.();
+            onInteractionEnd?.();
+          }}
+          minimumValue={min}
+          maximumValue={max}
+          step={1}
+          minimumTrackTintColor={
+            Platform.OS === "ios" ? colors.accent : colors.accent
+          }
+          maximumTrackTintColor={colors.track}
+          thumbTintColor={Platform.OS === "android" ? colors.accent : undefined}
+        />
+      </View>
     </View>
   );
 };

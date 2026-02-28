@@ -11,6 +11,8 @@ type BreathingSlidersProps = {
   sliderItems: SliderItem[];
   draft: DurationsSec;
   repeatMinutes: number;
+  onSliderDragStart: () => void;
+  onSliderDragEnd: () => void;
   onSetRepeatMinutes: (minutes: number) => void;
   onSetDraftField: (key: keyof DurationsSec, value: number) => void;
 };
@@ -20,6 +22,8 @@ export default function BreathingSliders({
   sliderItems,
   draft,
   repeatMinutes,
+  onSliderDragStart,
+  onSliderDragEnd,
   onSetRepeatMinutes,
   onSetDraftField,
 }: BreathingSlidersProps) {
@@ -45,6 +49,10 @@ export default function BreathingSliders({
           label={t("label.repeatFor")}
           value={repeatMinutes}
           onChange={onSetRepeatMinutes}
+          onInteractionStart={onSliderDragStart}
+          onInteractionEnd={onSliderDragEnd}
+          onSlidingStart={onSliderDragStart}
+          onSlidingComplete={onSliderDragEnd}
           min={0}
           max={30}
           unitLabel={` ${t("unit.minuteShort")}`}
@@ -70,6 +78,10 @@ export default function BreathingSliders({
             label={t(item.labelKey)}
             value={draft[item.key]}
             onChange={(value) => onSetDraftField(item.key, value)}
+            onInteractionStart={onSliderDragStart}
+            onInteractionEnd={onSliderDragEnd}
+            onSlidingStart={onSliderDragStart}
+            onSlidingComplete={onSliderDragEnd}
             min={item.min}
             max={item.max}
             unitLabel={` ${t("unit.secondShort")}`}
