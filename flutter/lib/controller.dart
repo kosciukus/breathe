@@ -12,6 +12,7 @@ import 'presets.dart';
 
 class BreathingController extends ChangeNotifier {
   static const Duration _tickInterval = Duration(milliseconds: 100);
+  static const Duration _minTickInterval = Duration(milliseconds: 16);
 
   static const String _darkModeKey = 'breathe_flutter.theme.dark_mode';
   static const String _soundKey = 'breathe_flutter.preferences.sound_enabled';
@@ -395,8 +396,28 @@ class BreathingController extends ChangeNotifier {
   }
 
   void _startTicker() {
+    _scheduleNextTick();
+  }
+
+  void _scheduleNextTick([int? remainingMs]) {
+    if (!isRunning) return;
+
     _stopTicker();
-    _ticker = Timer.periodic(_tickInterval, (_) {
+
+    var nextDelay = _tickInterval;
+    if (remainingMs != null) {
+      if (remainingMs <= 0) {
+        nextDelay = _minTickInterval;
+      } else if (remainingMs < _tickInterval.inMilliseconds) {
+        nextDelay = Duration(
+          milliseconds: remainingMs < _minTickInterval.inMilliseconds
+              ? _minTickInterval.inMilliseconds
+              : remainingMs,
+        );
+      }
+    }
+
+    _ticker = Timer(nextDelay, () {
       unawaited(_tick());
     });
   }
@@ -416,6 +437,7 @@ class BreathingController extends ChangeNotifier {
       if (nextRemaining > 0) {
         preStartRemainingMs = nextRemaining;
         notifyListeners();
+        _scheduleNextTick(nextRemaining);
         return;
       }
 
@@ -429,10 +451,11 @@ class BreathingController extends ChangeNotifier {
       _sessionEndsAt = sessionRemainingMs == null
           ? null
           : now.add(Duration(milliseconds: sessionRemainingMs!));
-      await _playPhaseCue(phase);
       notifyListeners();
+      unawaited(_playPhaseCue(phase));
 
       if (remainingMs > 0) {
+        _scheduleNextTick(remainingMs);
         return;
       }
     }
@@ -454,6 +477,7 @@ class BreathingController extends ChangeNotifier {
     if (nextPhaseRemaining > 0) {
       remainingMs = nextPhaseRemaining;
       notifyListeners();
+      _scheduleNextTick(nextPhaseRemaining);
       return;
     }
 
@@ -481,8 +505,9 @@ class BreathingController extends ChangeNotifier {
         phase = cursor;
         remainingMs = phaseDurationMs - spillMs;
         _phaseEndsAt = now.add(Duration(milliseconds: remainingMs));
-        await _playPhaseCue(phase);
         notifyListeners();
+        unawaited(_playPhaseCue(phase));
+        _scheduleNextTick(remainingMs);
         return;
       }
 

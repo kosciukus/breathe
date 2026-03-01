@@ -2,6 +2,8 @@
 
 Thanks for your interest in contributing to **Mindful Breathe**.
 
+All commands below assume you are running them from the `react_native/` folder.
+
 ## Getting Started
 
 1. Fork the repository

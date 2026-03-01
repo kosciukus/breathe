@@ -1,4 +1,4 @@
-package com.example.breathe_flutter
+package it.arcsoftware.breathe
 
 import io.flutter.embedding.android.FlutterActivity
 
