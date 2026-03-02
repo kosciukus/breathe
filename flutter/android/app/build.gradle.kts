@@ -19,8 +19,8 @@ fun releaseSigningProperty(name: String): String? =
 
 android {
     namespace = "it.arcsoftware.breathe"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    compileSdk = 36
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -33,8 +33,8 @@ android {
 
     defaultConfig {
         applicationId = "it.arcsoftware.breathe"
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        minSdk = 24
+        targetSdk = 36
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
