@@ -105,12 +105,19 @@ flutter pub get
 
 ```bash
 flutter analyze
+flutter test
 ```
 
 4. Launch the app:
 
 ```bash
 flutter run
+```
+
+To launch a release build instead of the default debug build:
+
+```bash
+flutter run --release
 ```
 
 ### Run on iOS Simulator
@@ -143,6 +150,12 @@ flutter devices
 flutter run -d <device-id>
 ```
 
+To run the Android app in release mode instead of debug:
+
+```bash
+flutter run --release -d <device-id>
+```
+
 ### Build Release Binaries
 
 #### Android APK
@@ -168,3 +181,6 @@ flutter build ios --release
 ```
 
 For App Store distribution, you can also open `ios/Runner.xcworkspace` in Xcode and archive from there.
+The default `Runner` scheme keeps Xcode's **Run** action on `Debug`.
+If you want a production-style build when launching from Xcode to a physical iPhone, switch to the shared `Runner Release` scheme before pressing **Run**.
+If a previously installed debug build still shows the "can only be launched from Flutter tooling" message after you switch schemes, delete the app from the device and reinstall it from `Runner Release`.

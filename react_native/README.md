@@ -105,7 +105,14 @@ This is an Expo app using Expo Router.
 npm install
 ```
 
-2. Start the app
+2. Run checks
+
+```bash
+npm run lint
+npm run test
+```
+
+3. Start the app
 
 ```bash
 npx expo start

@@ -195,4 +195,8 @@ For Flutter changes, the default lightweight check is:
 
 - Run `flutter analyze` from `flutter/`
 
+For timer or other behavior changes, also run:
+
+- `flutter test` from `flutter/`
+
 For behavior changes, also confirm whether the same product change should be mirrored in `react_native/`.

@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vibration/vibration.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
+import 'cycle_transition.dart';
 import 'models.dart';
 import 'presets.dart';
 
@@ -31,6 +32,7 @@ class BreathingController extends ChangeNotifier {
   DateTime? _preStartEndsAt;
   DateTime? _phaseEndsAt;
   DateTime? _sessionEndsAt;
+  bool _stopAfterCycle = false;
 
   bool isReady = false;
   bool soundEnabled = true;
@@ -333,6 +335,7 @@ class BreathingController extends ChangeNotifier {
     _phaseEndsAt = DateTime.now().add(Duration(milliseconds: remainingMs));
     sessionRemainingMs = repeatMinutes > 0 ? repeatMinutes * 60 * 1000 : null;
     _sessionEndsAt = null;
+    _stopAfterCycle = false;
     isRunning = true;
 
     await WakelockPlus.enable();
@@ -346,6 +349,7 @@ class BreathingController extends ChangeNotifier {
     await WakelockPlus.disable();
 
     isRunning = false;
+    _stopAfterCycle = false;
     _preStartEndsAt = null;
     _phaseEndsAt = null;
     _sessionEndsAt = null;
@@ -464,11 +468,11 @@ class BreathingController extends ChangeNotifier {
       final nextSession = _sessionEndsAt!.difference(now).inMilliseconds;
       if (nextSession <= 0) {
         sessionRemainingMs = 0;
-        remainingMs = 0;
-        await reset();
-        return;
+        _sessionEndsAt = null;
+        _stopAfterCycle = true;
+      } else {
+        sessionRemainingMs = nextSession;
       }
-      sessionRemainingMs = nextSession;
     }
 
     _phaseEndsAt ??= now.add(Duration(milliseconds: remainingMs));
@@ -487,34 +491,25 @@ class BreathingController extends ChangeNotifier {
       await reset();
       return;
     }
-
-    var spillMs = -nextPhaseRemaining;
-    if (spillMs >= cycleMs) {
-      spillMs %= cycleMs;
-    }
-
-    var cursor = phase;
-    for (var index = 0; index < BreathingPhase.values.length + 1; index++) {
-      cursor = cursor.next;
-      final phaseDurationMs = active.durationFor(cursor) * 1000;
-      if (phaseDurationMs <= 0) {
-        continue;
-      }
-
-      if (spillMs < phaseDurationMs) {
-        phase = cursor;
-        remainingMs = phaseDurationMs - spillMs;
+    final transition = resolveCycleTransition(
+      currentPhase: phase,
+      durations: active,
+      spillMs: -nextPhaseRemaining,
+      stopAfterCycle: _stopAfterCycle,
+    );
+    switch (transition) {
+      case StopCycleTransition():
+        await reset();
+        return;
+      case ContinueCycleTransition():
+        phase = transition.phase;
+        remainingMs = transition.remainingMs;
         _phaseEndsAt = now.add(Duration(milliseconds: remainingMs));
         notifyListeners();
         unawaited(_playPhaseCue(phase));
         _scheduleNextTick(remainingMs);
         return;
-      }
-
-      spillMs -= phaseDurationMs;
     }
-
-    await reset();
   }
 
   BreathingPreset? _presetById(String? presetId) {

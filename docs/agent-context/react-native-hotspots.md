@@ -170,4 +170,8 @@ For React Native changes, the default lightweight check is:
 
 - Run `npm run lint` from `react_native/`
 
+For timer or other behavior changes, also run:
+
+- `npm run test` from `react_native/`
+
 For behavior changes, also confirm whether the same product change should be mirrored in `flutter/`.

@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as SecureStore from "expo-secure-store";
-import { PHASE_ORDER, TICK_MS } from "../lib/constants";
+import { TICK_MS } from "../lib/constants";
 import { BREATHING_PRESETS } from "../data/presets";
 import { BreathingPreset, DurationsSec, PhaseKey } from "../lib/types";
-import { clampSec, isSamePresetConfig, nextPhase } from "../lib/utils";
+import { resolveCycleTransition } from "../lib/cycleTransition";
+import { clampSec, isSamePresetConfig } from "../lib/utils";
 
 export type BreathingTimerState = {
   active: DurationsSec;
@@ -138,6 +139,7 @@ export const useBreathingTimer = (): BreathingTimerState => {
   const sessionEndAtRef = useRef<number | null>(
     repeatMinutes > 0 ? nowMs() + repeatMinutes * 60 * 1000 : null,
   );
+  const stopAfterCycleRef = useRef(false);
 
   useEffect(() => {
     presetsRef.current = presets;
@@ -304,6 +306,7 @@ export const useBreathingTimer = (): BreathingTimerState => {
   const reset = useCallback(() => {
     clearTimer();
     setIsRunning(false);
+    stopAfterCycleRef.current = false;
     setActive(draftRef.current);
     setPhaseAndRemaining("inhale", draftRef.current);
     const nextSession =
@@ -322,6 +325,7 @@ export const useBreathingTimer = (): BreathingTimerState => {
   const resetAppDataState = useCallback(() => {
     clearTimer();
     setIsRunning(false);
+    stopAfterCycleRef.current = false;
 
     const nextDraft: DurationsSec = { ...DEFAULT_DRAFT };
     const nextRepeatMinutes = DEFAULT_REPEAT_MINUTES;
@@ -355,6 +359,7 @@ export const useBreathingTimer = (): BreathingTimerState => {
 
     const d = draftRef.current;
     const now = nowMs();
+    stopAfterCycleRef.current = false;
     setActive(d);
     const nextMs = Math.max(0, d.inhale * 1000);
     phaseRef.current = "inhale";
@@ -376,6 +381,7 @@ export const useBreathingTimer = (): BreathingTimerState => {
   }, []);
 
   const pause = useCallback(() => {
+    stopAfterCycleRef.current = false;
     setIsRunning(false);
   }, []);
 
@@ -436,9 +442,8 @@ export const useBreathingTimer = (): BreathingTimerState => {
         sessionRemainingRef.current = nextSession;
         setSessionRemainingMs(nextSession);
         if (nextSession <= 0) {
-          setIsRunning(false);
-          setRemainingMs(0);
-          return;
+          stopAfterCycleRef.current = true;
+          sessionEndAtRef.current = null;
         }
       }
 
@@ -463,35 +468,23 @@ export const useBreathingTimer = (): BreathingTimerState => {
         setIsRunning(false);
         return;
       }
-
-      const cycleMs = totalSec * 1000;
-      let spillMs = now - phaseEndAt;
-      if (spillMs >= cycleMs) {
-        spillMs = spillMs % cycleMs;
-      }
-      let phaseCursor = phaseRef.current;
-
-      for (let i = 0; i < PHASE_ORDER.length + 1; i++) {
-        phaseCursor = nextPhase(phaseCursor);
-
-        let phaseDurationMs = Math.max(0, nextActive[phaseCursor] * 1000);
-        if (phaseDurationMs <= 0) continue;
-
-        if (spillMs < phaseDurationMs) {
-          const nextRemaining = Math.max(0, phaseDurationMs - spillMs);
-          phaseRef.current = phaseCursor;
-          setPhase(phaseCursor);
-          setRemainingMs(nextRemaining);
-          phaseEndAtRef.current = now + nextRemaining;
-          scheduleNextTick(nextRemaining);
-          return;
-        }
-
-        spillMs -= phaseDurationMs;
+      const transition = resolveCycleTransition({
+        currentPhase: phaseRef.current,
+        durations: nextActive,
+        spillMs: now - phaseEndAt,
+        stopAfterCycle: stopAfterCycleRef.current,
+      });
+      if (transition.action === "stop") {
+        stopAfterCycleRef.current = false;
+        setIsRunning(false);
+        return;
       }
 
-      // Fallback: if we couldn't find a non-zero phase (should be impossible with totalSec > 0).
-      setIsRunning(false);
+      phaseRef.current = transition.phase;
+      setPhase(transition.phase);
+      setRemainingMs(transition.remainingMs);
+      phaseEndAtRef.current = now + transition.remainingMs;
+      scheduleNextTick(transition.remainingMs);
     };
 
     tick();

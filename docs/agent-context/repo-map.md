@@ -58,6 +58,7 @@ Run from `react_native/`:
 
 - `npm install`
 - `npm run lint`
+- `npm run test`
 - `npx expo start`
 - `npm run ios`
 - `npm run android`
@@ -97,9 +98,10 @@ Run from `flutter/`:
 
 - `flutter pub get`
 - `flutter analyze`
+- `flutter test`
 - `flutter run`
 
 ## Testing / Validation
 
-- React Native currently exposes `npm run lint` as the main built-in check in `package.json`.
-- Flutter includes `flutter analyze`; the standard Flutter test scaffold exists in `flutter/test/widget_test.dart`.
+- React Native exposes `npm run lint` for linting and `npm run test` for timer logic regression coverage.
+- Flutter includes `flutter analyze` and `flutter test`; timer cycle regression coverage now lives in `flutter/test/cycle_transition_test.dart`.

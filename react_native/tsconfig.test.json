@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "node16",
+    "moduleResolution": "node16",
+    "outDir": "./node_modules/.cache/breathe-tests",
+    "noEmit": false
+  },
+  "include": [
+    "features/breathing/lib/cycleTransition.ts",
+    "features/breathing/lib/cycleTransition.test.ts"
+  ]
+}
