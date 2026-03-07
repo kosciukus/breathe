@@ -5,6 +5,15 @@ This repository now contains two app implementations of the same product:
 - `react_native/` contains the Expo React Native app
 - `flutter/` contains the Flutter port
 
+Production release note:
+
+- The current production Android release on Google Play uses the Flutter app, not the Expo React Native app.
+
+Store link:
+
+- [Android on Google Play](https://play.google.com/store/apps/details?id=it.arcsoftware.breathe)
+- [iOS on the App Store](https://apps.apple.com/pl/app/mindful-breathe/id6758299219)
+
 Project docs:
 
 - [React Native README](react_native/README.md)
