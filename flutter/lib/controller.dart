@@ -14,6 +14,8 @@ import 'presets.dart';
 class BreathingController extends ChangeNotifier {
   static const Duration _tickInterval = Duration(milliseconds: 100);
   static const Duration _minTickInterval = Duration(milliseconds: 16);
+  static const Duration _phaseCueTimeout = Duration(milliseconds: 500);
+  static const double _phaseCueVolume = 0.8;
 
   static const String _darkModeKey = 'breathe_flutter.theme.dark_mode';
   static const String _soundKey = 'breathe_flutter.preferences.sound_enabled';
@@ -25,7 +27,18 @@ class BreathingController extends ChangeNotifier {
   static const String _hiddenPresetsKey = 'breathe_flutter.presets.hidden';
   static const String _lastPresetKey = 'breathe_flutter.presets.last';
 
-  final AudioPlayer _audioPlayer = AudioPlayer();
+  static const String _inhaleCueAsset = 'sounds/phase-inhale.mp3';
+  static const String _holdCueAsset = 'sounds/phase-hold.mp3';
+  static const String _exhaleCueAsset = 'sounds/phase-exhale.mp3';
+
+  AudioPlayer? _inhaleCuePlayer;
+  AudioPlayer? _holdCuePlayer;
+  AudioPlayer? _exhaleCuePlayer;
+  AudioPlayer? _activeCuePlayer;
+  bool _audioCuesPrepared = false;
+  bool? _hasVibrator;
+  final Future<void> Function(BreathingPhase currentPhase)? _phaseCueOverride;
+  Future<void> _phaseCueQueue = Future<void>.value();
 
   SharedPreferences? _prefs;
   Timer? _ticker;
@@ -52,6 +65,10 @@ class BreathingController extends ChangeNotifier {
   List<BreathingPreset> _customPresets = <BreathingPreset>[];
   final Set<String> _favoritePresetIds = <String>{};
   final Set<String> _hiddenPresetIds = <String>{};
+
+  BreathingController({
+    Future<void> Function(BreathingPhase currentPhase)? phaseCueOverride,
+  }) : _phaseCueOverride = phaseCueOverride;
 
   Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
@@ -104,6 +121,9 @@ class BreathingController extends ChangeNotifier {
     phase = BreathingPhase.inhale;
     remainingMs = active.inhale * 1000;
     sessionRemainingMs = repeatMinutes > 0 ? repeatMinutes * 60 * 1000 : null;
+    if (_phaseCueOverride == null) {
+      await _prepareAudioCues();
+    }
     isReady = true;
     notifyListeners();
   }
@@ -152,6 +172,9 @@ class BreathingController extends ChangeNotifier {
 
   Future<void> setSoundEnabled(bool value) async {
     soundEnabled = value;
+    if (!value) {
+      await _stopPhaseCue();
+    }
     notifyListeners();
     final prefs = _prefs;
     if (prefs != null) {
@@ -338,7 +361,7 @@ class BreathingController extends ChangeNotifier {
     _stopAfterCycle = false;
     isRunning = true;
 
-    await WakelockPlus.enable();
+    await _setWakelockEnabled(true);
     _startTicker();
     notifyListeners();
   }
@@ -346,7 +369,7 @@ class BreathingController extends ChangeNotifier {
   Future<void> reset() async {
     _stopTicker();
     await _stopPhaseCue();
-    await WakelockPlus.disable();
+    await _setWakelockEnabled(false);
 
     isRunning = false;
     _stopAfterCycle = false;
@@ -456,7 +479,7 @@ class BreathingController extends ChangeNotifier {
           ? null
           : now.add(Duration(milliseconds: sessionRemainingMs!));
       notifyListeners();
-      unawaited(_playPhaseCue(phase));
+      _queuePhaseCue(phase);
 
       if (remainingMs > 0) {
         _scheduleNextTick(remainingMs);
@@ -506,7 +529,7 @@ class BreathingController extends ChangeNotifier {
         remainingMs = transition.remainingMs;
         _phaseEndsAt = now.add(Duration(milliseconds: remainingMs));
         notifyListeners();
-        unawaited(_playPhaseCue(phase));
+        _queuePhaseCue(phase);
         _scheduleNextTick(remainingMs);
         return;
     }
@@ -551,26 +574,46 @@ class BreathingController extends ChangeNotifier {
   }
 
   Future<void> _playPhaseCue(BreathingPhase currentPhase) async {
+    final cueOverride = _phaseCueOverride;
+    if (cueOverride != null) {
+      await cueOverride(currentPhase);
+      return;
+    }
+
     if (soundEnabled) {
-      final assetPath = switch (currentPhase) {
-        BreathingPhase.inhale => 'sounds/phase-inhale.mp3',
-        BreathingPhase.holdIn => 'sounds/phase-hold.mp3',
-        BreathingPhase.exhale => 'sounds/phase-exhale.mp3',
-        BreathingPhase.holdOut => 'sounds/phase-hold.mp3',
-      };
+      final cuePlayer = _cuePlayerForPhase(currentPhase);
+      final cueAsset = _cueAssetForPhase(currentPhase);
 
       try {
-        await _audioPlayer.stop();
-        await _audioPlayer.play(AssetSource(assetPath));
+        if (!_audioCuesPrepared) {
+          await _prepareAudioCues();
+        }
+
+        final activeCuePlayer = _activeCuePlayer;
+        if (activeCuePlayer != null && activeCuePlayer != cuePlayer) {
+          await activeCuePlayer.stop();
+        }
+
+        await cuePlayer.stop();
+        await cuePlayer.resume();
+        _activeCuePlayer = cuePlayer;
       } catch (_) {
-        // Ignore playback failures and keep the timer running.
+        try {
+          await cuePlayer.play(
+            AssetSource(cueAsset),
+            volume: _phaseCueVolume,
+          );
+          _activeCuePlayer = cuePlayer;
+        } catch (_) {
+          // Ignore playback failures and keep the timer running.
+        }
       }
     }
 
     if (vibrationEnabled) {
       try {
-        final hasVibrator = await Vibration.hasVibrator();
-        if (hasVibrator) {
+        _hasVibrator ??= await Vibration.hasVibrator();
+        if (_hasVibrator == true) {
           Vibration.vibrate(duration: 120);
         }
       } catch (_) {
@@ -580,20 +623,115 @@ class BreathingController extends ChangeNotifier {
   }
 
   Future<void> _stopPhaseCue() async {
-    try {
-      await _audioPlayer.stop();
-    } catch (_) {
-      // Ignore stop failures.
+    for (final player in <AudioPlayer?>[
+      _inhaleCuePlayer,
+      _holdCuePlayer,
+      _exhaleCuePlayer,
+    ]) {
+      if (player == null) {
+        continue;
+      }
+      try {
+        await player.stop();
+      } catch (_) {
+        // Ignore stop failures.
+      }
     }
+    _activeCuePlayer = null;
+  }
+
+  void _queuePhaseCue(BreathingPhase currentPhase) {
+    _phaseCueQueue = _phaseCueQueue.then((_) async {
+      try {
+        await _playPhaseCue(
+          currentPhase,
+        ).timeout(_phaseCueTimeout, onTimeout: () {});
+      } catch (_) {
+        // Ignore queued cue failures and keep the timer running.
+      }
+    });
+  }
+
+  Future<void> _prepareAudioCues() async {
+    final playersByAsset = <AudioPlayer, String>{
+      _inhaleCuePlayer ??= AudioPlayer(): _inhaleCueAsset,
+      _holdCuePlayer ??= AudioPlayer(): _holdCueAsset,
+      _exhaleCuePlayer ??= AudioPlayer(): _exhaleCueAsset,
+    };
+
+    for (final entry in playersByAsset.entries) {
+      final player = entry.key;
+      final asset = entry.value;
+      try {
+        await player.setPlayerMode(PlayerMode.lowLatency);
+      } catch (_) {
+        // Ignore mode failures and keep default mode.
+      }
+      try {
+        await player.setReleaseMode(ReleaseMode.stop);
+      } catch (_) {
+        // Ignore release mode failures and keep default mode.
+      }
+      try {
+        await player.setVolume(_phaseCueVolume);
+      } catch (_) {
+        // Ignore volume failures and keep default volume.
+      }
+      try {
+        await player.setSource(AssetSource(asset));
+      } catch (_) {
+        // Ignore source preparation failures and attempt direct play later.
+      }
+    }
+
+    _audioCuesPrepared = true;
+  }
+
+  AudioPlayer _cuePlayerForPhase(BreathingPhase currentPhase) {
+    return switch (currentPhase) {
+      BreathingPhase.inhale => _inhaleCuePlayer ??= AudioPlayer(),
+      BreathingPhase.holdIn => _holdCuePlayer ??= AudioPlayer(),
+      BreathingPhase.exhale => _exhaleCuePlayer ??= AudioPlayer(),
+      BreathingPhase.holdOut => _holdCuePlayer ??= AudioPlayer(),
+    };
+  }
+
+  String _cueAssetForPhase(BreathingPhase currentPhase) {
+    return switch (currentPhase) {
+      BreathingPhase.inhale => _inhaleCueAsset,
+      BreathingPhase.holdIn => _holdCueAsset,
+      BreathingPhase.exhale => _exhaleCueAsset,
+      BreathingPhase.holdOut => _holdCueAsset,
+    };
   }
 
   @override
   void dispose() {
     _stopTicker();
     unawaited(_stopPhaseCue());
-    unawaited(WakelockPlus.disable());
-    unawaited(_audioPlayer.dispose());
+    unawaited(_setWakelockEnabled(false));
+    for (final player in <AudioPlayer?>[
+      _inhaleCuePlayer,
+      _holdCuePlayer,
+      _exhaleCuePlayer,
+    ]) {
+      if (player != null) {
+        unawaited(player.dispose());
+      }
+    }
     super.dispose();
+  }
+
+  Future<void> _setWakelockEnabled(bool enabled) async {
+    try {
+      if (enabled) {
+        await WakelockPlus.enable();
+      } else {
+        await WakelockPlus.disable();
+      }
+    } catch (_) {
+      // Ignore wakelock failures on unsupported platforms/test runtime.
+    }
   }
 }
 

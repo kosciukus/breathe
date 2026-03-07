@@ -7,7 +7,10 @@
     "noEmit": false
   },
   "include": [
+    "features/breathing/lib/types.ts",
     "features/breathing/lib/cycleTransition.ts",
-    "features/breathing/lib/cycleTransition.test.ts"
+    "features/breathing/lib/cycleTransition.test.ts",
+    "features/breathing/lib/phaseCueTrigger.ts",
+    "features/breathing/lib/phaseCueTrigger.test.ts"
   ]
 }

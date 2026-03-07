@@ -11,6 +11,7 @@ import { useBreathing } from "../context/BreathingContext";
 import { usePhaseCues } from "../hooks/usePhaseCues";
 import { useBreathingTheme } from "../hooks/useBreathingTheme";
 import { SLIDER_ITEMS } from "../lib/constants";
+import { triggerPhaseCue } from "../lib/phaseCueTrigger";
 import { isSamePresetConfig } from "../lib/utils";
 import BreathingSessionCard from "./components/BreathingSessionCard";
 import BreathingSliders from "./components/BreathingSliders";
@@ -87,8 +88,12 @@ export default function BreathingScreen() {
   }, [cardAnim]);
 
   useEffect(() => {
-    if (!isRunning || isPreparing) return;
-    void playPhaseTone(phase);
+    triggerPhaseCue({
+      isRunning,
+      isPreparing,
+      phase,
+      playPhaseTone,
+    });
   }, [isPreparing, isRunning, phase, playPhaseTone]);
 
   useEffect(() => {

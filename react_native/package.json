@@ -9,7 +9,7 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "test": "tsc -p tsconfig.test.json && node --test node_modules/.cache/breathe-tests/cycleTransition.test.js"
+    "test": "tsc -p tsconfig.test.json && node --test node_modules/.cache/breathe-tests/cycleTransition.test.js node_modules/.cache/breathe-tests/phaseCueTrigger.test.js"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",

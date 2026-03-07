@@ -157,7 +157,6 @@
 				B964E40EE0BE69F02A211385 /* Pods-RunnerTests.release.xcconfig */,
 				81DDC2A6EB30B0CF6C9DD998 /* Pods-RunnerTests.profile.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -203,6 +202,7 @@
 				97C146EC1CF9000F007C117D /* Resources */,
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
+				A1E6B2F83D4E7A9C00112233 /* Generate objective_c dSYM */,
 				0A069DF3F876BF0E88B1192F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -307,6 +307,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin";
+		};
+		A1E6B2F83D4E7A9C00112233 /* Generate objective_c dSYM */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${TARGET_BUILD_DIR}/${WRAPPER_NAME}/Frameworks/objective_c.framework/objective_c",
+			);
+			name = "Generate objective_c dSYM";
+			outputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/objective_c.framework.dSYM/Contents/Resources/DWARF/objective_c",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\nif [ \"${ACTION}\" != \"install\" ]; then\n  exit 0\nfi\nFRAMEWORK_BINARY=\"${TARGET_BUILD_DIR}/${WRAPPER_NAME}/Frameworks/objective_c.framework/objective_c\"\nif [ ! -f \"${FRAMEWORK_BINARY}\" ]; then\n  exit 0\nfi\n/usr/bin/dsymutil \"${FRAMEWORK_BINARY}\" -o \"${DWARF_DSYM_FOLDER_PATH}/objective_c.framework.dSYM\"\n";
+			showEnvVarsInLog = 0;
 		};
 		5A5AE32F8548BD8FB3863B13 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -479,6 +496,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = L5G733RSSG;
 				ENABLE_BITCODE = NO;
+				FLUTTER_BUILD_NAME = 1.0.4;
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -662,6 +680,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = L5G733RSSG;
 				ENABLE_BITCODE = NO;
+				FLUTTER_BUILD_NAME = 1.0.4;
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -685,6 +704,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = L5G733RSSG;
 				ENABLE_BITCODE = NO;
+				FLUTTER_BUILD_NAME = 1.0.4;
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

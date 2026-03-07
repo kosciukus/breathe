@@ -1,3 +1,4 @@
+import java.io.File
 import java.util.Properties
 
 plugins {
@@ -16,6 +17,20 @@ val sharedSigningProperties = Properties().apply {
 
 fun releaseSigningProperty(name: String): String? =
     (project.findProperty(name) as String?) ?: sharedSigningProperties.getProperty(name)
+
+fun resolveReleaseStoreFile(storeFilePath: String): File {
+    val configuredPath = file(storeFilePath)
+    if (File(storeFilePath).isAbsolute || configuredPath.exists()) {
+        return configuredPath
+    }
+
+    val reactNativeAppPath = rootProject.file("../../react_native/android/app/$storeFilePath")
+    if (reactNativeAppPath.exists()) {
+        return reactNativeAppPath
+    }
+
+    return configuredPath
+}
 
 android {
     namespace = "it.arcsoftware.breathe"
@@ -52,7 +67,7 @@ android {
                 storePasswordProp != null &&
                 keyPasswordProp != null
             ) {
-                storeFile = file(storeFileProp)
+                storeFile = resolveReleaseStoreFile(storeFileProp)
                 storePassword = storePasswordProp
                 keyAlias = keyAliasProp
                 keyPassword = keyPasswordProp

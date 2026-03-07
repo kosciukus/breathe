@@ -25,6 +25,6 @@ Current high-confidence notes:
 
 - The repo contains two app implementations of the same product: `react_native/` and `flutter/`.
 - The React Native app appears to be the primary actively released app at the repo level (`release-please` files are wired for it).
-- The root-level `ios/` directory currently contains generated CocoaPods output only and is not the main source tree.
+- There is no canonical root-level `ios/` source tree; iOS projects live under `react_native/ios` and `flutter/ios`.
 
 Keep this folder small and update it when structure, major workflows, or core ownership changes.
