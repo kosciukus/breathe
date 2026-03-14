@@ -3,8 +3,10 @@
 ## Root
 
 - `README.md`: top-level repo overview and entry points
-- `react_native/`: Expo React Native implementation
-- `flutter/`: Flutter implementation of the same product
+- `react_native/`: Expo React Native implementation (iOS production)
+- `flutter/`: Flutter implementation (Android production) + wearable apps
+- `flutter/ios/BreatheWatch/`: standalone Apple Watch app (Swift/SwiftUI)
+- `flutter/android/wearos/`: standalone Wear OS app (Flutter)
 - `.github/`: CI/release workflows
 - `release-please-config.json` and `.release-please-manifest.json`: React Native release automation
 
@@ -99,6 +101,39 @@ Run from `flutter/`:
 - `flutter pub get`
 - `flutter analyze`
 - `flutter test`
+- `flutter run`
+
+## Apple Watch App (`flutter/ios/BreatheWatch/`)
+
+Standalone Swift/SwiftUI app — no Flutter, no phone required.
+
+- `BreatheWatchApp.swift`: app entry, creates `BreathingEngine`
+- `Presets.swift`: all 10 built-in presets + `BreathPhase` enum (mirrors `flutter/lib/presets.dart`)
+- `BreathingEngine.swift`: timer, phase cycling, haptics, last-preset persistence (`UserDefaults`)
+- `PresetListView.swift`: preset picker
+- `SessionView.swift`: active session UI (progress ring, phase label, countdown, stop)
+
+### Apple Watch commands
+
+Build and run via Xcode — select the `BreatheWatch` scheme and a Watch simulator target.
+
+## Wear OS App (`flutter/android/wearos/`)
+
+Standalone Flutter app targeting Wear OS (API 26+).
+
+- `lib/main.dart`: app entry, Provider setup
+- `lib/presets.dart`: all 10 built-in presets + `BreathPhase` enum (mirrors `flutter/lib/presets.dart`)
+- `lib/engine.dart`: timer, phase cycling, haptics, last-preset persistence (`shared_preferences`)
+- `lib/screens/preset_list_screen.dart`: preset picker
+- `lib/screens/session_screen.dart`: active session UI (progress ring, phase label, countdown, stop)
+- `android/app/src/main/AndroidManifest.xml`: Wear OS flags (`standalone`, `VIBRATE`, `WAKE_LOCK`)
+
+### Wear OS commands
+
+Run from `flutter/android/wearos/`:
+
+- `flutter pub get`
+- `flutter analyze`
 - `flutter run`
 
 ## Testing / Validation

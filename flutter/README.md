@@ -88,6 +88,31 @@ The Flutter and React Native apps are intended to stay visually aligned, so the 
 - UI spacing and controls are optimized for both phones and tablets.
 - Layout and typography are tuned for readability across compact and large screens.
 
+## Wearable Companions
+
+The Flutter project ships two standalone wearable apps alongside the phone app.
+
+### Apple Watch (`ios/BreatheWatch/`)
+
+A native Swift/SwiftUI watch app that runs independently — no phone required.
+
+- Built and run via Xcode: open `ios/Runner.xcworkspace`, select the **BreatheWatch** scheme, choose a Watch simulator
+- All 10 presets, full breathing timer, haptic feedback on each phase transition
+- Source files: `ios/BreatheWatch/` (Swift only, no Flutter)
+
+### Wear OS (`android/wearos/`)
+
+A standalone Flutter app targeting Wear OS (API 26+).
+
+```bash
+cd android/wearos
+flutter pub get
+flutter run
+```
+
+- All 10 presets, full breathing timer, haptic feedback on each phase transition
+- Requires a Wear OS emulator (Android Studio → Device Manager → Wear OS Small Round) or a physical Wear OS watch
+
 ## Technical
 
 This is a Flutter app built with Material 3 and platform-specific Flutter runners for iOS, Android, macOS, Linux, Windows, and web.

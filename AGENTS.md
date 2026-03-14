@@ -9,6 +9,8 @@ Before doing broad code discovery for a new change request:
 3. Read `docs/agent-context/change-routing.md`.
 4. If the request targets the Expo app, read `docs/agent-context/react-native-hotspots.md`.
 5. If the request targets the Flutter app, read `docs/agent-context/flutter-hotspots.md`.
+6. If the request targets the Apple Watch app, see `flutter/ios/BreatheWatch/`.
+7. If the request targets the Wear OS app, see `flutter/android/wearos/`.
 
 Use those files as the default starting point to identify the likely implementation area.
 
@@ -20,9 +22,11 @@ After that:
 
 ## Scope
 
-This repository contains two app implementations of the same product:
+This repository contains four app implementations of the same product:
 
-- `react_native/` for the Expo React Native app
-- `flutter/` for the Flutter app
+- `react_native/` — Expo React Native app (iOS production)
+- `flutter/` — Flutter app (Android production)
+- `flutter/ios/BreatheWatch/` — standalone Apple Watch app (Swift/SwiftUI, no Flutter)
+- `flutter/android/wearos/` — standalone Wear OS app (Flutter)
 
-For product behavior changes, check whether the change should be mirrored in both apps.
+For product behavior changes (presets, session logic, copy), check whether the change should be mirrored across all relevant targets. Wearable apps share preset definitions with their parent platform app.

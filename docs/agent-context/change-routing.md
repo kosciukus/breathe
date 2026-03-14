@@ -104,13 +104,59 @@ Start here:
 - `flutter/lib/app.dart`
 - `flutter/lib/theme.dart`
 
+## Apple Watch app: common requests
+
+### Change breathing logic or phase cycling
+
+Start here:
+
+- `flutter/ios/BreatheWatch/BreathingEngine.swift`
+
+### Change preset definitions
+
+Start here:
+
+- `flutter/ios/BreatheWatch/Presets.swift`
+
+Also verify parity with `flutter/lib/presets.dart`.
+
+### Change Watch UI layout
+
+Start here:
+
+- `flutter/ios/BreatheWatch/SessionView.swift`
+- `flutter/ios/BreatheWatch/PresetListView.swift`
+
+## Wear OS app: common requests
+
+### Change breathing logic or phase cycling
+
+Start here:
+
+- `flutter/android/wearos/lib/engine.dart`
+
+### Change preset definitions
+
+Start here:
+
+- `flutter/android/wearos/lib/presets.dart`
+
+Also verify parity with `flutter/lib/presets.dart`.
+
+### Change Wear OS UI layout
+
+Start here:
+
+- `flutter/android/wearos/lib/screens/session_screen.dart`
+- `flutter/android/wearos/lib/screens/preset_list_screen.dart`
+
 ## Parity checks
 
 If a request affects product behavior rather than platform-specific plumbing, check whether the same change should be mirrored in both apps.
 
 Typical parity-sensitive changes:
 
-- preset content
+- preset content (must stay in sync across `flutter/lib/presets.dart`, `flutter/ios/BreatheWatch/Presets.swift`, `flutter/android/wearos/lib/presets.dart`, and `react_native/features/breathing/data/presets.json`)
 - session logic
 - user-facing instructional copy
 - settings semantics
@@ -119,4 +165,6 @@ Typical platform-specific changes:
 
 - Expo / native module integration
 - Flutter plugin wiring
+- Swift / WatchKit APIs
+- Wear OS / Android APIs
 - simulator / device build setup

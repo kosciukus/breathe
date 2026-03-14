@@ -10,6 +10,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 import 'cycle_transition.dart';
 import 'models.dart';
 import 'presets.dart';
+import 'watch_connectivity_service.dart';
 
 class BreathingController extends ChangeNotifier {
   static const Duration _tickInterval = Duration(milliseconds: 100);
@@ -65,6 +66,8 @@ class BreathingController extends ChangeNotifier {
   List<BreathingPreset> _customPresets = <BreathingPreset>[];
   final Set<String> _favoritePresetIds = <String>{};
   final Set<String> _hiddenPresetIds = <String>{};
+
+  final WatchConnectivityService _watchService = WatchConnectivityService();
 
   BreathingController({
     Future<void> Function(BreathingPhase currentPhase)? phaseCueOverride,
@@ -124,6 +127,7 @@ class BreathingController extends ChangeNotifier {
     if (_phaseCueOverride == null) {
       await _prepareAudioCues();
     }
+    await _watchService.initialize();
     isReady = true;
     notifyListeners();
   }
@@ -361,6 +365,14 @@ class BreathingController extends ChangeNotifier {
     _stopAfterCycle = false;
     isRunning = true;
 
+    unawaited(_watchService.sendSessionStarted(
+      inhale: active.inhale,
+      holdIn: active.holdIn,
+      exhale: active.exhale,
+      holdOut: active.holdOut,
+      repeatMinutes: repeatMinutes,
+    ));
+
     await _setWakelockEnabled(true);
     _startTicker();
     notifyListeners();
@@ -370,6 +382,7 @@ class BreathingController extends ChangeNotifier {
     _stopTicker();
     await _stopPhaseCue();
     await _setWakelockEnabled(false);
+    unawaited(_watchService.sendSessionStopped());
 
     isRunning = false;
     _stopAfterCycle = false;
@@ -480,6 +493,7 @@ class BreathingController extends ChangeNotifier {
           : now.add(Duration(milliseconds: sessionRemainingMs!));
       notifyListeners();
       _queuePhaseCue(phase);
+      _sendPhaseToWatch();
 
       if (remainingMs > 0) {
         _scheduleNextTick(remainingMs);
@@ -530,9 +544,18 @@ class BreathingController extends ChangeNotifier {
         _phaseEndsAt = now.add(Duration(milliseconds: remainingMs));
         notifyListeners();
         _queuePhaseCue(phase);
+        _sendPhaseToWatch();
         _scheduleNextTick(remainingMs);
         return;
     }
+  }
+
+  void _sendPhaseToWatch() {
+    unawaited(_watchService.sendPhaseChanged(
+      phase: phase.name,
+      phaseDurationMs: active.durationFor(phase) * 1000,
+      sessionRemainingMs: sessionRemainingMs ?? 0,
+    ));
   }
 
   BreathingPreset? _presetById(String? presetId) {

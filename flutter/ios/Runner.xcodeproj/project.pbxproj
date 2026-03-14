@@ -9,6 +9,17 @@
 /* Begin PBXBuildFile section */
 		0C1DB9D600F7754DEB9F11DA /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1137AA267848AD7CF058BD73 /* Pods_RunnerTests.framework */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
+		1A487AAD2F631A4000682DB1 /* phase-hold.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1A487AAB2F631A4000682DB1 /* phase-hold.mp3 */; };
+		1A487AAE2F631A4000682DB1 /* phase-exhale.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1A487AAA2F631A4000682DB1 /* phase-exhale.mp3 */; };
+		1A487AAF2F631A4000682DB1 /* phase-inhale.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1A487AAC2F631A4000682DB1 /* phase-inhale.mp3 */; };
+		1A487AB32F631C6600682DB1 /* Assets 2.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A487AB22F631C6600682DB1 /* Assets 2.xcassets */; };
+		1A487AB52F63254000682DB1 /* CustomTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A487AB42F63254000682DB1 /* CustomTimerView.swift */; };
+		1A81C3722F62E9BF00A8B676 /* BreatheWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 1A81C3682F62E9BE00A8B676 /* BreatheWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		1A81C37E2F62EA4300A8B676 /* SessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A81C37C2F62EA4300A8B676 /* SessionView.swift */; };
+		1A81C37F2F62EA4300A8B676 /* BreatheWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A81C3782F62EA4300A8B676 /* BreatheWatchApp.swift */; };
+		1A81C3802F62EA4300A8B676 /* Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A81C37B2F62EA4300A8B676 /* Presets.swift */; };
+		1A81C3812F62EA4300A8B676 /* BreathingEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A81C3792F62EA4300A8B676 /* BreathingEngine.swift */; };
+		1A81C3822F62EA4300A8B676 /* PresetListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A81C37A2F62EA4300A8B676 /* PresetListView.swift */; };
 		331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* RunnerTests.swift */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
@@ -20,6 +31,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		1A81C3702F62E9BF00A8B676 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1A81C3672F62E9BE00A8B676;
+			remoteInfo = "BreatheWatch Watch App";
+		};
 		331C8085294A63A400263BE5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
@@ -30,6 +48,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		1A81C3732F62E9BF00A8B676 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				1A81C3722F62E9BF00A8B676 /* BreatheWatch Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9705A1C41CF9048500538489 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -46,6 +75,17 @@
 		1137AA267848AD7CF058BD73 /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
+		1A487AAA2F631A4000682DB1 /* phase-exhale.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "phase-exhale.mp3"; sourceTree = "<group>"; };
+		1A487AAB2F631A4000682DB1 /* phase-hold.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "phase-hold.mp3"; sourceTree = "<group>"; };
+		1A487AAC2F631A4000682DB1 /* phase-inhale.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "phase-inhale.mp3"; sourceTree = "<group>"; };
+		1A487AB22F631C6600682DB1 /* Assets 2.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Assets 2.xcassets"; sourceTree = "<group>"; };
+		1A487AB42F63254000682DB1 /* CustomTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTimerView.swift; sourceTree = "<group>"; };
+		1A81C3682F62E9BE00A8B676 /* BreatheWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BreatheWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A81C3782F62EA4300A8B676 /* BreatheWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreatheWatchApp.swift; sourceTree = "<group>"; };
+		1A81C3792F62EA4300A8B676 /* BreathingEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathingEngine.swift; sourceTree = "<group>"; };
+		1A81C37A2F62EA4300A8B676 /* PresetListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetListView.swift; sourceTree = "<group>"; };
+		1A81C37B2F62EA4300A8B676 /* Presets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presets.swift; sourceTree = "<group>"; };
+		1A81C37C2F62EA4300A8B676 /* SessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionView.swift; sourceTree = "<group>"; };
 		331C807B294A618700263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
 		331C8081294A63A400263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
@@ -71,6 +111,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		1A81C3652F62E9BE00A8B676 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		97C146EB1CF9000F007C117D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -90,6 +137,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A81C37D2F62EA4300A8B676 /* BreatheWatch */ = {
+			isa = PBXGroup;
+			children = (
+				1A487AB42F63254000682DB1 /* CustomTimerView.swift */,
+				1A487AAA2F631A4000682DB1 /* phase-exhale.mp3 */,
+				1A487AAB2F631A4000682DB1 /* phase-hold.mp3 */,
+				1A487AAC2F631A4000682DB1 /* phase-inhale.mp3 */,
+				1A81C3782F62EA4300A8B676 /* BreatheWatchApp.swift */,
+				1A81C3792F62EA4300A8B676 /* BreathingEngine.swift */,
+				1A81C37A2F62EA4300A8B676 /* PresetListView.swift */,
+				1A81C37B2F62EA4300A8B676 /* Presets.swift */,
+				1A81C37C2F62EA4300A8B676 /* SessionView.swift */,
+				1A487AB22F631C6600682DB1 /* Assets 2.xcassets */,
+			);
+			path = BreatheWatch;
+			sourceTree = "<group>";
+		};
 		331C8082294A63A400263BE5 /* RunnerTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -113,6 +177,7 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
+				1A81C37D2F62EA4300A8B676 /* BreatheWatch */,
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
 				97C146EF1CF9000F007C117D /* Products */,
@@ -127,6 +192,7 @@
 			children = (
 				97C146EE1CF9000F007C117D /* Runner.app */,
 				331C8081294A63A400263BE5 /* RunnerTests.xctest */,
+				1A81C3682F62E9BE00A8B676 /* BreatheWatch Watch App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -172,6 +238,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		1A81C3672F62E9BE00A8B676 /* BreatheWatch Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1A81C3772F62E9BF00A8B676 /* Build configuration list for PBXNativeTarget "BreatheWatch Watch App" */;
+			buildPhases = (
+				1A81C3642F62E9BE00A8B676 /* Sources */,
+				1A81C3652F62E9BE00A8B676 /* Frameworks */,
+				1A81C3662F62E9BE00A8B676 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "BreatheWatch Watch App";
+			productName = "BreatheWatch Watch App";
+			productReference = 1A81C3682F62E9BE00A8B676 /* BreatheWatch Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
 		331C8080294A63A400263BE5 /* RunnerTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 331C8087294A63A400263BE5 /* Build configuration list for PBXNativeTarget "RunnerTests" */;
@@ -200,14 +283,17 @@
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
+				1A81C3732F62E9BF00A8B676 /* Embed Watch Content */,
+				1A9F3B012F700000008B0001 /* Fix Watch Icons */,
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
+				0A069DF3F876BF0E88B1192F /* [CP] Embed Pods Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				A1E6B2F83D4E7A9C00112233 /* Generate objective_c dSYM */,
-				0A069DF3F876BF0E88B1192F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				1A81C3712F62E9BF00A8B676 /* PBXTargetDependency */,
 			);
 			name = Runner;
 			productName = Runner;
@@ -221,9 +307,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 2630;
 				LastUpgradeCheck = 1510;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
+					1A81C3672F62E9BE00A8B676 = {
+						CreatedOnToolsVersion = 26.3;
+					};
 					331C8080294A63A400263BE5 = {
 						CreatedOnToolsVersion = 14.0;
 						TestTargetID = 97C146ED1CF9000F007C117D;
@@ -249,11 +339,23 @@
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
 				331C8080294A63A400263BE5 /* RunnerTests */,
+				1A81C3672F62E9BE00A8B676 /* BreatheWatch Watch App */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		1A81C3662F62E9BE00A8B676 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A487AAD2F631A4000682DB1 /* phase-hold.mp3 in Resources */,
+				1A487AAE2F631A4000682DB1 /* phase-exhale.mp3 in Resources */,
+				1A487AB32F631C6600682DB1 /* Assets 2.xcassets in Resources */,
+				1A487AAF2F631A4000682DB1 /* phase-inhale.mp3 in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		331C807F294A63A400263BE5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -277,6 +379,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		0A069DF3F876BF0E88B1192F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -306,24 +409,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin";
-		};
-		A1E6B2F83D4E7A9C00112233 /* Generate objective_c dSYM */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${TARGET_BUILD_DIR}/${WRAPPER_NAME}/Frameworks/objective_c.framework/objective_c",
-			);
-			name = "Generate objective_c dSYM";
-			outputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/objective_c.framework.dSYM/Contents/Resources/DWARF/objective_c",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "set -e\nif [ \"${ACTION}\" != \"install\" ]; then\n  exit 0\nfi\nFRAMEWORK_BINARY=\"${TARGET_BUILD_DIR}/${WRAPPER_NAME}/Frameworks/objective_c.framework/objective_c\"\nif [ ! -f \"${FRAMEWORK_BINARY}\" ]; then\n  exit 0\nfi\n/usr/bin/dsymutil \"${FRAMEWORK_BINARY}\" -o \"${DWARF_DSYM_FOLDER_PATH}/objective_c.framework.dSYM\"\n";
-			showEnvVarsInLog = 0;
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin\n";
 		};
 		5A5AE32F8548BD8FB3863B13 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -362,6 +448,24 @@
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
 		};
+		A1E6B2F83D4E7A9C00112233 /* Generate objective_c dSYM */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${TARGET_BUILD_DIR}/${WRAPPER_NAME}/Frameworks/objective_c.framework/objective_c",
+			);
+			name = "Generate objective_c dSYM";
+			outputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/objective_c.framework.dSYM/Contents/Resources/DWARF/objective_c",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\nif [ \"${ACTION}\" != \"install\" ]; then\n  exit 0\nfi\nFRAMEWORK_BINARY=\"${TARGET_BUILD_DIR}/${WRAPPER_NAME}/Frameworks/objective_c.framework/objective_c\"\nif [ ! -f \"${FRAMEWORK_BINARY}\" ]; then\n  exit 0\nfi\n/usr/bin/dsymutil \"${FRAMEWORK_BINARY}\" -o \"${DWARF_DSYM_FOLDER_PATH}/objective_c.framework.dSYM\"\n";
+			showEnvVarsInLog = 0;
+		};
 		B301EF9EF8DC0A5F3FE7A1FA /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -384,9 +488,40 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		1A9F3B012F700000008B0001 /* Fix Watch Icons */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Fix Watch Icons";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "WATCH_APP=\"${TARGET_BUILD_DIR}/${WRAPPER_NAME}/Watch/BreatheWatch Watch App.app\"\nPLIST=\"${WATCH_APP}/Info.plist\"\nICON_SRC=\"${SRCROOT}/BreatheWatch/Assets 2.xcassets/AppIcon.appiconset\"\nASSET_CATALOG=\"${SRCROOT}/BreatheWatch/Assets 2.xcassets\"\nif [ ! -f \"$PLIST\" ]; then echo \"Watch app plist not found: $PLIST\"; exit 0; fi\ncp \"${ICON_SRC}/AppIcon-58.png\"  \"${WATCH_APP}/AppIcon-58.png\"\ncp \"${ICON_SRC}/AppIcon-80.png\"  \"${WATCH_APP}/AppIcon-80.png\"\ncp \"${ICON_SRC}/AppIcon-87.png\"  \"${WATCH_APP}/AppIcon-87.png\"\ncp \"${ICON_SRC}/AppIcon-88.png\"  \"${WATCH_APP}/AppIcon-88.png\"\ncp \"${ICON_SRC}/AppIcon-92.png\"  \"${WATCH_APP}/AppIcon-92.png\"\ncp \"${ICON_SRC}/AppIcon-100.png\" \"${WATCH_APP}/AppIcon-100.png\"\ncp \"${ICON_SRC}/AppIcon-102.png\" \"${WATCH_APP}/AppIcon-102.png\"\ncp \"${ICON_SRC}/AppIcon-108.png\" \"${WATCH_APP}/AppIcon-108.png\"\nTEMP_DIR=$(mktemp -d)\nxcrun actool \"${ASSET_CATALOG}\" --output-format human-readable-text --notices --warnings --compress-pngs --output-partial-info-plist \"${TEMP_DIR}/partial-info.plist\" --app-icon AppIcon --minimum-deployment-target 9.0 --platform watchos --target-device watch --compile \"${TEMP_DIR}\" 2>/dev/null\nif [ -f \"${TEMP_DIR}/Assets.car\" ]; then cp \"${TEMP_DIR}/Assets.car\" \"${WATCH_APP}/Assets.car\"; fi\nrm -rf \"${TEMP_DIR}\"\n/usr/libexec/PlistBuddy -c \"Delete :CFBundleIconName\" \"$PLIST\" 2>/dev/null || true\n/usr/libexec/PlistBuddy -c \"Add :CFBundleIconName string AppIcon\" \"$PLIST\"\n/usr/libexec/PlistBuddy -c \"Delete :CFBundleIcons\" \"$PLIST\" 2>/dev/null || true\n/usr/libexec/PlistBuddy -c \"Add :CFBundleIcons dict\" \"$PLIST\"\n/usr/libexec/PlistBuddy -c \"Add :CFBundleIcons:CFBundlePrimaryIcon dict\" \"$PLIST\"\n/usr/libexec/PlistBuddy -c \"Add :CFBundleIcons:CFBundlePrimaryIcon:CFBundleIconName string AppIcon\" \"$PLIST\"\n/usr/libexec/PlistBuddy -c \"Add :CFBundleIcons:CFBundlePrimaryIcon:CFBundleIconFiles array\" \"$PLIST\"\n/usr/libexec/PlistBuddy -c \"Add :CFBundleIcons:CFBundlePrimaryIcon:CFBundleIconFiles:0 string AppIcon-58\" \"$PLIST\"\n/usr/libexec/PlistBuddy -c \"Add :CFBundleIcons:CFBundlePrimaryIcon:CFBundleIconFiles:1 string AppIcon-80\" \"$PLIST\"\n/usr/libexec/PlistBuddy -c \"Add :CFBundleIcons:CFBundlePrimaryIcon:CFBundleIconFiles:2 string AppIcon-87\" \"$PLIST\"\n/usr/libexec/PlistBuddy -c \"Add :CFBundleIcons:CFBundlePrimaryIcon:CFBundleIconFiles:3 string AppIcon-88\" \"$PLIST\"\n/usr/libexec/PlistBuddy -c \"Add :CFBundleIcons:CFBundlePrimaryIcon:CFBundleIconFiles:4 string AppIcon-92\" \"$PLIST\"\n/usr/libexec/PlistBuddy -c \"Add :CFBundleIcons:CFBundlePrimaryIcon:CFBundleIconFiles:5 string AppIcon-100\" \"$PLIST\"\n/usr/libexec/PlistBuddy -c \"Add :CFBundleIcons:CFBundlePrimaryIcon:CFBundleIconFiles:6 string AppIcon-102\" \"$PLIST\"\n/usr/libexec/PlistBuddy -c \"Add :CFBundleIcons:CFBundlePrimaryIcon:CFBundleIconFiles:7 string AppIcon-108\" \"$PLIST\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		1A81C3642F62E9BE00A8B676 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A81C37E2F62EA4300A8B676 /* SessionView.swift in Sources */,
+				1A81C37F2F62EA4300A8B676 /* BreatheWatchApp.swift in Sources */,
+				1A81C3802F62EA4300A8B676 /* Presets.swift in Sources */,
+				1A81C3812F62EA4300A8B676 /* BreathingEngine.swift in Sources */,
+				1A81C3822F62EA4300A8B676 /* PresetListView.swift in Sources */,
+				1A487AB52F63254000682DB1 /* CustomTimerView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		331C807D294A63A400263BE5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -408,6 +543,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		1A81C3712F62E9BF00A8B676 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1A81C3672F62E9BE00A8B676 /* BreatheWatch Watch App */;
+			targetProxy = 1A81C3702F62E9BF00A8B676 /* PBXContainerItemProxy */;
+		};
 		331C8086294A63A400263BE5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 97C146ED1CF9000F007C117D /* Runner */;
@@ -435,6 +575,150 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		1A81C3742F62E9BF00A8B676 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				ASSETCATALOG_COMPILER_SKIP_APP_STORE_DEPLOYMENT = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L5G733RSSG;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Mindful Breathe";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.arcsoftware.breathe;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.arcsoftware.breathe.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Debug;
+		};
+		1A81C3752F62E9BF00A8B676 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				ASSETCATALOG_COMPILER_SKIP_APP_STORE_DEPLOYMENT = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L5G733RSSG;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Mindful Breathe";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.arcsoftware.breathe;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.arcsoftware.breathe.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Release;
+		};
+		1A81C3762F62E9BF00A8B676 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				ASSETCATALOG_COMPILER_SKIP_APP_STORE_DEPLOYMENT = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L5G733RSSG;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Mindful Breathe";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.arcsoftware.breathe;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.arcsoftware.breathe.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Profile;
+		};
 		249021D3217E4FDB00AE95B9 /* Profile */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -496,12 +780,13 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = L5G733RSSG;
 				ENABLE_BITCODE = NO;
-				FLUTTER_BUILD_NAME = 1.0.4;
+				FLUTTER_BUILD_NAME = "$(inherited)";
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.arcsoftware.breathe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -680,12 +965,13 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = L5G733RSSG;
 				ENABLE_BITCODE = NO;
-				FLUTTER_BUILD_NAME = 1.0.4;
+				FLUTTER_BUILD_NAME = "$(inherited)";
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.arcsoftware.breathe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -704,12 +990,13 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = L5G733RSSG;
 				ENABLE_BITCODE = NO;
-				FLUTTER_BUILD_NAME = 1.0.4;
+				FLUTTER_BUILD_NAME = "$(inherited)";
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.arcsoftware.breathe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -721,6 +1008,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1A81C3772F62E9BF00A8B676 /* Build configuration list for PBXNativeTarget "BreatheWatch Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1A81C3742F62E9BF00A8B676 /* Debug */,
+				1A81C3752F62E9BF00A8B676 /* Release */,
+				1A81C3762F62E9BF00A8B676 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		331C8087294A63A400263BE5 /* Build configuration list for PBXNativeTarget "RunnerTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

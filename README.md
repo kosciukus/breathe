@@ -1,15 +1,15 @@
 # Breathe Repository
 
-This repository now contains two app implementations of the same product:
+This repository contains four app implementations of the same product:
 
-- `react_native/` contains the Expo React Native app
-- `flutter/` contains the Flutter port
+| App | Platform | Location |
+|-----|----------|----------|
+| Expo React Native | iOS (production) | `react_native/` |
+| Flutter | Android (production) | `flutter/` |
+| Apple Watch | watchOS (standalone) | `flutter/ios/BreatheWatch/` |
+| Wear OS | Wear OS (standalone) | `flutter/android/wearos/` |
 
-Production release note:
-
-- The current production Android release on Google Play uses the Flutter app, not the Expo React Native app.
-
-Store link:
+Store links:
 
 - [Android on Google Play](https://play.google.com/store/apps/details?id=it.arcsoftware.breathe)
 - [iOS on the App Store](https://apps.apple.com/pl/app/mindful-breathe/id6758299219)
@@ -29,3 +29,5 @@ Quick start:
 
 1. For the Expo app, `cd react_native` and follow [react_native/README.md](react_native/README.md).
 2. For the Flutter app, `cd flutter` and follow [flutter/README.md](flutter/README.md).
+3. For the Apple Watch app, open `flutter/ios/Runner.xcworkspace` in Xcode and select the `BreatheWatch` scheme.
+4. For the Wear OS app, `cd flutter/android/wearos` and run `flutter run`.
