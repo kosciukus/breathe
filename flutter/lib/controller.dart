@@ -10,6 +10,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 import 'cycle_transition.dart';
 import 'models.dart';
 import 'presets.dart';
+import 'health_service.dart';
 import 'watch_connectivity_service.dart';
 
 class BreathingController extends ChangeNotifier {
@@ -58,7 +59,7 @@ class BreathingController extends ChangeNotifier {
   PhaseDurations active = defaultDraft;
   int repeatMinutes = defaultRepeatMinutes;
   BreathingPhase phase = BreathingPhase.inhale;
-  int remainingMs = defaultDraft.inhale * 1000;
+  int remainingMs = (defaultDraft.inhale * 1000).round();
   int? preStartRemainingMs;
   int? sessionRemainingMs = defaultRepeatMinutes * 60 * 1000;
   bool isRunning = false;
@@ -68,6 +69,8 @@ class BreathingController extends ChangeNotifier {
   final Set<String> _hiddenPresetIds = <String>{};
 
   final WatchConnectivityService _watchService = WatchConnectivityService();
+  final HealthService _healthService = HealthService();
+  DateTime? _sessionStartedAt;
 
   BreathingController({
     Future<void> Function(BreathingPhase currentPhase)? phaseCueOverride,
@@ -122,12 +125,13 @@ class BreathingController extends ChangeNotifier {
     }
 
     phase = BreathingPhase.inhale;
-    remainingMs = active.inhale * 1000;
+    remainingMs = (active.inhale * 1000).round();
     sessionRemainingMs = repeatMinutes > 0 ? repeatMinutes * 60 * 1000 : null;
     if (_phaseCueOverride == null) {
       await _prepareAudioCues();
     }
     await _watchService.initialize();
+    await _healthService.initialize();
     isReady = true;
     notifyListeners();
   }
@@ -161,7 +165,7 @@ class BreathingController extends ChangeNotifier {
     return seconds < 1 ? 1 : seconds;
   }
 
-  int get totalActiveSeconds => active.totalSeconds;
+  int get totalActiveSeconds => active.totalSeconds.round();
 
   double get progress {
     if (isPreparing) return 0;
@@ -222,7 +226,7 @@ class BreathingController extends ChangeNotifier {
   }
 
   void setPhaseDuration(BreathingPhase targetPhase, double value) {
-    final nextValue = clampWhole(value, min: 0, max: 20);
+    final nextValue = clampHalf(value, min: 0, max: 20);
     switch (targetPhase) {
       case BreathingPhase.inhale:
         draft = draft.copyWith(inhale: nextValue);
@@ -355,7 +359,7 @@ class BreathingController extends ChangeNotifier {
 
     active = draft;
     phase = BreathingPhase.inhale;
-    remainingMs = active.inhale * 1000;
+    remainingMs = (active.inhale * 1000).round();
     preStartRemainingMs = preStartCountdownSeconds * 1000;
     _preStartEndsAt =
         DateTime.now().add(const Duration(seconds: preStartCountdownSeconds));
@@ -379,6 +383,14 @@ class BreathingController extends ChangeNotifier {
   }
 
   Future<void> reset() async {
+    final start = _sessionStartedAt;
+    if (start != null) {
+      unawaited(_healthService.logMindfulnessSession(
+        startTime: start,
+        endTime: DateTime.now(),
+      ));
+    }
+
     _stopTicker();
     await _stopPhaseCue();
     await _setWakelockEnabled(false);
@@ -389,6 +401,7 @@ class BreathingController extends ChangeNotifier {
     _preStartEndsAt = null;
     _phaseEndsAt = null;
     _sessionEndsAt = null;
+    _sessionStartedAt = null;
     preStartRemainingMs = null;
     _syncIdleState();
     notifyListeners();
@@ -431,7 +444,7 @@ class BreathingController extends ChangeNotifier {
   void _syncIdleState() {
     active = draft;
     phase = BreathingPhase.inhale;
-    remainingMs = active.inhale * 1000;
+    remainingMs = (active.inhale * 1000).round();
     sessionRemainingMs = repeatMinutes > 0 ? repeatMinutes * 60 * 1000 : null;
   }
 
@@ -485,12 +498,13 @@ class BreathingController extends ChangeNotifier {
       preStartRemainingMs = null;
       active = draft;
       phase = BreathingPhase.inhale;
-      remainingMs = active.inhale * 1000;
+      remainingMs = (active.inhale * 1000).round();
       _phaseEndsAt = now.add(Duration(milliseconds: remainingMs));
       sessionRemainingMs = repeatMinutes > 0 ? repeatMinutes * 60 * 1000 : null;
       _sessionEndsAt = sessionRemainingMs == null
           ? null
           : now.add(Duration(milliseconds: sessionRemainingMs!));
+      _sessionStartedAt = now;
       notifyListeners();
       _queuePhaseCue(phase);
       _sendPhaseToWatch();
@@ -553,7 +567,7 @@ class BreathingController extends ChangeNotifier {
   void _sendPhaseToWatch() {
     unawaited(_watchService.sendPhaseChanged(
       phase: phase.name,
-      phaseDurationMs: active.durationFor(phase) * 1000,
+      phaseDurationMs: (active.durationFor(phase) * 1000).round(),
       sessionRemainingMs: sessionRemainingMs ?? 0,
     ));
   }

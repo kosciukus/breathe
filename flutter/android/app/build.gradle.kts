@@ -48,7 +48,7 @@ android {
 
     defaultConfig {
         applicationId = "it.arcsoftware.breathe"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 36
         versionCode = flutter.versionCode
         versionName = flutter.versionName

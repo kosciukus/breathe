@@ -1,5 +1,7 @@
 # React Native Hotspots
 
+> **DISCONTINUED** — The React Native app is no longer maintained. Do not use this file to guide new changes. It is kept for historical reference only.
+
 Use this file when the request targets the Expo app in `react_native/`.
 
 It is intentionally biased toward common day-to-day edits: feature behavior, UI, copy, presets, and app settings.

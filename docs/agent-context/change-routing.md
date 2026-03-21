@@ -2,7 +2,9 @@
 
 Use this to avoid broad codebase scans. Start with the request type, then confirm the implementation in the listed files.
 
-## React Native: common requests
+> **React Native is discontinued.** The `react_native/` directory is kept for reference but should not be modified. Skip the React Native sections below unless you are explicitly asked to read historical code.
+
+## React Native: common requests (DISCONTINUED — do not modify)
 
 ### Change breathing timing logic or phase transitions
 
@@ -77,6 +79,22 @@ Start here:
 
 ## Flutter: common requests
 
+### Change health logging (Apple Health / Health Connect)
+
+Start here:
+
+- `flutter/lib/health_service.dart`
+- `flutter/lib/controller.dart`
+
+Also check:
+
+- `flutter/android/wearos/lib/health_service.dart` (separate Wear OS copy)
+- `flutter/ios/BreatheWatch/HealthService.swift` (Apple Watch HealthKit copy)
+
+Reason:
+
+- Each platform has its own `HealthService`. The phone app (`health_service.dart`) handles both iOS and Android. The wearables have separate implementations — keep them consistent.
+
 ### Change breathing logic, persistence, favorites, or settings behavior
 
 Start here:
@@ -126,6 +144,14 @@ Start here:
 
 - `flutter/ios/BreatheWatch/SessionView.swift`
 - `flutter/ios/BreatheWatch/PresetListView.swift`
+- `flutter/ios/BreatheWatch/CustomTimerView.swift`
+
+### Change Apple Watch health logging
+
+Start here:
+
+- `flutter/ios/BreatheWatch/HealthService.swift`
+- `flutter/ios/BreatheWatch/BreathingEngine.swift`
 
 ## Wear OS app: common requests
 
@@ -150,13 +176,20 @@ Start here:
 - `flutter/android/wearos/lib/screens/session_screen.dart`
 - `flutter/android/wearos/lib/screens/preset_list_screen.dart`
 
+### Change Wear OS health logging
+
+Start here:
+
+- `flutter/android/wearos/lib/health_service.dart`
+- `flutter/android/wearos/lib/engine.dart`
+
 ## Parity checks
 
 If a request affects product behavior rather than platform-specific plumbing, check whether the same change should be mirrored in both apps.
 
 Typical parity-sensitive changes:
 
-- preset content (must stay in sync across `flutter/lib/presets.dart`, `flutter/ios/BreatheWatch/Presets.swift`, `flutter/android/wearos/lib/presets.dart`, and `react_native/features/breathing/data/presets.json`)
+- preset content (must stay in sync across `flutter/lib/presets.dart`, `flutter/ios/BreatheWatch/Presets.swift`, and `flutter/android/wearos/lib/presets.dart` — `react_native/features/breathing/data/presets.json` is discontinued, skip it)
 - session logic
 - user-facing instructional copy
 - settings semantics

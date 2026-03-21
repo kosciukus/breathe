@@ -3,16 +3,16 @@
 ## Root
 
 - `README.md`: top-level repo overview and entry points
-- `react_native/`: Expo React Native implementation (iOS production)
-- `flutter/`: Flutter implementation (Android production) + wearable apps
+- `react_native/`: Expo React Native implementation — **DISCONTINUED**, kept for reference, do not modify
+- `flutter/`: Flutter implementation (iOS + Android production) + wearable apps
 - `flutter/ios/BreatheWatch/`: standalone Apple Watch app (Swift/SwiftUI)
 - `flutter/android/wearos/`: standalone Wear OS app (Flutter)
 - `.github/`: CI/release workflows
-- `release-please-config.json` and `.release-please-manifest.json`: React Native release automation
+- `release-please-config.json` and `.release-please-manifest.json`: React Native release automation (legacy)
 
 ## React Native App
 
-This is the quickest place to start for most product changes.
+> **DISCONTINUED** — The React Native app is no longer maintained. This section is kept for historical reference only. Do not make changes to `react_native/`.
 
 ### Entry flow
 
@@ -67,7 +67,7 @@ Run from `react_native/`:
 
 ## Flutter App
 
-Use this when the request explicitly targets the Flutter port or when parity with React Native matters.
+This is now the primary phone app for both iOS and Android.
 
 ### Entry flow
 
@@ -76,7 +76,8 @@ Use this when the request explicitly targets the Flutter port or when parity wit
 
 ### State and behavior
 
-- `flutter/lib/controller.dart`: main app controller; timer, persistence, favorites, settings, and media cues
+- `flutter/lib/controller.dart`: main app controller; timer, persistence, favorites, settings, media cues, and health logging
+- `flutter/lib/health_service.dart`: writes completed sessions to Apple Health (iOS) and Health Connect (Android) as `MINDFULNESS` records; permission is requested at startup and denial is silently absorbed
 - `flutter/lib/models.dart`: domain models
 - `flutter/lib/presets.dart`: built-in preset definitions
 
@@ -109,9 +110,11 @@ Standalone Swift/SwiftUI app — no Flutter, no phone required.
 
 - `BreatheWatchApp.swift`: app entry, creates `BreathingEngine`
 - `Presets.swift`: all 10 built-in presets + `BreathPhase` enum (mirrors `flutter/lib/presets.dart`)
-- `BreathingEngine.swift`: timer, phase cycling, haptics, last-preset persistence (`UserDefaults`)
+- `BreathingEngine.swift`: timer, phase cycling, haptics, health logging, last-preset persistence (`UserDefaults`)
+- `HealthService.swift`: logs completed sessions to Apple Health via HealthKit (`HKCategoryType.mindfulSession`); permission requested at startup, denial silently absorbed
 - `PresetListView.swift`: preset picker
 - `SessionView.swift`: active session UI (progress ring, phase label, countdown, stop)
+- `CustomTimerView.swift`: on-watch custom phase duration editor
 
 ### Apple Watch commands
 
@@ -123,7 +126,8 @@ Standalone Flutter app targeting Wear OS (API 26+).
 
 - `lib/main.dart`: app entry, Provider setup
 - `lib/presets.dart`: all 10 built-in presets + `BreathPhase` enum (mirrors `flutter/lib/presets.dart`)
-- `lib/engine.dart`: timer, phase cycling, haptics, last-preset persistence (`shared_preferences`)
+- `lib/engine.dart`: timer, phase cycling, haptics, health logging, last-preset persistence (`shared_preferences`)
+- `lib/health_service.dart`: logs completed sessions to Health Connect (`HealthDataType.MINDFULNESS`); Android-only, permission requested at startup
 - `lib/screens/preset_list_screen.dart`: preset picker
 - `lib/screens/session_screen.dart`: active session UI (progress ring, phase label, countdown, stop)
 - `android/app/src/main/AndroidManifest.xml`: Wear OS flags (`standalone`, `VIBRATE`, `WAKE_LOCK`)
@@ -138,5 +142,5 @@ Run from `flutter/android/wearos/`:
 
 ## Testing / Validation
 
-- React Native exposes `npm run lint` for linting and `npm run test` for timer logic regression coverage.
 - Flutter includes `flutter analyze` and `flutter test`; timer cycle regression coverage now lives in `flutter/test/cycle_transition_test.dart`.
+- React Native lint/test commands still work but the app is discontinued — no need to run them for new changes.

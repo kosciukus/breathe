@@ -167,19 +167,14 @@ class _HomeShellState extends State<_HomeShell> {
       ),
     ];
 
-    return SafeArea(
-      top: false,
-      left: false,
-      right: false,
-      minimum: EdgeInsets.only(bottom: effectiveBottomInset),
-      child: Material(
-        color: navigationBarTheme.backgroundColor ?? colorScheme.surface,
-        elevation: navigationBarTheme.elevation ?? 3,
-        shadowColor: navigationBarTheme.shadowColor,
-        surfaceTintColor: navigationBarTheme.surfaceTintColor,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 6, 10, 8),
-          child: Row(
+    return Material(
+      color: navigationBarTheme.backgroundColor ?? colorScheme.surface,
+      elevation: navigationBarTheme.elevation ?? 3,
+      shadowColor: navigationBarTheme.shadowColor,
+      surfaceTintColor: navigationBarTheme.surfaceTintColor,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(10, 6, 10, effectiveBottomInset + 8),
+        child: Row(
             children: [
               for (var index = 0; index < items.length; index++)
                 Expanded(
@@ -203,7 +198,6 @@ class _HomeShellState extends State<_HomeShell> {
             ],
           ),
         ),
-      ),
     );
   }
 

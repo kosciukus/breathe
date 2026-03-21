@@ -20,17 +20,17 @@ const Map<String, Map<String, String>> presetGuideLocalizedValues =
     "relax_4_7_8.caution":
         "Skip or reduce the hold if you are new to breathwork.",
     "coherent_5_5.about":
-        "Balanced inhale and exhale around 6 breaths per minute supports calm regulation.",
+        "5.5-second inhale and exhale produces about 5.5 breaths per minute — the rate shown to maximize heart rate variability.",
     "coherent_5_5.bestFor":
-        "Daily baseline practice and emotional steadiness.",
-    "coherent_5_5.tip": "Breathe through the nose and keep the breath smooth.",
-    "coherent_5_5.caution": "If it feels too slow, try 4-4 first.",
+        "Daily baseline practice, HRV support, and emotional steadiness.",
+    "coherent_5_5.tip": "Breathe through the nose with a smooth, steady pace.",
+    "coherent_5_5.caution": "If it feels too slow, start with 5-5 or 4-4 first.",
     "resonant_6_6.about":
         "A slower balanced pattern encourages deep, unhurried breathing.",
     "resonant_6_6.bestFor":
         "Longer calming sessions and nervous-system downshift.",
     "resonant_6_6.tip": "Stay relaxed in shoulders and jaw to avoid strain.",
-    "resonant_6_6.caution": "Drop to 5-5 if you feel air hunger.",
+    "resonant_6_6.caution": "Drop to 5.5-5.5 if you feel air hunger.",
     "equal_4_4.about":
         "Simple equal timing gives a neutral, accessible rhythm for most users.",
     "equal_4_4.bestFor": "Quick reset breaks and beginner practice.",
@@ -88,17 +88,17 @@ const Map<String, Map<String, String>> presetGuideLocalizedValues =
         "Usa una inhalación suave para evitar hiperventilar antes de la pausa.",
     "relax_4_7_8.caution": "Omite o reduce la pausa si eres principiante.",
     "coherent_5_5.about":
-        "Inhalar y exhalar en 5-5 favorece una regulación tranquila.",
+        "Inhalar y exhalar 5.5 segundos produce unas 5.5 respiraciones por minuto, el ritmo que maximiza la variabilidad de la frecuencia cardíaca.",
     "coherent_5_5.bestFor":
-        "Práctica diaria de base y estabilidad emocional.",
-    "coherent_5_5.tip": "Respira por la nariz y mantén el flujo uniforme.",
-    "coherent_5_5.caution": "Si te resulta lento, prueba primero 4-4.",
+        "Práctica diaria de base, apoyo a la VFC y estabilidad emocional.",
+    "coherent_5_5.tip": "Respira por la nariz con un ritmo suave y constante.",
+    "coherent_5_5.caution": "Si te resulta lento, empieza antes con 5-5 o 4-4.",
     "resonant_6_6.about":
         "Un ritmo más lento promueve respiración profunda y sin prisa.",
     "resonant_6_6.bestFor":
         "Sesiones largas de calma y regulación del sistema nervioso.",
     "resonant_6_6.tip": "Relaja hombros y mandíbula para evitar tensión.",
-    "resonant_6_6.caution": "Vuelve a 5-5 si te falta el aire.",
+    "resonant_6_6.caution": "Vuelve a 5.5-5.5 si te falta el aire.",
     "equal_4_4.about": "Patrón simple y accesible para empezar o reiniciar.",
     "equal_4_4.bestFor": "Pausas de reinicio rápidas y práctica inicial.",
     "equal_4_4.tip":
@@ -166,13 +166,13 @@ const Map<String, Map<String, String>> presetGuideLocalizedValues =
     "relax_4_7_8.caution":
         "Supprimez ou réduisez la pause si vous débutez.",
     "coherent_5_5.about":
-        "Un rythme 5-5 équilibré favorise une régulation calme.",
+        "Inspire et expire de 5.5 s pour atteindre 5.5 respirations par minute, le rythme qui maximise la variabilité de la fréquence cardiaque.",
     "coherent_5_5.bestFor":
-        "Pratique quotidienne de base et stabilité émotionnelle.",
+        "Pratique quotidienne de base, soutien de la VFC et stabilité émotionnelle.",
     "coherent_5_5.tip":
-        "Respirez par le nez et gardez un souffle fluide.",
+        "Respirez par le nez avec un rythme doux et régulier.",
     "coherent_5_5.caution":
-        "Si c'est trop lent, commencez par 4-4.",
+        "Si c'est trop lent, commencez par 5-5 ou 4-4.",
     "resonant_6_6.about":
         "Un rythme plus lent encourage une respiration ample et détendue.",
     "resonant_6_6.bestFor":
@@ -180,7 +180,7 @@ const Map<String, Map<String, String>> presetGuideLocalizedValues =
     "resonant_6_6.tip":
         "Gardez les épaules et la mâchoire détendues pour éviter la tension.",
     "resonant_6_6.caution":
-        "Repassez à 5-5 si vous manquez d'air.",
+        "Repassez à 5.5-5.5 si vous manquez d'air.",
     "equal_4_4.about":
         "Un schéma simple et accessible pour débuter.",
     "equal_4_4.bestFor":
@@ -253,13 +253,13 @@ const Map<String, Map<String, String>> presetGuideLocalizedValues =
     "relax_4_7_8.caution":
         "Lass die Pause weg oder verkürze sie, wenn du neu beginnst.",
     "coherent_5_5.about":
-        "Ausgewogenes 5-5 unterstützt eine ruhige Atemregulation.",
+        "5.5 Sekunden einatmen und ausatmen ergibt etwa 5.5 Atemzüge pro Minute — ein Rhythmus, der die Herzratenvariabilität maximiert.",
     "coherent_5_5.bestFor":
-        "Tägliche Basis-Praxis und emotionale Stabilität.",
+        "Tägliche Basis-Praxis, HRV-Unterstützung und emotionale Stabilität.",
     "coherent_5_5.tip":
-        "Atme durch die Nase und halte den Atemfluss weich.",
+        "Atme durch die Nase mit einem gleichmäßigen, ruhigen Tempo.",
     "coherent_5_5.caution":
-        "Wenn es zu langsam wirkt, starte mit 4-4.",
+        "Wenn es zu langsam wirkt, starte mit 5-5 oder 4-4.",
     "resonant_6_6.about":
         "Ein langsameres Tempo fördert tiefe, entspannte Atemzüge.",
     "resonant_6_6.bestFor":
@@ -267,7 +267,7 @@ const Map<String, Map<String, String>> presetGuideLocalizedValues =
     "resonant_6_6.tip":
         "Halte Schultern und Kiefer locker, um Spannung zu vermeiden.",
     "resonant_6_6.caution":
-        "Wechsle zu 5-5, wenn Luftknappheit entsteht.",
+        "Wechsle zu 5.5-5.5, wenn Luftknappheit entsteht.",
     "equal_4_4.about":
         "Ein einfaches und gut zugängliches Muster für den Einstieg.",
     "equal_4_4.bestFor":
@@ -340,13 +340,13 @@ const Map<String, Map<String, String>> presetGuideLocalizedValues =
     "relax_4_7_8.caution":
         "Pule ou reduza a pausa se você estiver começando.",
     "coherent_5_5.about":
-        "Ritmo 5-5 equilibrado favorece regulação calma.",
+        "Inspiração e expiração de 5.5 s produz cerca de 5.5 respirações por minuto — a taxa que maximiza a variabilidade da frequência cardíaca.",
     "coherent_5_5.bestFor":
-        "Prática diária de base e estabilidade emocional.",
+        "Prática diária de base, suporte à VFC e estabilidade emocional.",
     "coherent_5_5.tip":
-        "Respire pelo nariz e mantenha o fluxo suave.",
+        "Respire pelo nariz com um ritmo suave e constante.",
     "coherent_5_5.caution":
-        "Se parecer lento demais, tente 4-4 primeiro.",
+        "Se parecer lento demais, comece com 5-5 ou 4-4.",
     "resonant_6_6.about":
         "Um ritmo mais lento incentiva respiração profunda e tranquila.",
     "resonant_6_6.bestFor":
@@ -354,7 +354,7 @@ const Map<String, Map<String, String>> presetGuideLocalizedValues =
     "resonant_6_6.tip":
         "Relaxe ombros e mandíbula para evitar tensão.",
     "resonant_6_6.caution":
-        "Volte para 5-5 se faltar ar.",
+        "Volte para 5.5-5.5 se faltar ar.",
     "equal_4_4.about":
         "Padrão simples e acessível para começar.",
     "equal_4_4.bestFor":
@@ -428,13 +428,13 @@ const Map<String, Map<String, String>> presetGuideLocalizedValues =
     "relax_4_7_8.caution":
         "Уберите или сократите задержку, если вы новичок.",
     "coherent_5_5.about":
-        "Сбалансированный ритм 5-5 поддерживает спокойную регуляцию.",
+        "Вдох и выдох по 5.5 секунды дают около 5.5 циклов в минуту — ритм, который максимизирует вариабельность сердечного ритма.",
     "coherent_5_5.bestFor":
-        "Ежедневная базовая практика и эмоциональная устойчивость.",
+        "Ежедневная базовая практика, поддержка ВСР и эмоциональная устойчивость.",
     "coherent_5_5.tip":
-        "Дышите через нос и сохраняйте ровный поток дыхания.",
+        "Дышите через нос в ровном, спокойном темпе.",
     "coherent_5_5.caution":
-        "Если слишком медленно, начните с 4-4.",
+        "Если слишком медленно, начните с 5-5 или 4-4.",
     "resonant_6_6.about":
         "Более медленный ритм способствует глубокому и мягкому дыханию.",
     "resonant_6_6.bestFor":
@@ -442,7 +442,7 @@ const Map<String, Map<String, String>> presetGuideLocalizedValues =
     "resonant_6_6.tip":
         "Расслабьте плечи и челюсть, чтобы избежать напряжения.",
     "resonant_6_6.caution":
-        "Вернитесь к 5-5, если не хватает воздуха.",
+        "Вернитесь к 5.5-5.5, если не хватает воздуха.",
     "equal_4_4.about":
         "Простой и доступный паттерн для начала.",
     "equal_4_4.bestFor":
@@ -516,13 +516,13 @@ const Map<String, Map<String, String>> presetGuideLocalizedValues =
     "relax_4_7_8.caution":
         "Приберіть або зменште затримку, якщо ви початківець.",
     "coherent_5_5.about":
-        "Збалансований ритм 5-5 підтримує спокійну регуляцію.",
+        "Вдих і видих по 5.5 секунди дають близько 5.5 циклів на хвилину — ритм, що максимізує варіабельність серцевого ритму.",
     "coherent_5_5.bestFor":
-        "Щоденна базова практика та емоційна стабільність.",
+        "Щоденна базова практика, підтримка ВСР та емоційна стабільність.",
     "coherent_5_5.tip":
-        "Дихайте носом і зберігайте плавний ритм.",
+        "Дихайте носом у плавному рівному темпі.",
     "coherent_5_5.caution":
-        "Якщо занадто повільно, спробуйте спершу 4-4.",
+        "Якщо занадто повільно, спробуйте спершу 5-5 або 4-4.",
     "resonant_6_6.about":
         "Повільніший темп сприяє глибокому та м'якому диханню.",
     "resonant_6_6.bestFor":
@@ -530,7 +530,7 @@ const Map<String, Map<String, String>> presetGuideLocalizedValues =
     "resonant_6_6.tip":
         "Розслабте плечі та щелепу, щоб уникнути напруження.",
     "resonant_6_6.caution":
-        "Поверніться до 5-5, якщо бракує повітря.",
+        "Поверніться до 5.5-5.5, якщо бракує повітря.",
     "equal_4_4.about":
         "Простий і доступний шаблон для старту.",
     "equal_4_4.bestFor":
@@ -606,13 +606,13 @@ const Map<String, Map<String, String>> presetGuideLocalizedValues =
     "relax_4_7_8.caution":
         "यदि आप नए हैं तो होल्ड घटाएं या छोड़ दें।",
     "coherent_5_5.about":
-        "संतुलित 5-5 लय श्वास को सहज और नियंत्रित बनाती है।",
+        "5.5 सेकंड की श्वास और 5.5 सेकंड का श्वासत्याग प्रति मिनट लगभग 5.5 श्वास देता है — यह वह दर है जो हृदय दर परिवर्तनशीलता को अधिकतम करती है।",
     "coherent_5_5.bestFor":
-        "रोज़ की बेसलाइन प्रैक्टिस और भावनात्मक स्थिरता के लिए।",
+        "रोज़ की बेसलाइन प्रैक्टिस, HRV सपोर्ट और भावनात्मक स्थिरता के लिए।",
     "coherent_5_5.tip":
-        "नाक से श्वास लें और प्रवाह को मुलायम रखें।",
+        "नाक से श्वास लें और एक समान, शांत गति से चलते रहें।",
     "coherent_5_5.caution":
-        "यदि यह धीमा लगे तो पहले 4-4 करें।",
+        "यदि यह धीमा लगे तो पहले 5-5 या 4-4 से शुरू करें।",
     "resonant_6_6.about":
         "धीमा 6-6 रिदम गहरी और आरामदायक श्वास को बढ़ावा देता है।",
     "resonant_6_6.bestFor":
@@ -620,7 +620,7 @@ const Map<String, Map<String, String>> presetGuideLocalizedValues =
     "resonant_6_6.tip":
         "तनाव से बचने के लिए कंधे और जबड़ा ढीले रखें।",
     "resonant_6_6.caution":
-        "यदि सांस कम लगे तो 5-5 पर वापस आएं।",
+        "यदि सांस कम लगे तो 5.5-5.5 पर वापस आएं।",
     "equal_4_4.about":
         "शुरुआत या त्वरित रीसेट के लिए सरल और भरोसेमंद पैटर्न।",
     "equal_4_4.bestFor":
@@ -696,13 +696,13 @@ const Map<String, Map<String, String>> presetGuideLocalizedValues =
     "relax_4_7_8.caution":
         "初心者はホールドを短くするか省いてください。",
     "coherent_5_5.about":
-        "5-5の均等な呼吸で、落ち着いたペースを作りやすくします。",
+        "5.5秒の吸気と吐気で1分間に約5.5回の呼吸になり、心拍変動を最大化するリズムです。",
     "coherent_5_5.bestFor":
-        "毎日の基礎練習と気分の安定に。",
+        "毎日の基礎練習、HRVサポート、気分の安定に。",
     "coherent_5_5.tip":
-        "鼻呼吸で、呼吸の流れをなめらかに保ちます。",
+        "鼻呼吸で、なめらかで一定のペースを保ちます。",
     "coherent_5_5.caution":
-        "遅く感じる場合は、まず4-4を試してください。",
+        "遅く感じる場合は、5-5や4-4から始めてください。",
     "resonant_6_6.about":
         "よりゆっくりしたテンポで、深く無理のない呼吸を促します。",
     "resonant_6_6.bestFor":
@@ -710,7 +710,7 @@ const Map<String, Map<String, String>> presetGuideLocalizedValues =
     "resonant_6_6.tip":
         "肩とあごを緩め、余計な力みを避けます。",
     "resonant_6_6.caution":
-        "息苦しさがあれば5-5に戻してください。",
+        "息苦しさがあれば5.5-5.5に戻してください。",
     "equal_4_4.about":
         "シンプルで取り入れやすく、初心者にも使いやすいパターンです。",
     "equal_4_4.bestFor":
@@ -784,13 +784,13 @@ const Map<String, Map<String, String>> presetGuideLocalizedValues =
     "relax_4_7_8.caution":
         "Pomiń lub skróć pauzę, jeśli dopiero zaczynasz.",
     "coherent_5_5.about":
-        "Równy rytm 5-5 wspiera spokojną regulację oddechu.",
+        "Wdech i wydech po 5.5 s daje ok. 5.5 oddechów na minutę — rytm maksymalizujący zmienność rytmu serca.",
     "coherent_5_5.bestFor":
-        "Codzienna praktyka bazowa i stabilizacja emocji.",
+        "Codzienna praktyka bazowa, wsparcie HRV i stabilizacja emocji.",
     "coherent_5_5.tip":
-        "Oddychaj nosem i utrzymuj płynny oddech.",
+        "Oddychaj nosem równym, spokojnym tempem.",
     "coherent_5_5.caution":
-        "Jeśli rytm jest zbyt wolny, zacznij od 4-4.",
+        "Jeśli rytm jest zbyt wolny, zacznij od 5-5 lub 4-4.",
     "resonant_6_6.about":
         "Wolniejsze tempo sprzyja głębokiemu, spokojnemu oddechowi.",
     "resonant_6_6.bestFor":
@@ -798,7 +798,7 @@ const Map<String, Map<String, String>> presetGuideLocalizedValues =
     "resonant_6_6.tip":
         "Rozluźnij barki i szczękę, aby uniknąć napięcia.",
     "resonant_6_6.caution":
-        "Wróć do 5-5, jeśli brakuje Ci powietrza.",
+        "Wróć do 5.5-5.5, jeśli brakuje Ci powietrza.",
     "equal_4_4.about":
         "Prosty i dostępny wzorzec na start lub szybki reset.",
     "equal_4_4.bestFor":

@@ -29,16 +29,16 @@ const List<BreathingPreset> builtInPresets = <BreathingPreset>[
   ),
   BreathingPreset(
     id: 'coherent_5_5',
-    label: 'Coherent 5-5',
-    durations: PhaseDurations(inhale: 5, holdIn: 0, exhale: 5, holdOut: 0),
+    label: 'Coherent 5.5-5.5',
+    durations: PhaseDurations(inhale: 5.5, holdIn: 0, exhale: 5.5, holdOut: 0),
     repeatMinutes: 5,
     route: BreathingRoute.nose,
     isCustom: false,
     about:
-        'Balanced inhale and exhale around 6 breaths per minute supports calm regulation.',
-    bestFor: 'Daily baseline practice and emotional steadiness.',
-    tip: 'Breathe through the nose and keep the breath smooth.',
-    caution: 'If it feels too slow, try 4-4 first.',
+        '5.5-second inhale and exhale produces about 5.5 breaths per minute — the rate shown to maximize heart rate variability.',
+    bestFor: 'Daily baseline practice, HRV support, and emotional steadiness.',
+    tip: 'Breathe through the nose with a smooth, steady pace.',
+    caution: 'If it feels too slow, start with 5-5 or 4-4 first.',
   ),
   BreathingPreset(
     id: 'resonant_6_6',
@@ -50,7 +50,7 @@ const List<BreathingPreset> builtInPresets = <BreathingPreset>[
     about: 'A slower balanced pattern encourages deep, unhurried breathing.',
     bestFor: 'Longer calming sessions and nervous-system downshift.',
     tip: 'Stay relaxed in shoulders and jaw to avoid strain.',
-    caution: 'Drop to 5-5 if you feel air hunger.',
+    caution: 'Drop to 5.5-5.5 if you feel air hunger.',
   ),
   BreathingPreset(
     id: 'equal_4_4',

@@ -177,6 +177,27 @@ Look here when:
 - changing sound asset references
 - changing plugin wiring for audio or vibration
 
+### Health logging (Apple Health / Health Connect)
+
+Open:
+
+- `flutter/lib/health_service.dart`
+- `flutter/lib/controller.dart`
+
+Look here when:
+
+- changing what data is written to Apple Health or Health Connect
+- changing when sessions are logged (session end vs. cycle end)
+- changing permission handling
+
+Important details:
+
+- `HealthService` is initialized in `controller.dart` and writes `HealthDataType.MINDFULNESS` records.
+- Uses the `health` plugin (see `pubspec.yaml`).
+- Permission is requested at startup; denial is silently absorbed — health logging is best-effort and the app works normally without it.
+- The same `health_service.dart` serves both iOS (Apple Health) and Android (Health Connect); the Wear OS app has its own copy at `flutter/android/wearos/lib/health_service.dart` (Android-only).
+- For the Apple Watch, health logging uses native HealthKit in `flutter/ios/BreatheWatch/HealthService.swift`.
+
 ## Fast triage rules
 
 Use these shortcuts before opening more files:
@@ -188,6 +209,7 @@ Use these shortcuts before opening more files:
 - If it mentions “layout,” “home screen,” or “UI,” start with `flutter/lib/screens.dart`.
 - If it mentions “navigation” or “tabs,” start with `flutter/lib/app.dart`.
 - If it mentions “theme” or “colors,” start with `flutter/lib/theme.dart`.
+- If it mentions “health,” “Apple Health,” “Health Connect,” or “mindfulness minutes,” start with `flutter/lib/health_service.dart`.
 
 ## Validation after changes
 
@@ -199,4 +221,4 @@ For timer or other behavior changes, also run:
 
 - `flutter test` from `flutter/`
 
-For behavior changes, also confirm whether the same product change should be mirrored in `react_native/`.
+For behavior changes, also confirm whether the same product change should be mirrored in the Apple Watch app (`flutter/ios/BreatheWatch/`) or the Wear OS app (`flutter/android/wearos/`).

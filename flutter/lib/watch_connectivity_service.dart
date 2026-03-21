@@ -19,10 +19,10 @@ class WatchConnectivityService {
   }
 
   Future<void> sendSessionStarted({
-    required int inhale,
-    required int holdIn,
-    required int exhale,
-    required int holdOut,
+    required double inhale,
+    required double holdIn,
+    required double exhale,
+    required double holdOut,
     required int repeatMinutes,
   }) async {
     if (!_configured) return;

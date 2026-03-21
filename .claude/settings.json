@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(grep -v \"^--$\")"
+      "Bash(grep -v \"^--$\")",
+      "Bash(find /Users/kosciukus/Projects/breathe/flutter/android -name *.gradle -o -name *.gradle.kts)",
+      "Bash(flutter test:*)",
+      "Bash(flutter clean:*)",
+      "Bash(flutter build:*)"
     ],
     "additionalDirectories": [
       "/Users/kosciukus/Projects/breathe/flutter/android/wearos/ios"

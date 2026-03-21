@@ -28,6 +28,7 @@ The Flutter and React Native apps are intended to stay visually aligned, so the 
 - Favorites, quick access to common patterns
 - Multi-language UI (English, Spanish, French, German, Portuguese, Russian, Ukrainian, Hindi, Japanese, Polish)
 - Responsive layout optimized for phones and tablets
+- Logs completed sessions to Apple Health (iOS) and Health Connect (Android) as mindfulness minutes
 
 ### Guided Breathing Timer
 
@@ -98,6 +99,8 @@ A native Swift/SwiftUI watch app that runs independently — no phone required.
 
 - Built and run via Xcode: open `ios/Runner.xcworkspace`, select the **BreatheWatch** scheme, choose a Watch simulator
 - All 10 presets, full breathing timer, haptic feedback on each phase transition
+- Custom timer: `CustomTimerView.swift` lets users set arbitrary phase durations on-watch
+- Logs completed sessions to Apple Health via HealthKit (`HKCategoryType.mindfulSession`)
 - Source files: `ios/BreatheWatch/` (Swift only, no Flutter)
 
 ### Wear OS (`android/wearos/`)
@@ -111,6 +114,7 @@ flutter run
 ```
 
 - All 10 presets, full breathing timer, haptic feedback on each phase transition
+- Logs completed sessions to Health Connect (`HealthDataType.MINDFULNESS`)
 - Requires a Wear OS emulator (Android Studio → Device Manager → Wear OS Small Round) or a physical Wear OS watch
 
 ## Technical

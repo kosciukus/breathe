@@ -15,10 +15,10 @@ class CustomTimerScreen extends StatefulWidget {
 }
 
 class _CustomTimerScreenState extends State<CustomTimerScreen> {
-  late int _inhale;
-  late int _holdIn;
-  late int _exhale;
-  late int _holdOut;
+  late double _inhale;
+  late double _holdIn;
+  late double _exhale;
+  late double _holdOut;
   late int _minutes;
 
   @override
@@ -52,17 +52,18 @@ class _CustomTimerScreenState extends State<CustomTimerScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              _PhaseRow(label: 'Inhale',  value: _inhale,  min: 1, max: 20, onChanged: (v) => setState(() => _inhale  = v)),
-              _PhaseRow(label: 'Hold',    value: _holdIn,  min: 0, max: 20, onChanged: (v) => setState(() => _holdIn  = v)),
-              _PhaseRow(label: 'Exhale',  value: _exhale,  min: 1, max: 20, onChanged: (v) => setState(() => _exhale  = v)),
-              _PhaseRow(label: 'Hold',    value: _holdOut, min: 0, max: 20, onChanged: (v) => setState(() => _holdOut = v)),
-              _PhaseRow(label: 'Minutes', value: _minutes, min: 1, max: 30, onChanged: (v) => setState(() => _minutes = v)),
+              _PhaseRow(label: 'Inhale',  value: _inhale,  min: 1, max: 20, step: 0.5, onChanged: (v) => setState(() => _inhale  = v)),
+              _PhaseRow(label: 'Hold',    value: _holdIn,  min: 0, max: 20, step: 0.5, onChanged: (v) => setState(() => _holdIn  = v)),
+              _PhaseRow(label: 'Exhale',  value: _exhale,  min: 1, max: 20, step: 0.5, onChanged: (v) => setState(() => _exhale  = v)),
+              _PhaseRow(label: 'Hold',    value: _holdOut, min: 0, max: 20, step: 0.5, onChanged: (v) => setState(() => _holdOut = v)),
+              _IntPhaseRow(label: 'Minutes', value: _minutes, min: 1, max: 30, onChanged: (v) => setState(() => _minutes = v)),
               const SizedBox(height: 8),
               GestureDetector(
                 onTap: () {
+                  String fmt(double d) => d % 1 == 0 ? d.toInt().toString() : d.toString();
                   final preset = WearPreset(
                     id: 'custom',
-                    label: 'Custom $_inhale-$_holdIn-$_exhale-$_holdOut',
+                    label: 'Custom ${fmt(_inhale)}-${fmt(_holdIn)}-${fmt(_exhale)}-${fmt(_holdOut)}',
                     inhale: _inhale,
                     holdIn: _holdIn,
                     exhale: _exhale,
@@ -107,6 +108,66 @@ class _CustomTimerScreenState extends State<CustomTimerScreen> {
 
 class _PhaseRow extends StatelessWidget {
   const _PhaseRow({
+    required this.label,
+    required this.value,
+    required this.min,
+    required this.max,
+    required this.onChanged,
+    this.step = 1.0,
+  });
+
+  final String label;
+  final double value;
+  final double min;
+  final double max;
+  final double step;
+  final ValueChanged<double> onChanged;
+
+  String get _display => value % 1 == 0 ? value.toInt().toString() : value.toString();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              label,
+              style: TextStyle(
+                color: Colors.white.withValues(alpha: 0.7),
+                fontSize: 12,
+              ),
+            ),
+          ),
+          _StepButton(
+            icon: Icons.remove,
+            onTap: value > min ? () => onChanged((value - step).clamp(min, max)) : null,
+          ),
+          SizedBox(
+            width: 28,
+            child: Text(
+              _display,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          _StepButton(
+            icon: Icons.add,
+            onTap: value < max ? () => onChanged((value + step).clamp(min, max)) : null,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _IntPhaseRow extends StatelessWidget {
+  const _IntPhaseRow({
     required this.label,
     required this.value,
     required this.min,

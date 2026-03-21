@@ -33,7 +33,7 @@ CycleTransitionResult resolveCycleTransition({
   required int spillMs,
   required bool stopAfterCycle,
 }) {
-  final cycleMs = durations.totalSeconds * 1000;
+  final cycleMs = (durations.totalSeconds * 1000).round();
   if (cycleMs <= 0) {
     return const StopCycleTransition();
   }
@@ -51,7 +51,7 @@ CycleTransitionResult resolveCycleTransition({
   var cursor = currentPhase;
   for (var index = 0; index < BreathingPhase.values.length + 1; index++) {
     cursor = cursor.next;
-    final phaseDurationMs = durations.durationFor(cursor) * 1000;
+    final phaseDurationMs = (durations.durationFor(cursor) * 1000).round();
     if (phaseDurationMs <= 0) {
       continue;
     }

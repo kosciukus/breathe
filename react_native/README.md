@@ -1,4 +1,6 @@
-# Breathe
+# Breathe (React Native — DISCONTINUED)
+
+> **This app is discontinued.** The React Native implementation is no longer actively maintained or shipped. The production apps are now the Flutter app (`flutter/`) for both iOS and Android. This directory is kept for reference only — do not make new changes here.
 
 A calm, focused breathing coach that guides you through inhale, hold, and exhale cycles with clear visuals, gentle cues, and a modern, distraction-free UI. Use presets or craft your own rhythm to match relaxation, focus, or recovery sessions.
 

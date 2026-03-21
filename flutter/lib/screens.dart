@@ -734,7 +734,7 @@ class _DurationSlider extends StatelessWidget {
                 ),
               ),
               Text(
-                '${value.round()} $suffix',
+                '${value % 1 == 0 ? value.toInt() : value} $suffix',
                 style: theme.textTheme.labelLarge?.copyWith(
                   color: theme.colorScheme.primary,
                 ),
@@ -745,6 +745,7 @@ class _DurationSlider extends StatelessWidget {
             value: value.clamp(min, max).toDouble(),
             min: min,
             max: max,
+            divisions: ((max - min) / 0.5).round(),
             onChanged: onChanged,
           ),
         ],

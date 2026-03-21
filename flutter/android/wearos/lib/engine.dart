@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vibration/vibration.dart';
 
+import 'health_service.dart';
 import 'presets.dart';
 
 const int _preStartSeconds = 3;
@@ -28,6 +29,9 @@ class BreathingEngine extends ChangeNotifier {
     inhale: 4, holdIn: 0, exhale: 4, holdOut: 0, minutes: 5,
   );
 
+  final HealthService _healthService = HealthService();
+  DateTime? _sessionStartedAt;
+
   Timer? _ticker;
   DateTime _phaseEndTime = DateTime.now();
   DateTime? _sessionEndTime;
@@ -41,6 +45,7 @@ class BreathingEngine extends ChangeNotifier {
 
   BreathingEngine() {
     _restoreLastPreset();
+    _healthService.initialize();
   }
 
   void selectPreset(WearPreset preset) {
@@ -49,10 +54,10 @@ class BreathingEngine extends ChangeNotifier {
       lastCustomPreset = preset;
       SharedPreferences.getInstance().then((p) {
         p.setString(_lastPresetKey, preset.id);
-        p.setInt(_customInhaleKey,  preset.inhale);
-        p.setInt(_customHoldInKey,  preset.holdIn);
-        p.setInt(_customExhaleKey,  preset.exhale);
-        p.setInt(_customHoldOutKey, preset.holdOut);
+        p.setDouble(_customInhaleKey,  preset.inhale);
+        p.setDouble(_customHoldInKey,  preset.holdIn);
+        p.setDouble(_customExhaleKey,  preset.exhale);
+        p.setDouble(_customHoldOutKey, preset.holdOut);
         p.setInt(_customMinutesKey, preset.minutes);
       });
     } else {
@@ -86,10 +91,18 @@ class BreathingEngine extends ChangeNotifier {
   void stop() {
     _ticker?.cancel();
     _ticker = null;
+    final start = _sessionStartedAt;
+    if (start != null) {
+      unawaited(_healthService.logMindfulnessSession(
+        startTime: start,
+        endTime: DateTime.now(),
+      ));
+    }
     isRunning = false;
     countdownSeconds = null;
     _stopAfterCycle = false;
     _sessionEndTime = null;
+    _sessionStartedAt = null;
     phase = BreathPhase.inhale;
     phaseProgress = 0;
     phaseRemainingSeconds = 0;
@@ -99,6 +112,7 @@ class BreathingEngine extends ChangeNotifier {
 
   void _beginSession() {
     final preset = selectedPreset;
+    _sessionStartedAt = DateTime.now();
     _sessionEndTime =
         DateTime.now().add(Duration(minutes: preset.minutes));
     sessionRemainingSeconds = preset.minutes * 60;
@@ -110,7 +124,7 @@ class BreathingEngine extends ChangeNotifier {
 
   void _beginPhase(BreathPhase newPhase) {
     phase = newPhase;
-    _phaseDuration = selectedPreset.durationFor(newPhase).toDouble();
+    _phaseDuration = selectedPreset.durationFor(newPhase);
     _phaseEndTime =
         DateTime.now().add(Duration(milliseconds: (_phaseDuration * 1000).round()));
     phaseRemainingSeconds = _phaseDuration;
@@ -232,13 +246,14 @@ class BreathingEngine extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
 
     // Restore last custom values (even if custom wasn't the last used preset)
-    final customInhale  = prefs.getInt(_customInhaleKey);
+    final customInhale  = prefs.getDouble(_customInhaleKey);
     if (customInhale != null) {
-      final hi  = prefs.getInt(_customHoldInKey)  ?? lastCustomPreset.holdIn;
-      final e   = prefs.getInt(_customExhaleKey)  ?? lastCustomPreset.exhale;
-      final ho  = prefs.getInt(_customHoldOutKey) ?? lastCustomPreset.holdOut;
+      final hi  = prefs.getDouble(_customHoldInKey)  ?? lastCustomPreset.holdIn;
+      final e   = prefs.getDouble(_customExhaleKey)  ?? lastCustomPreset.exhale;
+      final ho  = prefs.getDouble(_customHoldOutKey) ?? lastCustomPreset.holdOut;
+      final tmp = WearPreset(id: 'custom', label: '', inhale: customInhale, holdIn: hi, exhale: e, holdOut: ho, minutes: 1);
       lastCustomPreset = WearPreset(
-        id: 'custom', label: 'Custom $customInhale-$hi-$e-$ho',
+        id: 'custom', label: 'Custom ${tmp.sequence}',
         inhale:  customInhale,
         holdIn:  hi,
         exhale:  e,

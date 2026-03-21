@@ -2,12 +2,14 @@
 
 This repository contains four app implementations of the same product:
 
-| App | Platform | Location |
-|-----|----------|----------|
-| Expo React Native | iOS (production) | `react_native/` |
-| Flutter | Android (production) | `flutter/` |
-| Apple Watch | watchOS (standalone) | `flutter/ios/BreatheWatch/` |
-| Wear OS | Wear OS (standalone) | `flutter/android/wearos/` |
+| App | Platform | Location | Status |
+|-----|----------|----------|--------|
+| Expo React Native | iOS | `react_native/` | **Discontinued** — code kept for reference, no longer maintained |
+| Flutter | Android (production) | `flutter/` | Active |
+| Apple Watch | watchOS (standalone) | `flutter/ios/BreatheWatch/` | Active |
+| Wear OS | Wear OS (standalone) | `flutter/android/wearos/` | Active |
+
+> **Note:** The React Native app (`react_native/`) is discontinued. The iOS production app is now the Flutter app (`flutter/`). Do not make new changes to `react_native/`.
 
 Store links:
 
@@ -27,7 +29,7 @@ Repository-level files stay at the root:
 
 Quick start:
 
-1. For the Expo app, `cd react_native` and follow [react_native/README.md](react_native/README.md).
+1. ~~For the Expo app, `cd react_native` and follow [react_native/README.md](react_native/README.md).~~ *(discontinued)*
 2. For the Flutter app, `cd flutter` and follow [flutter/README.md](flutter/README.md).
 3. For the Apple Watch app, open `flutter/ios/Runner.xcworkspace` in Xcode and select the `BreatheWatch` scheme.
 4. For the Wear OS app, `cd flutter/android/wearos` and run `flutter run`.

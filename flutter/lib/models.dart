@@ -52,6 +52,13 @@ int clampWhole(num value, {int min = 0, int max = 60}) {
   return rounded;
 }
 
+double clampHalf(num value, {double min = 0, double max = 60}) {
+  final snapped = (value * 2).round() / 2;
+  if (snapped < min) return min;
+  if (snapped > max) return max;
+  return snapped;
+}
+
 int coerceInt(
   Object? value, {
   int min = 0,
@@ -71,6 +78,29 @@ int coerceInt(
 
   return fallback;
 }
+
+double coerceDouble(
+  Object? value, {
+  double min = 0,
+  double max = 60,
+  double fallback = 0,
+}) {
+  if (value is num) {
+    return clampHalf(value, min: min, max: max);
+  }
+
+  if (value is String) {
+    final parsed = num.tryParse(value);
+    if (parsed != null) {
+      return clampHalf(parsed, min: min, max: max);
+    }
+  }
+
+  return fallback;
+}
+
+String _formatDuration(double d) =>
+    d % 1 == 0 ? d.toInt().toString() : d.toString();
 
 AppLanguage resolveLanguageCode(String? raw, {AppLanguage fallback = AppLanguage.en}) {
   if (raw == null || raw.isEmpty) return fallback;
@@ -106,10 +136,10 @@ class PhaseDurations {
     required this.holdOut,
   });
 
-  final int inhale;
-  final int holdIn;
-  final int exhale;
-  final int holdOut;
+  final double inhale;
+  final double holdIn;
+  final double exhale;
+  final double holdOut;
 
   static const zero = PhaseDurations(
     inhale: 0,
@@ -118,7 +148,7 @@ class PhaseDurations {
     holdOut: 0,
   );
 
-  int durationFor(BreathingPhase phase) {
+  double durationFor(BreathingPhase phase) {
     switch (phase) {
       case BreathingPhase.inhale:
         return inhale;
@@ -131,15 +161,16 @@ class PhaseDurations {
     }
   }
 
-  int get totalSeconds => inhale + holdIn + exhale + holdOut;
+  double get totalSeconds => inhale + holdIn + exhale + holdOut;
 
-  String get sequence => '$inhale-$holdIn-$exhale-$holdOut';
+  String get sequence =>
+      '${_formatDuration(inhale)}-${_formatDuration(holdIn)}-${_formatDuration(exhale)}-${_formatDuration(holdOut)}';
 
   PhaseDurations copyWith({
-    int? inhale,
-    int? holdIn,
-    int? exhale,
-    int? holdOut,
+    double? inhale,
+    double? holdIn,
+    double? exhale,
+    double? holdOut,
   }) {
     return PhaseDurations(
       inhale: inhale ?? this.inhale,
@@ -160,10 +191,10 @@ class PhaseDurations {
 
   factory PhaseDurations.fromJson(Map<String, dynamic> json) {
     return PhaseDurations(
-      inhale: coerceInt(json['inhale'], max: 20),
-      holdIn: coerceInt(json['holdIn'], max: 20),
-      exhale: coerceInt(json['exhale'], max: 20),
-      holdOut: coerceInt(json['holdOut'], max: 20),
+      inhale: coerceDouble(json['inhale'], max: 20),
+      holdIn: coerceDouble(json['holdIn'], max: 20),
+      exhale: coerceDouble(json['exhale'], max: 20),
+      holdOut: coerceDouble(json['holdOut'], max: 20),
     );
   }
 

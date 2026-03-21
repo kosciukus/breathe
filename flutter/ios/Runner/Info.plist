@@ -38,6 +38,10 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Mindful Breathe logs your mindfulness sessions to Apple Health so you can track your practice over time.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Mindful Breathe writes your completed breathing sessions to Apple Health as mindfulness minutes.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

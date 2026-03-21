@@ -11,22 +11,25 @@ class WearPreset {
 
   final String id;
   final String label;
-  final int inhale;
-  final int holdIn;
-  final int exhale;
-  final int holdOut;
+  final double inhale;
+  final double holdIn;
+  final double exhale;
+  final double holdOut;
   final int minutes;
 
-  String get sequence => '$inhale-$holdIn-$exhale-$holdOut';
+  String get sequence {
+    String fmt(double d) => d % 1 == 0 ? d.toInt().toString() : d.toString();
+    return '${fmt(inhale)}-${fmt(holdIn)}-${fmt(exhale)}-${fmt(holdOut)}';
+  }
 
-  int durationFor(BreathPhase phase) => switch (phase) {
+  double durationFor(BreathPhase phase) => switch (phase) {
         BreathPhase.inhale => inhale,
         BreathPhase.holdIn => holdIn,
         BreathPhase.exhale => exhale,
         BreathPhase.holdOut => holdOut,
       };
 
-  int get totalCycleSeconds => inhale + holdIn + exhale + holdOut;
+  double get totalCycleSeconds => inhale + holdIn + exhale + holdOut;
 }
 
 enum BreathPhase {
@@ -53,7 +56,7 @@ enum BreathPhase {
 const List<WearPreset> builtInPresets = [
   WearPreset(id: 'box_4_4_4_4',    label: 'Box 4-4-4-4',          inhale: 4, holdIn: 4, exhale: 4, holdOut: 4, minutes: 8),
   WearPreset(id: 'relax_4_7_8',    label: 'Relax 4-7-8',          inhale: 4, holdIn: 7, exhale: 8, holdOut: 0, minutes: 6),
-  WearPreset(id: 'coherent_5_5',   label: 'Coherent 5-5',         inhale: 5, holdIn: 0, exhale: 5, holdOut: 0, minutes: 5),
+  WearPreset(id: 'coherent_5_5',   label: 'Coherent 5.5-5.5',     inhale: 5.5, holdIn: 0, exhale: 5.5, holdOut: 0, minutes: 5),
   WearPreset(id: 'resonant_6_6',   label: 'Resonant 6-6',         inhale: 6, holdIn: 0, exhale: 6, holdOut: 0, minutes: 5),
   WearPreset(id: 'equal_4_4',      label: 'Equal 4-4',            inhale: 4, holdIn: 0, exhale: 4, holdOut: 0, minutes: 5),
   WearPreset(id: 'pursed_2_4',     label: 'Pursed-lip 2-4',       inhale: 2, holdIn: 0, exhale: 4, holdOut: 0, minutes: 5),
