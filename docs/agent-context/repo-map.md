@@ -81,6 +81,14 @@ This is now the primary phone app for both iOS and Android.
 - `flutter/lib/models.dart`: domain models
 - `flutter/lib/presets.dart`: built-in preset definitions
 
+### Voice assistant integration (Siri / Google Assistant)
+
+- `flutter/lib/deep_link_service.dart`: listens for `breathe://start?preset=<id>&autostart=true` deep links via a MethodChannel (`it.arcsoftware.breathe/deeplink`); emits `DeepLinkIntent` to `app.dart`
+- `flutter/lib/preset_aliases.dart`: maps natural-language voice input (e.g. "box breathing") to preset IDs; used by the deep link service
+- `flutter/ios/Runner/StartBreathingIntent.swift`: iOS App Intent (iOS 16+) for Siri — "Start breathing with Mindful Breathe"
+- `flutter/ios/Runner/AppShortcuts.swift`: registers Siri phrases via `AppShortcutsProvider`
+- `flutter/android/app/src/main/res/xml/shortcuts.xml`: Google Assistant App Actions (`OPEN_APP_FEATURE` capability)
+
 ### Data and copy
 
 - `flutter/lib/app_strings.dart`: localized UI strings
@@ -108,13 +116,15 @@ Run from `flutter/`:
 
 Standalone Swift/SwiftUI app — no Flutter, no phone required.
 
-- `BreatheWatchApp.swift`: app entry, creates `BreathingEngine`
+- `BreatheWatchApp.swift`: app entry, creates `BreathingEngine`; receives Siri notifications and sets `siriTriggeredPresetId`
 - `Presets.swift`: all 10 built-in presets + `BreathPhase` enum (mirrors `flutter/lib/presets.dart`)
-- `BreathingEngine.swift`: timer, phase cycling, haptics, health logging, last-preset persistence (`UserDefaults`)
+- `BreathingEngine.swift`: timer, phase cycling, haptics, health logging, last-preset persistence (`UserDefaults`); exposes `siriTriggeredPresetId` for voice-triggered sessions
 - `HealthService.swift`: logs completed sessions to Apple Health via HealthKit (`HKCategoryType.mindfulSession`); permission requested at startup, denial silently absorbed
-- `PresetListView.swift`: preset picker
+- `PresetListView.swift`: preset picker; observes `siriTriggeredPresetId` to auto-navigate to `SessionView` on Siri invocation
 - `SessionView.swift`: active session UI (progress ring, phase label, countdown, stop)
 - `CustomTimerView.swift`: on-watch custom phase duration editor
+- `StartBreathingWatchIntent.swift`: watchOS App Intent (watchOS 9+) for Siri
+- `WatchAppShortcuts.swift`: registers Siri phrases for the watch
 
 ### Apple Watch commands
 
@@ -124,13 +134,16 @@ Build and run via Xcode — select the `BreatheWatch` scheme and a Watch simulat
 
 Standalone Flutter app targeting Wear OS (API 26+).
 
-- `lib/main.dart`: app entry, Provider setup
+- `lib/main.dart`: app entry, Provider setup; wires deep link service for Google Assistant voice integration
 - `lib/presets.dart`: all 10 built-in presets + `BreathPhase` enum (mirrors `flutter/lib/presets.dart`)
 - `lib/engine.dart`: timer, phase cycling, haptics, health logging, last-preset persistence (`shared_preferences`)
 - `lib/health_service.dart`: logs completed sessions to Health Connect (`HealthDataType.MINDFULNESS`); Android-only, permission requested at startup
+- `lib/deep_link_service.dart`: listens for `breathe://` deep links via MethodChannel for voice-triggered sessions
+- `lib/preset_aliases.dart`: maps voice input to preset IDs (mirrors `flutter/lib/preset_aliases.dart`)
 - `lib/screens/preset_list_screen.dart`: preset picker
 - `lib/screens/session_screen.dart`: active session UI (progress ring, phase label, countdown, stop)
-- `android/app/src/main/AndroidManifest.xml`: Wear OS flags (`standalone`, `VIBRATE`, `WAKE_LOCK`)
+- `android/app/src/main/AndroidManifest.xml`: Wear OS flags (`standalone`, `VIBRATE`, `WAKE_LOCK`); deep link intent-filter + shortcuts metadata
+- `android/app/src/main/res/xml/shortcuts.xml`: Google Assistant App Actions for Wear OS
 
 ### Wear OS commands
 

@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- "Open box breathing in Mindful Breathe" -->
+    <capability android:name="actions.intent.OPEN_APP_FEATURE">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="it.arcsoftware.breathe.wearos"
+            android:targetClass="it.arcsoftware.breathe_wearos.MainActivity">
+            <url-template android:value="breathe://start?preset={preset}" />
+            <parameter
+                android:name="feature"
+                android:key="preset" />
+        </intent>
+    </capability>
+
+    <!-- "Start box breathing in Mindful Breathe" -->
+    <capability android:name="actions.intent.START_EXERCISE">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="it.arcsoftware.breathe.wearos"
+            android:targetClass="it.arcsoftware.breathe_wearos.MainActivity">
+            <url-template android:value="breathe://start?preset={name}&amp;autostart=true" />
+            <parameter
+                android:name="exercise.name"
+                android:key="name" />
+        </intent>
+    </capability>
+
+    <!-- Box Breathing -->
+    <shortcut
+        android:shortcutId="start_box"
+        android:shortcutShortLabel="@string/shortcut_box"
+        android:enabled="true">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="breathe://start?preset=box_4_4_4_4&amp;autostart=true" />
+        <capability-binding android:key="actions.intent.OPEN_APP_FEATURE">
+            <parameter-binding
+                android:key="feature"
+                android:value="box breathing" />
+        </capability-binding>
+        <capability-binding android:key="actions.intent.START_EXERCISE">
+            <parameter-binding
+                android:key="exercise.name"
+                android:value="box breathing" />
+        </capability-binding>
+    </shortcut>
+
+    <!-- Relax 4-7-8 -->
+    <shortcut
+        android:shortcutId="start_relax"
+        android:shortcutShortLabel="@string/shortcut_relax"
+        android:enabled="true">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="breathe://start?preset=relax_4_7_8&amp;autostart=true" />
+        <capability-binding android:key="actions.intent.OPEN_APP_FEATURE">
+            <parameter-binding
+                android:key="feature"
+                android:value="relax 4-7-8" />
+        </capability-binding>
+        <capability-binding android:key="actions.intent.START_EXERCISE">
+            <parameter-binding
+                android:key="exercise.name"
+                android:value="relax 4-7-8" />
+        </capability-binding>
+    </shortcut>
+
+    <!-- Coherent Breathing -->
+    <shortcut
+        android:shortcutId="start_coherent"
+        android:shortcutShortLabel="@string/shortcut_coherent"
+        android:enabled="true">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="breathe://start?preset=coherent_5_5&amp;autostart=true" />
+        <capability-binding android:key="actions.intent.OPEN_APP_FEATURE">
+            <parameter-binding
+                android:key="feature"
+                android:value="coherent breathing" />
+        </capability-binding>
+        <capability-binding android:key="actions.intent.START_EXERCISE">
+            <parameter-binding
+                android:key="exercise.name"
+                android:value="coherent breathing" />
+        </capability-binding>
+    </shortcut>
+
+    <!-- Resonant Breathing -->
+    <shortcut
+        android:shortcutId="start_resonant"
+        android:shortcutShortLabel="@string/shortcut_resonant"
+        android:enabled="true">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="breathe://start?preset=resonant_6_6&amp;autostart=true" />
+        <capability-binding android:key="actions.intent.OPEN_APP_FEATURE">
+            <parameter-binding
+                android:key="feature"
+                android:value="resonant breathing" />
+        </capability-binding>
+        <capability-binding android:key="actions.intent.START_EXERCISE">
+            <parameter-binding
+                android:key="exercise.name"
+                android:value="resonant breathing" />
+        </capability-binding>
+    </shortcut>
+
+    <!-- Equal Breathing -->
+    <shortcut
+        android:shortcutId="start_equal"
+        android:shortcutShortLabel="@string/shortcut_equal"
+        android:enabled="true">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="breathe://start?preset=equal_4_4&amp;autostart=true" />
+        <capability-binding android:key="actions.intent.OPEN_APP_FEATURE">
+            <parameter-binding
+                android:key="feature"
+                android:value="equal breathing" />
+        </capability-binding>
+        <capability-binding android:key="actions.intent.START_EXERCISE">
+            <parameter-binding
+                android:key="exercise.name"
+                android:value="equal breathing" />
+        </capability-binding>
+    </shortcut>
+
+    <!-- Pursed Lip Breathing -->
+    <shortcut
+        android:shortcutId="start_pursed"
+        android:shortcutShortLabel="@string/shortcut_pursed"
+        android:enabled="true">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="breathe://start?preset=pursed_2_4&amp;autostart=true" />
+        <capability-binding android:key="actions.intent.OPEN_APP_FEATURE">
+            <parameter-binding
+                android:key="feature"
+                android:value="pursed lip breathing" />
+        </capability-binding>
+        <capability-binding android:key="actions.intent.START_EXERCISE">
+            <parameter-binding
+                android:key="exercise.name"
+                android:value="pursed lip breathing" />
+        </capability-binding>
+    </shortcut>
+
+    <!-- Extended Exhale 4-6 -->
+    <shortcut
+        android:shortcutId="start_extended_4_6"
+        android:shortcutShortLabel="@string/shortcut_extended_4_6"
+        android:enabled="true">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="breathe://start?preset=extended_4_6&amp;autostart=true" />
+        <capability-binding android:key="actions.intent.OPEN_APP_FEATURE">
+            <parameter-binding
+                android:key="feature"
+                android:value="extended exhale 4-6" />
+        </capability-binding>
+        <capability-binding android:key="actions.intent.START_EXERCISE">
+            <parameter-binding
+                android:key="exercise.name"
+                android:value="extended exhale 4-6" />
+        </capability-binding>
+    </shortcut>
+
+    <!-- Extended Exhale 4-8 -->
+    <shortcut
+        android:shortcutId="start_extended_4_8"
+        android:shortcutShortLabel="@string/shortcut_extended_4_8"
+        android:enabled="true">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="breathe://start?preset=extended_4_8&amp;autostart=true" />
+        <capability-binding android:key="actions.intent.OPEN_APP_FEATURE">
+            <parameter-binding
+                android:key="feature"
+                android:value="extended exhale 4-8" />
+        </capability-binding>
+        <capability-binding android:key="actions.intent.START_EXERCISE">
+            <parameter-binding
+                android:key="exercise.name"
+                android:value="extended exhale 4-8" />
+        </capability-binding>
+    </shortcut>
+
+    <!-- Triangle Breathing -->
+    <shortcut
+        android:shortcutId="start_triangle"
+        android:shortcutShortLabel="@string/shortcut_triangle"
+        android:enabled="true">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="breathe://start?preset=triangle_3_3_3&amp;autostart=true" />
+        <capability-binding android:key="actions.intent.OPEN_APP_FEATURE">
+            <parameter-binding
+                android:key="feature"
+                android:value="triangle breathing" />
+        </capability-binding>
+        <capability-binding android:key="actions.intent.START_EXERCISE">
+            <parameter-binding
+                android:key="exercise.name"
+                android:value="triangle breathing" />
+        </capability-binding>
+    </shortcut>
+
+    <!-- Calm Breathing -->
+    <shortcut
+        android:shortcutId="start_calm"
+        android:shortcutShortLabel="@string/shortcut_calm"
+        android:enabled="true">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="breathe://start?preset=calm_4_4_6_2&amp;autostart=true" />
+        <capability-binding android:key="actions.intent.OPEN_APP_FEATURE">
+            <parameter-binding
+                android:key="feature"
+                android:value="calm breathing" />
+        </capability-binding>
+        <capability-binding android:key="actions.intent.START_EXERCISE">
+            <parameter-binding
+                android:key="exercise.name"
+                android:value="calm breathing" />
+        </capability-binding>
+    </shortcut>
+
+</shortcuts>

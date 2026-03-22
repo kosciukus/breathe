@@ -5,7 +5,8 @@
       "Bash(find /Users/kosciukus/Projects/breathe/flutter/android -name *.gradle -o -name *.gradle.kts)",
       "Bash(flutter test:*)",
       "Bash(flutter clean:*)",
-      "Bash(flutter build:*)"
+      "Bash(flutter build:*)",
+      "Bash(git status:*)"
     ],
     "additionalDirectories": [
       "/Users/kosciukus/Projects/breathe/flutter/android/wearos/ios"

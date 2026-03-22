@@ -1,0 +1,12 @@
+/* Siri phrase translations — Russian */
+"Start ${preset} with ${applicationName}" = "Начать ${preset} в ${applicationName}";
+"Start ${preset} in ${applicationName}" = "Запустить ${preset} в ${applicationName}";
+"${applicationName} start ${preset}" = "${applicationName} начать ${preset}";
+"Do ${preset} with ${applicationName}" = "Выполнить ${preset} в ${applicationName}";
+"Start breathing with ${applicationName}" = "Начать дыхание в ${applicationName}";
+"Start a breathing session with ${applicationName}" = "Начать сеанс дыхания в ${applicationName}";
+"Breathe with ${applicationName}" = "Дышать с ${applicationName}";
+"Open ${applicationName}" = "Открыть ${applicationName}";
+"Box breathing with ${applicationName}" = "Квадратное дыхание в ${applicationName}";
+"Relax breathing with ${applicationName}" = "Расслабляющее дыхание в ${applicationName}";
+"Calm breathing with ${applicationName}" = "Спокойное дыхание в ${applicationName}";

@@ -1,0 +1,12 @@
+/* Siri phrase translations — Hindi */
+"Start ${preset} with ${applicationName}" = "${applicationName} में ${preset} शुरू करें";
+"Start ${preset} in ${applicationName}" = "${applicationName} पर ${preset} शुरू करें";
+"${applicationName} start ${preset}" = "${applicationName} ${preset} शुरू करें";
+"Do ${preset} with ${applicationName}" = "${applicationName} से ${preset} करें";
+"Start breathing with ${applicationName}" = "${applicationName} में सांस लेना शुरू करें";
+"Start a breathing session with ${applicationName}" = "${applicationName} में सांस का सत्र शुरू करें";
+"Breathe with ${applicationName}" = "${applicationName} से सांस लें";
+"Open ${applicationName}" = "${applicationName} खोलें";
+"Box breathing with ${applicationName}" = "${applicationName} में बॉक्स श्वास";
+"Relax breathing with ${applicationName}" = "${applicationName} में आराम श्वास";
+"Calm breathing with ${applicationName}" = "${applicationName} में शांत श्वास";

@@ -79,6 +79,28 @@ Start here:
 
 ## Flutter: common requests
 
+### Change voice assistant integration (Siri / Google Assistant)
+
+Start here:
+
+- `flutter/lib/deep_link_service.dart`
+- `flutter/lib/preset_aliases.dart`
+- `flutter/lib/app.dart`
+
+Also check platform-specific files:
+
+- iOS Siri: `flutter/ios/Runner/StartBreathingIntent.swift`, `flutter/ios/Runner/AppShortcuts.swift`, `flutter/ios/Runner/AppDelegate.swift`
+- Android Google Assistant: `flutter/android/app/src/main/res/xml/shortcuts.xml`, `flutter/android/app/src/main/kotlin/.../MainActivity.kt`
+
+For wearables:
+
+- Apple Watch Siri: `flutter/ios/BreatheWatch/StartBreathingWatchIntent.swift`, `flutter/ios/BreatheWatch/WatchAppShortcuts.swift`
+- Wear OS Google Assistant: `flutter/android/wearos/lib/deep_link_service.dart`, `flutter/android/wearos/android/app/src/main/res/xml/shortcuts.xml`
+
+Reason:
+
+- All voice commands funnel through `breathe://start?preset=<id>` deep links. The Dart-side deep link service resolves aliases and triggers the controller. Platform-specific code (App Intents on iOS/watchOS, App Actions on Android) bridges voice input to the URL scheme.
+
 ### Change health logging (Apple Health / Health Connect)
 
 Start here:
@@ -146,6 +168,20 @@ Start here:
 - `flutter/ios/BreatheWatch/PresetListView.swift`
 - `flutter/ios/BreatheWatch/CustomTimerView.swift`
 
+### Change Apple Watch Siri integration
+
+Start here:
+
+- `flutter/ios/BreatheWatch/StartBreathingWatchIntent.swift`
+- `flutter/ios/BreatheWatch/WatchAppShortcuts.swift`
+- `flutter/ios/BreatheWatch/BreatheWatchApp.swift`
+- `flutter/ios/BreatheWatch/BreathingEngine.swift`
+- `flutter/ios/BreatheWatch/PresetListView.swift`
+
+Reason:
+
+- Siri triggers a notification from the App Intent, which `BreatheWatchApp` receives and sets `engine.siriTriggeredPresetId`. `PresetListView` observes this to navigate and auto-start the session.
+
 ### Change Apple Watch health logging
 
 Start here:
@@ -175,6 +211,16 @@ Start here:
 
 - `flutter/android/wearos/lib/screens/session_screen.dart`
 - `flutter/android/wearos/lib/screens/preset_list_screen.dart`
+
+### Change Wear OS Google Assistant integration
+
+Start here:
+
+- `flutter/android/wearos/lib/deep_link_service.dart`
+- `flutter/android/wearos/lib/preset_aliases.dart`
+- `flutter/android/wearos/lib/main.dart`
+- `flutter/android/wearos/android/app/src/main/res/xml/shortcuts.xml`
+- `flutter/android/wearos/android/app/src/main/kotlin/.../MainActivity.kt`
 
 ### Change Wear OS health logging
 

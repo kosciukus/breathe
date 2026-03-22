@@ -1,0 +1,12 @@
+/* Siri phrase translations — Spanish */
+"Start ${preset} with ${applicationName}" = "Iniciar ${preset} con ${applicationName}";
+"Start ${preset} in ${applicationName}" = "Iniciar ${preset} en ${applicationName}";
+"${applicationName} start ${preset}" = "${applicationName} iniciar ${preset}";
+"Do ${preset} with ${applicationName}" = "Hacer ${preset} con ${applicationName}";
+"Start breathing with ${applicationName}" = "Iniciar respiracion con ${applicationName}";
+"Start a breathing session with ${applicationName}" = "Iniciar sesion de respiracion con ${applicationName}";
+"Breathe with ${applicationName}" = "Respirar con ${applicationName}";
+"Open ${applicationName}" = "Abrir ${applicationName}";
+"Box breathing with ${applicationName}" = "Respiracion de caja con ${applicationName}";
+"Relax breathing with ${applicationName}" = "Respiracion relajante con ${applicationName}";
+"Calm breathing with ${applicationName}" = "Respiracion calmante con ${applicationName}";

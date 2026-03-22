@@ -177,6 +177,31 @@ Look here when:
 - changing sound asset references
 - changing plugin wiring for audio or vibration
 
+### Voice assistant integration (Siri / Google Assistant)
+
+Open:
+
+- `flutter/lib/deep_link_service.dart`
+- `flutter/lib/preset_aliases.dart`
+- `flutter/lib/app.dart`
+
+Look here when:
+
+- changing how voice commands trigger sessions
+- adding new voice aliases for presets
+- changing deep link URL format or parameters
+- changing Siri phrases or Google Assistant shortcuts
+
+Important details:
+
+- All voice commands resolve to a `breathe://start?preset=<id>&autostart=true` deep link.
+- `DeepLinkService` listens via a MethodChannel (`it.arcsoftware.breathe/deeplink`). Native code on each platform forwards URLs to this channel.
+- `preset_aliases.dart` maps natural-language voice input ("box breathing", "4 7 8") to preset IDs. Resolution: exact ID → alias lookup → substring match.
+- `app.dart` subscribes to the deep link stream after `controller.isReady` and calls `applyPreset()` + `startOrResetSession()`.
+- iOS Siri: App Intents framework (iOS 16+) in `flutter/ios/Runner/StartBreathingIntent.swift` and `AppShortcuts.swift`. Guarded with `@available` — older iOS versions simply don't get Siri integration.
+- Android Google Assistant: App Actions in `flutter/android/app/src/main/res/xml/shortcuts.xml` using `OPEN_APP_FEATURE` BII.
+- Native deep link forwarding: `AppDelegate.swift` (iOS) and `MainActivity.kt` (Android) each set up the MethodChannel and handle cold-start + warm-start deep links.
+
 ### Health logging (Apple Health / Health Connect)
 
 Open:
@@ -210,6 +235,7 @@ Use these shortcuts before opening more files:
 - If it mentions “navigation” or “tabs,” start with `flutter/lib/app.dart`.
 - If it mentions “theme” or “colors,” start with `flutter/lib/theme.dart`.
 - If it mentions “health,” “Apple Health,” “Health Connect,” or “mindfulness minutes,” start with `flutter/lib/health_service.dart`.
+- If it mentions “Siri,” “Google Assistant,” “voice,” or “deep link,” start with `flutter/lib/deep_link_service.dart` and `flutter/lib/preset_aliases.dart`.
 
 ## Validation after changes
 

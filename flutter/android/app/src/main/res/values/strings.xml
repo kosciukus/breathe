@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="shortcut_box">Box Breathing</string>
+    <string name="shortcut_relax">Relax 4-7-8</string>
+    <string name="shortcut_coherent">Coherent Breathing</string>
+    <string name="shortcut_resonant">Resonant Breathing</string>
+    <string name="shortcut_equal">Equal Breathing</string>
+    <string name="shortcut_pursed">Pursed Lip Breathing</string>
+    <string name="shortcut_extended_4_6">Extended Exhale 4-6</string>
+    <string name="shortcut_extended_4_8">Extended Exhale 4-8</string>
+    <string name="shortcut_triangle">Triangle Breathing</string>
+    <string name="shortcut_calm">Calm Breathing</string>
+</resources>

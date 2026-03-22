@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'app_strings.dart';
 import 'controller.dart';
+import 'deep_link_service.dart';
 import 'models.dart';
 import 'screens.dart';
 import 'theme.dart';
@@ -17,6 +20,8 @@ class _BreatheAppState extends State<BreatheApp> {
   late final BreathingController _controller;
   late bool _darkMode;
   late AppLanguage _language;
+  final DeepLinkService _deepLinkService = DeepLinkService();
+  StreamSubscription<DeepLinkIntent>? _deepLinkSub;
 
   @override
   void initState() {
@@ -29,6 +34,12 @@ class _BreatheAppState extends State<BreatheApp> {
   }
 
   void _handleControllerChange() {
+    // Initialize deep links once the controller is ready.
+    if (_controller.isReady && _deepLinkSub == null) {
+      _deepLinkService.initialize(_controller.presets);
+      _deepLinkSub = _deepLinkService.intents.listen(_handleDeepLinkIntent);
+    }
+
     if (_darkMode == _controller.darkModeEnabled &&
         _language == _controller.language) {
       return;
@@ -40,8 +51,17 @@ class _BreatheAppState extends State<BreatheApp> {
     });
   }
 
+  void _handleDeepLinkIntent(DeepLinkIntent intent) {
+    _controller.applyPreset(intent.presetId);
+    if (intent.autoStart && !_controller.isRunning) {
+      _controller.startOrResetSession();
+    }
+  }
+
   @override
   void dispose() {
+    _deepLinkSub?.cancel();
+    _deepLinkService.dispose();
     _controller.removeListener(_handleControllerChange);
     _controller.dispose();
     super.dispose();

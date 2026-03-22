@@ -32,7 +32,11 @@ class HealthService {
     }
     if (!Platform.isIOS && !Platform.isAndroid) return;
     try {
-      final types = [HealthDataType.MINDFULNESS];
+      await _health.configure();
+      // Android Health Connect doesn't support MINDFULNESS; use WORKOUT instead.
+      final types = Platform.isAndroid
+          ? [HealthDataType.WORKOUT]
+          : [HealthDataType.MINDFULNESS];
       final permissions = [HealthDataAccess.WRITE];
       _authorized = await _health.requestAuthorization(types, permissions: permissions);
     } catch (_) {
@@ -54,14 +58,23 @@ class HealthService {
         await writer(0, startTime, endTime);
         return;
       }
-      // MINDFULNESS is an HKCategorySample on iOS. The value must be 0
-      // (HKCategoryValue.notApplicable). Duration is encoded in startTime/endTime.
-      await _health.writeHealthData(
-        value: 0,
-        type: HealthDataType.MINDFULNESS,
-        startTime: startTime,
-        endTime: endTime,
-      );
+      if (Platform.isAndroid) {
+        // Android Health Connect: log as a guided breathing workout session.
+        await _health.writeWorkoutData(
+          activityType: HealthWorkoutActivityType.GUIDED_BREATHING,
+          start: startTime,
+          end: endTime,
+        );
+      } else {
+        // iOS HealthKit: MINDFULNESS is an HKCategorySample. Value must be 0
+        // (HKCategoryValue.notApplicable). Duration is encoded in startTime/endTime.
+        await _health.writeHealthData(
+          value: 0,
+          type: HealthDataType.MINDFULNESS,
+          startTime: startTime,
+          endTime: endTime,
+        );
+      }
     } catch (_) {
       // Ignore write failures — health logging is best-effort.
     }

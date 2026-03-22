@@ -1,0 +1,12 @@
+/* Siri phrase translations — Japanese */
+"Start ${preset} with ${applicationName}" = "${applicationName}で${preset}を始める";
+"Start ${preset} in ${applicationName}" = "${applicationName}の${preset}を開始";
+"${applicationName} start ${preset}" = "${applicationName} ${preset}スタート";
+"Do ${preset} with ${applicationName}" = "${applicationName}で${preset}をする";
+"Start breathing with ${applicationName}" = "${applicationName}で呼吸を始める";
+"Start a breathing session with ${applicationName}" = "${applicationName}で呼吸セッションを開始";
+"Breathe with ${applicationName}" = "${applicationName}で呼吸する";
+"Open ${applicationName}" = "${applicationName}を開く";
+"Box breathing with ${applicationName}" = "${applicationName}でボックス呼吸";
+"Relax breathing with ${applicationName}" = "${applicationName}でリラックス呼吸";
+"Calm breathing with ${applicationName}" = "${applicationName}で穏やか呼吸";
