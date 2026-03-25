@@ -1,6 +1,6 @@
 # Privacy Policy
 
-Last updated: March 2025
+Last updated: March 2026
 
 Mindful Breathe is designed to help you build calm breathing habits. We respect your privacy and keep data collection to a minimum.
 
@@ -16,9 +16,18 @@ Any data stored on your device is used only to power app features such as breath
 
 We do not include third-party analytics or advertising SDKs in the app. If this changes in the future, we will update this policy and provide details about what data is collected and why.
 
-## Data Retention
+## Data Retention and Deletion
 
-Your preferences remain on your device until you reset them or uninstall the app. We do not retain copies on our servers because we do not collect them.
+All data (breathing preferences, session settings, and favorites) is stored exclusively on your device using your operating system's local storage. We do not transmit or store any data on external servers, so we hold no server-side copies to delete.
+
+**Retention period:** Data persists on your device for as long as the app is installed, or until you manually clear it.
+
+**How to delete your data:**
+
+- **Android:** Go to *Settings → Apps → Mindful Breathe → Storage → Clear Data* to erase all app data immediately.
+- **iOS / watchOS:** Delete the app from your device. All locally stored data is removed automatically when the app is uninstalled.
+- **Wear OS:** Go to *Settings → Apps → Mindful Breathe → Clear Data*, or uninstall the app.
+
 
 ## Children’s Privacy
 
