@@ -7,6 +7,7 @@ import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
     private val CHANNEL = "it.arcsoftware.breathe/deeplink"
+    private val SESSION_CHANNEL = "it.arcsoftware.breathe/session"
     private var deepLinkChannel: MethodChannel? = null
     private var pendingDeepLink: String? = null
 
@@ -22,6 +23,31 @@ class MainActivity : FlutterActivity() {
                 result.notImplemented()
             }
         }
+
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, SESSION_CHANNEL)
+            .setMethodCallHandler { call, result ->
+                when (call.method) {
+                    "startSession" -> {
+                        val label = call.argument<String>("label") ?: "Breathing"
+                        startService(
+                            Intent(this, BreathingService::class.java).apply {
+                                action = BreathingService.ACTION_START
+                                putExtra(BreathingService.EXTRA_PRESET_LABEL, label)
+                            }
+                        )
+                        result.success(null)
+                    }
+                    "stopSession" -> {
+                        startService(
+                            Intent(this, BreathingService::class.java).apply {
+                                action = BreathingService.ACTION_STOP
+                            }
+                        )
+                        result.success(null)
+                    }
+                    else -> result.notImplemented()
+                }
+            }
 
         // Handle cold-start intent.
         intent?.data?.toString()?.let { uri ->

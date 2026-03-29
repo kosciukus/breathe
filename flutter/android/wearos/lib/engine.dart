@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vibration/vibration.dart';
 
@@ -15,6 +16,8 @@ const String _customHoldInKey  = 'breathe.wear.custom.holdIn';
 const String _customExhaleKey  = 'breathe.wear.custom.exhale';
 const String _customHoldOutKey = 'breathe.wear.custom.holdOut';
 const String _customMinutesKey = 'breathe.wear.custom.minutes';
+
+const _sessionChannel = MethodChannel('it.arcsoftware.breathe/session');
 
 class BreathingEngine extends ChangeNotifier {
   BreathPhase phase = BreathPhase.inhale;
@@ -103,6 +106,11 @@ class BreathingEngine extends ChangeNotifier {
     _stopAfterCycle = false;
     _sessionEndTime = null;
     _sessionStartedAt = null;
+    unawaited(
+      _sessionChannel
+          .invokeMethod<void>('stopSession')
+          .catchError((_) {}),
+    );
     phase = BreathPhase.inhale;
     phaseProgress = 0;
     phaseRemainingSeconds = 0;
@@ -116,6 +124,11 @@ class BreathingEngine extends ChangeNotifier {
     _sessionEndTime =
         DateTime.now().add(Duration(minutes: preset.minutes));
     sessionRemainingSeconds = preset.minutes * 60;
+    unawaited(
+      _sessionChannel
+          .invokeMethod<void>('startSession', {'label': preset.label})
+          .catchError((_) {}),
+    );
     _prepareAudio();
     _beginPhase(BreathPhase.inhale);
 

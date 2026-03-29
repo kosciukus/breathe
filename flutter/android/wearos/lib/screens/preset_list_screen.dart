@@ -6,19 +6,48 @@ import '../presets.dart';
 import 'custom_timer_screen.dart';
 import 'session_screen.dart';
 
-class PresetListScreen extends StatelessWidget {
+class PresetListScreen extends StatefulWidget {
   const PresetListScreen({super.key});
+
+  @override
+  State<PresetListScreen> createState() => _PresetListScreenState();
+}
+
+class _PresetListScreenState extends State<PresetListScreen> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final engine = context.watch<BreathingEngine>();
+    // Round Wear OS screens: the circular boundary cuts in at the top/bottom.
+    // Use ~15% of screen width as horizontal padding to keep content within
+    // the inscribed safe area (circle diameter d → safe inner width ≈ d/√2).
+    final hPad = MediaQuery.of(context).size.width * 0.15;
 
     return Scaffold(
       backgroundColor: Colors.black,
-      body: ListView.builder(
-        padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 8),
-        itemCount: builtInPresets.length + 1, // +1 for Custom tile
-        itemBuilder: (context, i) {
+      body: SafeArea(
+        child: ScrollbarTheme(
+          data: ScrollbarThemeData(
+            thickness: WidgetStateProperty.all(5.0),
+            radius: const Radius.circular(3),
+            crossAxisMargin: 20,
+            thumbColor: WidgetStateProperty.all(Colors.white),
+            trackBorderColor: WidgetStateProperty.all(Colors.transparent),
+          ),
+          child: Scrollbar(
+          controller: _scrollController,
+          child: ListView.builder(
+          controller: _scrollController,
+          padding: EdgeInsets.symmetric(vertical: 32, horizontal: hPad),
+          itemCount: builtInPresets.length + 1, // +1 for Custom tile
+          itemBuilder: (context, i) {
           if (i == 0) {
             return _CustomTile(
               isSelected: engine.selectedPreset.id == 'custom',
@@ -52,7 +81,10 @@ class PresetListScreen extends StatelessWidget {
               );
             },
           );
-        },
+          },
+          ),
+          ),
+        ),
       ),
     );
   }
@@ -87,6 +119,8 @@ class _PresetTile extends StatelessWidget {
           children: [
             Text(
               preset.label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 14,
@@ -96,6 +130,8 @@ class _PresetTile extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               '${preset.minutes} min · ${preset.sequence}',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: Colors.white.withValues(alpha: 0.5),
                 fontSize: 11,
@@ -141,6 +177,8 @@ class _CustomTile extends StatelessWidget {
           children: [
             Text(
               'Custom ${lastCustomPreset.sequence}',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 14,
@@ -150,6 +188,8 @@ class _CustomTile extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               '${lastCustomPreset.minutes} min',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: Colors.white.withValues(alpha: 0.5),
                 fontSize: 11,

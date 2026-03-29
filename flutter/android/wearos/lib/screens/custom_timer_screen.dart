@@ -20,6 +20,13 @@ class _CustomTimerScreenState extends State<CustomTimerScreen> {
   late double _exhale;
   late double _holdOut;
   late int _minutes;
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -35,12 +42,25 @@ class _CustomTimerScreenState extends State<CustomTimerScreen> {
   Widget build(BuildContext context) {
     final engine = context.read<BreathingEngine>();
 
+    final hPad = MediaQuery.of(context).size.width * 0.15;
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-          child: Column(
+        child: ScrollbarTheme(
+          data: ScrollbarThemeData(
+            thickness: WidgetStateProperty.all(5.0),
+            radius: const Radius.circular(3),
+            crossAxisMargin: 20,
+            thumbColor: WidgetStateProperty.all(Colors.white),
+            trackBorderColor: WidgetStateProperty.all(Colors.transparent),
+          ),
+          child: Scrollbar(
+            controller: _scrollController,
+            child: SingleChildScrollView(
+            controller: _scrollController,
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: hPad),
+            child: Column(
             children: [
               const SizedBox(height: 4),
               const Text(
@@ -101,6 +121,8 @@ class _CustomTimerScreenState extends State<CustomTimerScreen> {
             ],
           ),
         ),
+          ),
+        ),
       ),
     );
   }
@@ -145,14 +167,17 @@ class _PhaseRow extends StatelessWidget {
             onTap: value > min ? () => onChanged((value - step).clamp(min, max)) : null,
           ),
           SizedBox(
-            width: 28,
-            child: Text(
-              _display,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
+            width: 36,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                _display,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           ),
@@ -201,14 +226,17 @@ class _IntPhaseRow extends StatelessWidget {
             onTap: value > min ? () => onChanged(value - 1) : null,
           ),
           SizedBox(
-            width: 28,
-            child: Text(
-              '$value',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
+            width: 36,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                '$value',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           ),

@@ -1,8 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <uses-permission android:name="android.permission.health.WRITE_MINDFULNESS_SESSION" />
-    <uses-permission android:name="android.permission.health.READ_MINDFULNESS_SESSION" />
     <uses-permission android:name="android.permission.health.WRITE_EXERCISE" />
-    <uses-permission android:name="android.permission.health.READ_EXERCISE" />
     <application
         android:label="Mindful Breathe"
         android:name="${applicationName}"

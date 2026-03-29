@@ -8,9 +8,13 @@
     <!-- Keep screen on during a session -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <!-- Health Connect: log mindfulness sessions -->
-    <uses-permission android:name="android.permission.health.WRITE_MINDFULNESS_SESSION" />
-    <uses-permission android:name="android.permission.health.READ_MINDFULNESS_SESSION" />
+    <!-- Health Connect: log guided breathing sessions as exercise -->
+    <uses-permission android:name="android.permission.health.WRITE_EXERCISE" />
+
+    <!-- Ongoing Activity: foreground service for session indicator on watch face -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:label="Breathe"
@@ -44,6 +48,11 @@
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
+
+        <service
+            android:name=".BreathingService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
 
         <meta-data
             android:name="flutterEmbedding"
