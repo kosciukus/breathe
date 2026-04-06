@@ -10,14 +10,16 @@ import 'screens.dart';
 import 'theme.dart';
 
 class BreatheApp extends StatefulWidget {
-  const BreatheApp({super.key});
+  const BreatheApp({super.key, required this.controller});
+
+  final BreathingController controller;
 
   @override
   State<BreatheApp> createState() => _BreatheAppState();
 }
 
 class _BreatheAppState extends State<BreatheApp> {
-  late final BreathingController _controller;
+  BreathingController get _controller => widget.controller;
   late bool _darkMode;
   late AppLanguage _language;
   final DeepLinkService _deepLinkService = DeepLinkService();
@@ -26,11 +28,15 @@ class _BreatheAppState extends State<BreatheApp> {
   @override
   void initState() {
     super.initState();
-    _controller = BreathingController();
     _darkMode = _controller.darkModeEnabled;
     _language = _controller.language;
     _controller.addListener(_handleControllerChange);
-    _controller.initialize();
+
+    // Controller is already initialized — set up deep links immediately if ready.
+    if (_controller.isReady) {
+      _deepLinkService.initialize(_controller.presets);
+      _deepLinkSub = _deepLinkService.intents.listen(_handleDeepLinkIntent);
+    }
   }
 
   void _handleControllerChange() {
@@ -63,7 +69,6 @@ class _BreatheAppState extends State<BreatheApp> {
     _deepLinkSub?.cancel();
     _deepLinkService.dispose();
     _controller.removeListener(_handleControllerChange);
-    _controller.dispose();
     super.dispose();
   }
 

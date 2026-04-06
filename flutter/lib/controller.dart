@@ -351,7 +351,7 @@ class BreathingController extends ChangeNotifier {
     return true;
   }
 
-  Future<void> startOrResetSession() async {
+  Future<void> startOrResetSession({bool skipCountdown = false}) async {
     if (isRunning) {
       await reset();
       return;
@@ -360,12 +360,22 @@ class BreathingController extends ChangeNotifier {
     active = draft;
     phase = BreathingPhase.inhale;
     remainingMs = (active.inhale * 1000).round();
-    preStartRemainingMs = preStartCountdownSeconds * 1000;
-    _preStartEndsAt =
-        DateTime.now().add(const Duration(seconds: preStartCountdownSeconds));
+    if (skipCountdown) {
+      preStartRemainingMs = null;
+      _preStartEndsAt = null;
+      _sessionStartedAt = DateTime.now();
+      sessionRemainingMs = repeatMinutes > 0 ? repeatMinutes * 60 * 1000 : null;
+      _sessionEndsAt = sessionRemainingMs == null
+          ? null
+          : DateTime.now().add(Duration(milliseconds: sessionRemainingMs!));
+    } else {
+      preStartRemainingMs = preStartCountdownSeconds * 1000;
+      _preStartEndsAt =
+          DateTime.now().add(const Duration(seconds: preStartCountdownSeconds));
+      sessionRemainingMs = repeatMinutes > 0 ? repeatMinutes * 60 * 1000 : null;
+      _sessionEndsAt = null;
+    }
     _phaseEndsAt = DateTime.now().add(Duration(milliseconds: remainingMs));
-    sessionRemainingMs = repeatMinutes > 0 ? repeatMinutes * 60 * 1000 : null;
-    _sessionEndsAt = null;
     _stopAfterCycle = false;
     isRunning = true;
 
@@ -379,6 +389,10 @@ class BreathingController extends ChangeNotifier {
 
     await _setWakelockEnabled(true);
     _startTicker();
+    if (skipCountdown) {
+      _queuePhaseCue(phase);
+      _sendPhaseToWatch();
+    }
     notifyListeners();
   }
 
