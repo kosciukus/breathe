@@ -4,7 +4,17 @@
 <dict>
 	<key>com.apple.developer.healthkit</key>
 	<true/>
+	<!-- TODO(CarPlay): Re-enable once Apple grants the CarPlay Audio entitlement
+	     (request at https://developer.apple.com/contact/carplay/, select
+	     "CarPlay Audio App"). To restore CarPlay, also:
+	       1. Add the CPTemplateApplicationSceneSessionRoleApplication scene
+	          back to Runner/Info.plist (see TODO(CarPlay) there).
+	       2. Flip `carPlayEnabled` to true in Runner/AppDelegate.swift.
+	     The CarPlaySceneDelegate.swift and Flutter carplay_service.dart files
+	     are left in place and are no-ops while disabled. -->
+	<!--
 	<key>com.apple.developer.carplay-audio</key>
 	<true/>
+	-->
 </dict>
 </plist>

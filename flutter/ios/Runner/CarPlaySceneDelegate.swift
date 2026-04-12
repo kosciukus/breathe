@@ -18,6 +18,16 @@ class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPI
     /// alive so MPNowPlayingInfoCenter updates reach CarPlay.
     private var silencePlayer: AVAudioPlayer?
 
+    // Authoritative Now Playing state. We own MPNowPlayingInfoCenter while a
+    // CarPlay session is active and re-write it on a timer so audio_service's
+    // async writes cannot clobber us, and so the timeline advances between
+    // (infrequent) Dart updates.
+    private var nowPlayingTimer: Timer?
+    private var lastElapsedSeconds: Double = 0
+    private var lastElapsedTimestamp: Date?
+    private var currentDurationSeconds: Double = 0
+    private var currentPresetLabel: String = "Breathing"
+
     // MARK: - CPTemplateApplicationSceneDelegate
 
     func templateApplicationScene(
@@ -60,6 +70,9 @@ class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPI
         didDisconnectInterfaceController interfaceController: CPInterfaceController
     ) {
         stopSilencePlayer()
+        stopNowPlayingTimer()
+        MPNowPlayingInfoCenter.default().playbackState = .stopped
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
         self.interfaceController = nil
         methodChannel = nil
         retryTimer?.invalidate()
@@ -164,25 +177,102 @@ class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPI
 
     private func updateNowPlaying(_ state: [String: Any]) {
         let running = state["isRunning"] as? Bool ?? false
-        guard running else { return }
 
-        let elapsed = state["elapsedSeconds"] as? Double ?? 0
-        let duration = state["durationSeconds"] as? Double ?? 0
-        let label = state["presetLabel"] as? String ?? "Breathing"
+        if !running {
+            stopNowPlayingTimer()
+            MPNowPlayingInfoCenter.default().playbackState = .stopped
+            MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+            return
+        }
+
+        lastElapsedSeconds = state["elapsedSeconds"] as? Double ?? 0
+        currentDurationSeconds = state["durationSeconds"] as? Double ?? 0
+        currentPresetLabel = state["presetLabel"] as? String ?? "Breathing"
+        lastElapsedTimestamp = Date()
 
         // audioplayers deactivates AVAudioSession after each short breathing cue.
-        // Re-activate it and write MPNowPlayingInfoCenter in the same synchronous
-        // block so the system is guaranteed to see playbackRate 1.0 (= pause button)
-        // and the current timeline position.
+        // Re-activate it so playback-rate updates reach CarPlay.
         try? AVAudioSession.sharedInstance().setActive(true)
 
+        configureRemoteCommands()
+        writeNowPlayingInfo()
+        MPNowPlayingInfoCenter.default().playbackState = .playing
+        startNowPlayingTimer()
+    }
+
+    private var remoteCommandsConfigured = false
+
+    private func configureRemoteCommands() {
+        // CPNowPlayingTemplate's play/pause button is only interactive when
+        // the corresponding MPRemoteCommand is enabled AND has a target.
+        // audio_service may not configure these for a "silent" handler, so
+        // we do it ourselves. This is also what convinces CarPlay to show
+        // the pause button instead of play.
+        let center = MPRemoteCommandCenter.shared()
+        center.playCommand.isEnabled = true
+        center.pauseCommand.isEnabled = true
+        center.stopCommand.isEnabled = true
+        center.togglePlayPauseCommand.isEnabled = true
+
+        guard !remoteCommandsConfigured else { return }
+        remoteCommandsConfigured = true
+
+        center.pauseCommand.addTarget { [weak self] _ in
+            self?.methodChannel?.invokeMethod("stopSession", arguments: nil)
+            return .success
+        }
+        center.stopCommand.addTarget { [weak self] _ in
+            self?.methodChannel?.invokeMethod("stopSession", arguments: nil)
+            return .success
+        }
+        center.togglePlayPauseCommand.addTarget { [weak self] _ in
+            self?.methodChannel?.invokeMethod("stopSession", arguments: nil)
+            return .success
+        }
+        center.playCommand.addTarget { _ in
+            // No-op: a CarPlay session is always started from the list.
+            return .success
+        }
+    }
+
+    private func writeNowPlayingInfo() {
+        let extrapolated: Double
+        if let ts = lastElapsedTimestamp {
+            extrapolated = min(
+                lastElapsedSeconds + Date().timeIntervalSince(ts),
+                currentDurationSeconds
+            )
+        } else {
+            extrapolated = lastElapsedSeconds
+        }
+
         MPNowPlayingInfoCenter.default().nowPlayingInfo = [
-            MPMediaItemPropertyTitle: label,
-            MPMediaItemPropertyAlbumTitle: "Mindful Breathe",
-            MPMediaItemPropertyPlaybackDuration: duration,
-            MPNowPlayingInfoPropertyElapsedPlaybackTime: elapsed,
+            MPMediaItemPropertyTitle: currentPresetLabel,
+            MPMediaItemPropertyArtist: "",
+            MPMediaItemPropertyAlbumTitle: "",
+            MPMediaItemPropertyPlaybackDuration: currentDurationSeconds,
+            MPNowPlayingInfoPropertyElapsedPlaybackTime: extrapolated,
             MPNowPlayingInfoPropertyPlaybackRate: 1.0,
+            MPNowPlayingInfoPropertyDefaultPlaybackRate: 1.0,
         ]
+    }
+
+    private func startNowPlayingTimer() {
+        guard nowPlayingTimer == nil else { return }
+        // Fire on the main run loop so it continues ticking while CarPlay UI
+        // is foregrounded. 0.5s is frequent enough to win any race with
+        // audio_service's async writes and to keep the timeline smooth.
+        let timer = Timer(timeInterval: 0.5, repeats: true) { [weak self] _ in
+            self?.writeNowPlayingInfo()
+        }
+        RunLoop.main.add(timer, forMode: .common)
+        nowPlayingTimer = timer
+    }
+
+    private func stopNowPlayingTimer() {
+        nowPlayingTimer?.invalidate()
+        nowPlayingTimer = nil
+        lastElapsedTimestamp = nil
     }
 
     // MARK: - CPInterfaceControllerDelegate
@@ -191,6 +281,9 @@ class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPI
         if aTemplate is CPNowPlayingTemplate {
             // User tapped "Back" from the Now Playing screen — stop session.
             stopSilencePlayer()
+            stopNowPlayingTimer()
+            MPNowPlayingInfoCenter.default().playbackState = .stopped
+            MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
             methodChannel?.invokeMethod("stopSession", arguments: nil)
         }
     }

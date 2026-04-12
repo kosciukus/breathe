@@ -61,6 +61,13 @@
 					<string>Main</string>
 				</dict>
 			</array>
+			<!-- TODO(CarPlay): Re-enable once Apple grants the CarPlay Audio
+			     entitlement. Uncomment the block below AND restore the
+			     com.apple.developer.carplay-audio entitlement in
+			     Runner.entitlements AND flip `carPlayEnabled` to true in
+			     AppDelegate.swift. Declaring this scene without the
+			     entitlement causes the device build to fail. -->
+			<!--
 			<key>CPTemplateApplicationSceneSessionRoleApplication</key>
 			<array>
 				<dict>
@@ -72,6 +79,7 @@
 					<string>$(PRODUCT_MODULE_NAME).CarPlaySceneDelegate</string>
 				</dict>
 			</array>
+			-->
 		</dict>
 	</dict>
 	<key>UIBackgroundModes</key>

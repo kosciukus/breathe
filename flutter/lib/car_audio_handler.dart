@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 
@@ -171,8 +172,13 @@ class BreathingAudioHandler extends BaseAudioHandler {
     return MediaItem(
       id: preset.id,
       title: preset.label,
-      album: _albumName,
-      artist: '${preset.durations.sequence} \u2022 ${preset.repeatMinutes} min',
+      album: Platform.isIOS ? null : _albumName,
+      // On iOS, CarPlay owns the subtitle via CPListItem.detailText; setting
+      // artist here causes audio_service to write it to MPNowPlayingInfoCenter
+      // where it shows as a flashing subtitle on the Now Playing screen.
+      artist: Platform.isIOS
+          ? null
+          : '${preset.durations.sequence} \u2022 ${preset.repeatMinutes} min',
       duration: Duration(minutes: preset.repeatMinutes),
       playable: true,
     );

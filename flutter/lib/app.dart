@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:quick_actions/quick_actions.dart';
 
 import 'app_strings.dart';
 import 'controller.dart';
@@ -8,6 +9,12 @@ import 'deep_link_service.dart';
 import 'models.dart';
 import 'screens.dart';
 import 'theme.dart';
+
+const List<ShortcutItem> _breatheShortcutItems = <ShortcutItem>[
+  ShortcutItem(type: 'box_4_4_4_4', localizedTitle: 'Box Breathing'),
+  ShortcutItem(type: 'coherent_5_5', localizedTitle: 'Coherent (5-5)'),
+  ShortcutItem(type: 'relax_4_7_8', localizedTitle: 'Relax (4-7-8)'),
+];
 
 class BreatheApp extends StatefulWidget {
   const BreatheApp({super.key, required this.controller});
@@ -24,6 +31,9 @@ class _BreatheAppState extends State<BreatheApp> {
   late AppLanguage _language;
   final DeepLinkService _deepLinkService = DeepLinkService();
   StreamSubscription<DeepLinkIntent>? _deepLinkSub;
+  final QuickActions _quickActions = const QuickActions();
+  bool _quickActionsInitialized = false;
+  String? _pendingQuickActionType;
 
   @override
   void initState() {
@@ -37,6 +47,30 @@ class _BreatheAppState extends State<BreatheApp> {
       _deepLinkService.initialize(_controller.presets);
       _deepLinkSub = _deepLinkService.intents.listen(_handleDeepLinkIntent);
     }
+
+    _initializeQuickActions();
+  }
+
+  void _initializeQuickActions() {
+    if (_quickActionsInitialized) return;
+    _quickActionsInitialized = true;
+    _quickActions.initialize(_handleQuickActionType);
+    _quickActions.setShortcutItems(_breatheShortcutItems);
+  }
+
+  void _handleQuickActionType(String type) {
+    if (!_controller.isReady) {
+      _pendingQuickActionType = type;
+      return;
+    }
+    _startPresetById(type);
+  }
+
+  void _startPresetById(String presetId) {
+    _controller.applyPreset(presetId);
+    if (!_controller.isRunning) {
+      _controller.startOrResetSession();
+    }
   }
 
   void _handleControllerChange() {
@@ -44,6 +78,12 @@ class _BreatheAppState extends State<BreatheApp> {
     if (_controller.isReady && _deepLinkSub == null) {
       _deepLinkService.initialize(_controller.presets);
       _deepLinkSub = _deepLinkService.intents.listen(_handleDeepLinkIntent);
+    }
+
+    if (_controller.isReady && _pendingQuickActionType != null) {
+      final pending = _pendingQuickActionType!;
+      _pendingQuickActionType = null;
+      _startPresetById(pending);
     }
 
     if (_darkMode == _controller.darkModeEnabled &&

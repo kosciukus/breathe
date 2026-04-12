@@ -15,17 +15,63 @@ class CarPlayService {
   final BreathingController _controller;
   final BreathingAudioHandler _audioHandler;
 
+  /// Cached preset ids from the last push to CarPlay. Used to avoid resending
+  /// the preset list on every controller notification (they fire ~10x/sec
+  /// during a session) and only push when the set actually changes.
+  List<String> _lastPushedPresetIds = const <String>[];
+
+  /// Flipped to false the first time a MethodChannel call fails with
+  /// MissingPluginException — meaning the native CarPlay handler isn't
+  /// registered (entitlement not granted, CarPlay scene not active, or the
+  /// `carPlayEnabled` gate in AppDelegate.swift is off). After that we stop
+  /// pushing updates so controller ticks don't spam unhandled exceptions.
+  bool _nativeAvailable = true;
+
   void initialize() {
     if (!Platform.isIOS) return;
 
     _channel.setMethodCallHandler(_handleCall);
-    _controller.addListener(_pushPlaybackState);
+    _controller.addListener(_onControllerChanged);
+  }
+
+  Future<void> _safeInvoke(String method, [dynamic arguments]) async {
+    if (!_nativeAvailable) return;
+    try {
+      await _channel.invokeMethod<void>(method, arguments);
+    } on MissingPluginException {
+      _nativeAvailable = false;
+      _controller.removeListener(_onControllerChanged);
+    }
+  }
+
+  void _onControllerChanged() {
+    _maybePushPresets();
+    _pushPlaybackState();
+  }
+
+  void _maybePushPresets() {
+    final sorted = _sortedForCarPlay(_controller.presets);
+    final ids = sorted.map((p) => p.id).toList(growable: false);
+    if (_listsEqual(ids, _lastPushedPresetIds)) return;
+    _lastPushedPresetIds = ids;
+    _safeInvoke('updatePresets', _serializePresets(sorted));
+  }
+
+  bool _listsEqual(List<String> a, List<String> b) {
+    if (a.length != b.length) return false;
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
+    }
+    return true;
   }
 
   Future<dynamic> _handleCall(MethodCall call) async {
     switch (call.method) {
       case 'getPresets':
-        return _serializePresets(_controller.presets);
+        final sorted = _sortedForCarPlay(_controller.presets);
+        _lastPushedPresetIds =
+            sorted.map((p) => p.id).toList(growable: false);
+        return _serializePresets(sorted);
       case 'startPreset':
         final presetId = call.arguments as String?;
         if (presetId != null) {
@@ -54,7 +100,7 @@ class CarPlayService {
     final sessionRemaining = _controller.sessionRemainingMs ?? 0;
     final elapsedMs = totalMs - sessionRemaining;
 
-    _channel.invokeMethod('updatePlaybackState', <String, dynamic>{
+    _safeInvoke('updatePlaybackState', <String, dynamic>{
       'isRunning': _controller.isRunning,
       'presetId': _controller.selectedPreset?.id,
       'phase': _controller.phase.name,
@@ -68,8 +114,29 @@ class CarPlayService {
 
   void pushPresets() {
     if (!Platform.isIOS) return;
-    _channel.invokeMethod(
-        'updatePresets', _serializePresets(_controller.presets));
+    final sorted = _sortedForCarPlay(_controller.presets);
+    _lastPushedPresetIds = sorted.map((p) => p.id).toList(growable: false);
+    _safeInvoke('updatePresets', _serializePresets(sorted));
+  }
+
+  /// CarPlay ordering: saved (custom) presets first (newest first by
+  /// creation date), then built-in presets in their natural order.
+  List<BreathingPreset> _sortedForCarPlay(List<BreathingPreset> presets) {
+    final custom = presets.where((p) => p.isCustom).toList()
+      ..sort((a, b) => _customCreatedMillis(b).compareTo(
+            _customCreatedMillis(a),
+          ));
+    final builtIn = presets.where((p) => !p.isCustom).toList();
+    return <BreathingPreset>[...custom, ...builtIn];
+  }
+
+  /// Extracts creation timestamp from a custom preset id of the form
+  /// `custom_<millisecondsSinceEpoch>`. Falls back to 0 for any id that
+  /// doesn't match the expected shape, pushing it to the bottom.
+  int _customCreatedMillis(BreathingPreset preset) {
+    const prefix = 'custom_';
+    if (!preset.id.startsWith(prefix)) return 0;
+    return int.tryParse(preset.id.substring(prefix.length)) ?? 0;
   }
 
   List<Map<String, dynamic>> _serializePresets(List<BreathingPreset> presets) {
@@ -84,6 +151,6 @@ class CarPlayService {
   }
 
   void dispose() {
-    _controller.removeListener(_pushPlaybackState);
+    _controller.removeListener(_onControllerChanged);
   }
 }
