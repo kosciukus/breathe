@@ -14,6 +14,8 @@ PODS:
     - Flutter
   - health (13.3.1):
     - Flutter
+  - home_widget (0.0.1):
+    - Flutter
   - package_info_plus (0.4.5):
     - Flutter
   - quick_actions_ios (0.0.1):
@@ -37,6 +39,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_watch_os_connectivity (from `.symlinks/plugins/flutter_watch_os_connectivity/ios`)
   - health (from `.symlinks/plugins/health/ios`)
+  - home_widget (from `.symlinks/plugins/home_widget/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - quick_actions_ios (from `.symlinks/plugins/quick_actions_ios/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
@@ -59,6 +62,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_watch_os_connectivity/ios"
   health:
     :path: ".symlinks/plugins/health/ios"
+  home_widget:
+    :path: ".symlinks/plugins/home_widget/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
   quick_actions_ios:
@@ -80,6 +85,7 @@ SPEC CHECKSUMS:
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_watch_os_connectivity: bdd14732e8ecea581b015c507a2bd833e0f5792d
   health: 4decf5d74e8f54c58a8c07a385fc72f629a831d9
+  home_widget: f169fc41fd807b4d46ab6615dc44d62adbf9f64f
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
   quick_actions_ios: 500fcc11711d9f646739093395c4ae8eec25f779
   shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb

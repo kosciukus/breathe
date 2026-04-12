@@ -10,4 +10,5 @@
     <string name="shortcut_extended_4_8">Extended Exhale 4-8</string>
     <string name="shortcut_triangle">Triangle Breathing</string>
     <string name="shortcut_calm">Calm Breathing</string>
+    <string name="widget_description">Quick-start a breathing session from your home screen.</string>
 </resources>

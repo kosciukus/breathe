@@ -5,6 +5,7 @@ import 'app.dart';
 import 'car_audio_handler.dart';
 import 'carplay_service.dart';
 import 'controller.dart';
+import 'home_widget_service.dart';
 
 late final BreathingAudioHandler audioHandler;
 
@@ -13,6 +14,9 @@ Future<void> main() async {
 
   final controller = BreathingController();
   await controller.initialize();
+
+  final homeWidgetService = HomeWidgetService();
+  await homeWidgetService.initialize();
 
   audioHandler = await AudioService.init(
     builder: () => BreathingAudioHandler(controller),

@@ -4,6 +4,10 @@
 <dict>
 	<key>com.apple.developer.healthkit</key>
 	<true/>
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.it.arcsoftware.breathe</string>
+	</array>
 	<!-- TODO(CarPlay): Re-enable once Apple grants the CarPlay Audio entitlement
 	     (request at https://developer.apple.com/contact/carplay/, select
 	     "CarPlay Audio App"). To restore CarPlay, also:

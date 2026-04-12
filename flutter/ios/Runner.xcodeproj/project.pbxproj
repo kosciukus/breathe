@@ -74,6 +74,10 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		F82CBE7CB0EFBB4AE539B5C2 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEB11AF1D6A6852232915583 /* Pods_Runner.framework */; };
+		BWGT00010000000000000001 /* BreatheWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = BWGT00020000000000000001 /* BreatheWidget.swift */; };
+		BWGT00010000000000000002 /* BreatheWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = BWGT00020000000000000003 /* BreatheWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		BWGT00010000000000000003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BWGT00020000000000000004 /* Assets.xcassets */; };
+		BWGT00010000000000000004 /* AppIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = BWGT00020000000000000005 /* AppIcon.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,6 +94,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 97C146ED1CF9000F007C117D;
 			remoteInfo = Runner;
+		};
+		BWGT00080000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BWGT00050000000000000001;
+			remoteInfo = BreatheWidgetExtension;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -113,6 +124,17 @@
 			files = (
 			);
 			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BWGT000A0000000000000001 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				BWGT00010000000000000002 /* BreatheWidgetExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -202,6 +224,11 @@
 		B9522A6F883FE77A80162A9B /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		B964E40EE0BE69F02A211385 /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 		C363D7C4DEE69B0AC51F1B0E /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
+		BWGT00020000000000000001 /* BreatheWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreatheWidget.swift; sourceTree = "<group>"; };
+		BWGT00020000000000000004 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BWGT00020000000000000005 /* AppIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon.png; sourceTree = "<group>"; };
+		BWGT00020000000000000002 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BWGT00020000000000000003 /* BreatheWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BreatheWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -225,6 +252,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C1DB9D600F7754DEB9F11DA /* Pods_RunnerTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BWGT00030000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -465,6 +499,7 @@
 			isa = PBXGroup;
 			children = (
 				1A81C37D2F62EA4300A8B676 /* BreatheWatch */,
+				BWGT00040000000000000001 /* BreatheWidget */,
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
 				97C146EF1CF9000F007C117D /* Products */,
@@ -480,6 +515,7 @@
 				97C146EE1CF9000F007C117D /* Runner.app */,
 				331C8081294A63A400263BE5 /* RunnerTests.xctest */,
 				1A81C3682F62E9BE00A8B676 /* BreatheWatch Watch App.app */,
+				BWGT00020000000000000003 /* BreatheWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -537,6 +573,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		BWGT00040000000000000001 /* BreatheWidget */ = {
+			isa = PBXGroup;
+			children = (
+				BWGT00020000000000000001 /* BreatheWidget.swift */,
+				BWGT00020000000000000004 /* Assets.xcassets */,
+				BWGT00020000000000000005 /* AppIcon.png */,
+				BWGT00020000000000000002 /* Info.plist */,
+			);
+			path = BreatheWidget;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -586,6 +633,7 @@
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
 				1A81C3732F62E9BF00A8B676 /* Embed Watch Content */,
+				BWGT000A0000000000000001 /* Embed App Extensions */,
 				1A9F3B012F700000008B0001 /* Fix Watch Icons */,
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				0A069DF3F876BF0E88B1192F /* [CP] Embed Pods Frameworks */,
@@ -596,11 +644,29 @@
 			);
 			dependencies = (
 				1A81C3712F62E9BF00A8B676 /* PBXTargetDependency */,
+				BWGT00090000000000000001 /* PBXTargetDependency */,
 			);
 			name = Runner;
 			productName = Runner;
 			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
 			productType = "com.apple.product-type.application";
+		};
+		BWGT00050000000000000001 /* BreatheWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BWGT000C0000000000000001 /* Build configuration list for PBXNativeTarget "BreatheWidgetExtension" */;
+			buildPhases = (
+				BWGT00070000000000000001 /* Sources */,
+				BWGT00030000000000000001 /* Frameworks */,
+				BWGT00060000000000000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BreatheWidgetExtension;
+			productName = BreatheWidgetExtension;
+			productReference = BWGT00020000000000000003 /* BreatheWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -614,6 +680,9 @@
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					1A81C3672F62E9BE00A8B676 = {
+						CreatedOnToolsVersion = 26.3;
+					};
+					BWGT00050000000000000001 = {
 						CreatedOnToolsVersion = 26.3;
 					};
 					331C8080294A63A400263BE5 = {
@@ -651,6 +720,7 @@
 				97C146ED1CF9000F007C117D /* Runner */,
 				331C8080294A63A400263BE5 /* RunnerTests */,
 				1A81C3672F62E9BE00A8B676 /* BreatheWatch Watch App */,
+				BWGT00050000000000000001 /* BreatheWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -722,6 +792,15 @@
 				1A95BD3A2F6FDEAF008B80DF /* Localizable.strings in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BWGT00060000000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BWGT00010000000000000003 /* Assets.xcassets in Resources */,
+				BWGT00010000000000000004 /* AppIcon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -897,6 +976,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BWGT00070000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BWGT00010000000000000001 /* BreatheWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -909,6 +996,11 @@
 			isa = PBXTargetDependency;
 			target = 97C146ED1CF9000F007C117D /* Runner */;
 			targetProxy = 331C8085294A63A400263BE5 /* PBXContainerItemProxy */;
+		};
+		BWGT00090000000000000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BWGT00050000000000000001 /* BreatheWidgetExtension */;
+			targetProxy = BWGT00080000000000000001 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1694,6 +1786,92 @@
 			};
 			name = Release;
 		};
+		BWGT000B0000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+					ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+					CODE_SIGN_ENTITLEMENTS = BreatheWidget/BreatheWidgetExtension.entitlements;
+					CODE_SIGN_STYLE = Automatic;
+					CURRENT_PROJECT_VERSION = 1;
+					DEVELOPMENT_TEAM = L5G733RSSG;
+					GENERATE_INFOPLIST_FILE = YES;
+					INFOPLIST_FILE = BreatheWidget/Info.plist;
+					INFOPLIST_KEY_CFBundleDisplayName = BreatheWidget;
+					INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.widgetkit-extension";
+					IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+					LD_RUNPATH_SEARCH_PATHS = (
+						"$(inherited)",
+						"@executable_path/Frameworks",
+						"@executable_path/../../Frameworks",
+					);
+					MARKETING_VERSION = 1.0.0;
+					PRODUCT_BUNDLE_IDENTIFIER = com.arcsoftware.breathe.widget;
+					PRODUCT_NAME = "$(TARGET_NAME)";
+					SKIP_INSTALL = YES;
+					SWIFT_EMIT_LOC_STRINGS = YES;
+					SWIFT_VERSION = 5.0;
+					TARGETED_DEVICE_FAMILY = "1,2";
+					SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+					SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		BWGT000B0000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+					ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+					CODE_SIGN_ENTITLEMENTS = BreatheWidget/BreatheWidgetExtension.entitlements;
+					CODE_SIGN_STYLE = Automatic;
+					CURRENT_PROJECT_VERSION = 1;
+					DEVELOPMENT_TEAM = L5G733RSSG;
+					GENERATE_INFOPLIST_FILE = YES;
+					INFOPLIST_FILE = BreatheWidget/Info.plist;
+					INFOPLIST_KEY_CFBundleDisplayName = BreatheWidget;
+					INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.widgetkit-extension";
+					IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+					LD_RUNPATH_SEARCH_PATHS = (
+						"$(inherited)",
+						"@executable_path/Frameworks",
+						"@executable_path/../../Frameworks",
+					);
+					MARKETING_VERSION = 1.0.0;
+					PRODUCT_BUNDLE_IDENTIFIER = com.arcsoftware.breathe.widget;
+					PRODUCT_NAME = "$(TARGET_NAME)";
+					SKIP_INSTALL = YES;
+					SWIFT_EMIT_LOC_STRINGS = YES;
+					SWIFT_VERSION = 5.0;
+					TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		BWGT000B0000000000000003 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+					ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+					CODE_SIGN_ENTITLEMENTS = BreatheWidget/BreatheWidgetExtension.entitlements;
+					CODE_SIGN_STYLE = Automatic;
+					CURRENT_PROJECT_VERSION = 1;
+					DEVELOPMENT_TEAM = L5G733RSSG;
+					GENERATE_INFOPLIST_FILE = YES;
+					INFOPLIST_FILE = BreatheWidget/Info.plist;
+					INFOPLIST_KEY_CFBundleDisplayName = BreatheWidget;
+					INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.widgetkit-extension";
+					IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+					LD_RUNPATH_SEARCH_PATHS = (
+						"$(inherited)",
+						"@executable_path/Frameworks",
+						"@executable_path/../../Frameworks",
+					);
+					MARKETING_VERSION = 1.0.0;
+					PRODUCT_BUNDLE_IDENTIFIER = com.arcsoftware.breathe.widget;
+					PRODUCT_NAME = "$(TARGET_NAME)";
+					SKIP_INSTALL = YES;
+					SWIFT_EMIT_LOC_STRINGS = YES;
+					SWIFT_VERSION = 5.0;
+					TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Profile;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1733,6 +1911,16 @@
 				97C147061CF9000F007C117D /* Debug */,
 				97C147071CF9000F007C117D /* Release */,
 				249021D4217E4FDB00AE95B9 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BWGT000C0000000000000001 /* Build configuration list for PBXNativeTarget "BreatheWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BWGT000B0000000000000001 /* Debug */,
+				BWGT000B0000000000000002 /* Release */,
+				BWGT000B0000000000000003 /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
